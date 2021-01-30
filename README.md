@@ -15,15 +15,15 @@ setting.py 配置说明：
 * screct_key  flask 的 secret_key
 
 ### 使用
-* 生成数据库
-    * cd /path/to/RssSub/backend/sqlmodule && python3 module.py
-    * 连接数据库，执行 /path/to/RssSub/sql.sql 中的两条语句
+* ~~生成数据库~~
+    * ~~cd /path/to/RssSub/backend/sqlmodule && python3 module.py~~
+    * ~~连接数据库，执行 /path/to/RssSub/sql.sql 中的两条语句~~
 * 运行程序
     * cd /path/to/RssSub
     * sudo supervisord -c supervisor.conf
     * sudo supervisorctl -c supervisor.conf start all
 * 通过 `http://127.0.0.1:8083/` 访问即可（可在 supervisor.conf 里修改端口）
-    * 默认账户：管理员（admin/123456）、普通用户（test/test）
+    * 默认账户：管理员（admin/admin）、普通用户（test/test）
     * 登录后改密码、改配置中的网站域名即可
 * 添加 Blog
     * 通过正则添加博客，拿到生成的链接即可使用

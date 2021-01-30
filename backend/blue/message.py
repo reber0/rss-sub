@@ -4,7 +4,7 @@
 @Author: reber
 @Mail: reber0ask@qq.com
 @Date: 2021-01-27 01:01:53
-@LastEditTime : 2021-01-31 02:54:12
+@LastEditTime : 2021-01-31 05:25:21
 '''
 
 from flask import Blueprint
@@ -229,7 +229,7 @@ def delete_msg():
                     (Message.username == username) | (user_role=="root"), Message.id.in_(delete_id_list)).delete(synchronize_session=False)
             if delete_all:
                 affect_num = db_session.query(Message).filter(
-                    (Message.username == username) | (user_role=="root")).delete(synchronize_session=False)
+                    (Message.username == username) | (user_role=="root"), Message.msg_type==msg_type).delete(synchronize_session=False)
 
             # 获取剩余未读条数
             user_unread_count = db_session.query(func.count(Message.id)).filter(
@@ -237,7 +237,10 @@ def delete_msg():
             schedule_unread_count = db_session.query(func.count(Message.id)).filter(
                 user_role=="root", Message.status=="unread").scalar()
 
-            unread_count = user_unread_count + schedule_unread_count
+            if user_role == "root":
+                unread_count = user_unread_count + schedule_unread_count
+            else:
+                unread_count = user_unread_count
     except Exception as e:
         logger.error(str(e))
         r_data = {"code": 1, "msg": "delete error"}

@@ -4,7 +4,7 @@
 @Author: reber
 @Mail: reber0ask@qq.com
 @Date: 2021-01-28 22:51:00
-@LastEditTime : 2021-01-31 02:14:11
+@LastEditTime : 2021-01-31 05:18:35
 '''
 
 from functools import wraps
@@ -29,9 +29,12 @@ def logger_user_action(msg_type="user"):
     def decorator(func):
         @wraps(func)
         def wrapper(*args, **kwargs):
-            action = request.path
             data = request.get_json()
-            if data:
+            action = request.path
+            if ("/api/user/update" in action) or ("/api/user/add" in action):
+                data["password"] = "*"*8
+                data = "POST: {}".format(data)
+            elif data:
                 data = "POST: {}".format(data)
             else:
                 data = "-"
