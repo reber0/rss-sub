@@ -6,6 +6,7 @@ click==7.1.2
 cryptography==3.2.1
 demjson==2.2.4
 Flask==1.1.2
+gunicorn==20.0.4
 idna==2.10
 itsdangerous==1.1.0
 Jinja2==2.11.2
