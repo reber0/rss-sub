@@ -1,0 +1,119 @@
+<!--
+ * @Author: reber
+ * @Mail: reber0ask@qq.com
+ * @Date: 2020-02-08 16:28:54
+ * @LastEditTime : 2021-01-25 18:05:55
+ -->
+<!--
+ * @Author: reber
+ * @Mail: reber0ask@qq.com
+ * @Date: 2020-02-08 16:28:54
+ * @LastEditTime : 2021-01-25 17:55:31
+ -->
+
+
+<title>邮件服务</title>
+
+<div class="layui-card layadmin-header">
+  <div class="layui-breadcrumb" lay-filter="breadcrumb">
+    <a lay-href="">主页</a>
+    <a><cite>设置</cite></a>
+    <a><cite>邮件服务</cite></a>
+  </div>
+</div>
+
+<div class="layui-fluid">
+  <div class="layui-row layui-col-space15">
+    <div class="layui-col-md12">
+      <div class="layui-card">
+        <div class="layui-card-header">邮件服务</div>
+        <div class="layui-card-body">
+          
+          <div class="layui-form" wid100 lay-filter="email-form">
+            <div class="layui-form-item">
+              <label class="layui-form-label">SMTP服务器</label>
+              <div class="layui-input-inline">
+                <input type="text" name="smtp_server" value="smtp.aliyun.com" class="layui-input">
+              </div>
+              <div class="layui-form-mid layui-word-aux">如：smtp.163.com</div>
+            </div>
+            <div class="layui-form-item">
+              <label class="layui-form-label">SMTP端口号</label>
+              <div class="layui-input-inline" style="width: 80px;">
+                <input type="text" name="smtp_port" lay-verify="number" value="25" class="layui-input">
+              </div>
+              <div class="layui-form-mid layui-word-aux">一般为 25 或 465</div>
+            </div>
+            <div class="layui-form-item">
+              <label class="layui-form-label">发件人邮箱</label>
+              <div class="layui-input-inline">
+                <input type="text" name="send_email" lay-verify="email" autocomplete="off" class="layui-input">
+              </div>
+            </div>
+            <div class="layui-form-item">
+              <label class="layui-form-label">发件人昵称</label>
+              <div class="layui-input-inline">
+                <input type="text" name="send_nickname" autocomplete="off" class="layui-input">
+              </div>
+            </div>
+            <div class="layui-form-item">
+              <label class="layui-form-label">邮箱登入密码</label>
+              <div class="layui-input-inline">
+                <input type="password" name="send_email_pwd" autocomplete="off" class="layui-input">
+              </div>
+            </div>
+            <div class="layui-form-item">
+              <div class="layui-input-block">
+                <button class="layui-btn" lay-submit lay-filter="set-email">确认保存</button>
+              </div>
+            </div>
+          </div>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+    layui.use(['admin', 'form'], function(){
+        var admin = layui.admin;
+        var form = layui.form;
+
+        admin.req({
+            url: '/api/set/system/email',
+            type: 'post',
+            dataType: "json", //期望后端返回json
+            contentType: "application/json", //发送的数据的类型
+            timeout: 20000,
+            success: function (result) {
+                if (result.code == 0){
+                    form.val("email-form", {
+                        "smtp_server": result.data.smtp_server,
+                        "smtp_port": result.data.smtp_port,
+                        "send_email": result.data.send_email,
+                        "send_nickname": result.data.send_nickname,
+                        "send_email_pwd": result.data.send_email_pwd,
+                    });
+                }
+            }
+        });
+
+        // event 为 submit、lay-filter 为 set-email 的按钮
+        form.on('submit(set-email)', function(data){
+            var formData = data.field;
+
+            admin.req({
+                url: '/api/set/system/email/update',
+                type: 'post',
+                dataType: "json", //期望后端返回json
+                contentType: "application/json", //发送的数据的类型
+                data: JSON.stringify(formData),
+                timeout: 20000,
+                success: function (result) {
+                    layer.msg(result.msg, {offset: '150px', icon: 1, time: 1000});
+                }
+            });
+        });
+    });
+</script>
