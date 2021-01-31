@@ -4,7 +4,7 @@
 @Author: reber
 @Mail: reber0ask@qq.com
 @Date: 2021-01-28 22:51:00
-@LastEditTime : 2021-01-31 05:18:35
+@LastEditTime : 2021-01-31 13:39:24
 '''
 
 from functools import wraps
@@ -31,10 +31,7 @@ def logger_user_action(msg_type="user"):
         def wrapper(*args, **kwargs):
             data = request.get_json()
             action = request.path
-            if ("/api/user/update" in action) or ("/api/user/add" in action):
-                data["password"] = "*"*8
-                data = "POST: {}".format(data)
-            elif data:
+            if data:
                 data = "POST: {}".format(data)
             else:
                 data = "-"
