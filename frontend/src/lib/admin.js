@@ -27,8 +27,8 @@ layui.define('view', function(exports){
 
   //通用方法
   ,admin = {
-    // v: '2020.8.2 pro '
-    v: new Date().getTime()
+    v: '2020.8.2 pro '
+    // v: new Date().getTime()
     
     //数据的异步请求
     ,req: view.req
