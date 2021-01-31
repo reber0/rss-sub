@@ -4,9 +4,10 @@
 @Author: reber
 @Mail: reber0ask@qq.com
 @Date: 2021-01-27 01:01:53
-@LastEditTime : 2021-01-31 05:25:21
+@LastEditTime : 2021-01-31 14:00:29
 '''
 
+import re
 from flask import Blueprint
 from flask import request
 from flask import jsonify
@@ -159,6 +160,10 @@ def get_user_action_msg():
                 (~Message.action.contains("/api/")) | (user_role=="root")).order_by(Message.id.desc()).limit(pageSize).offset((pageIndex-1)*pageSize).all()
             data = to_dict(results)
         for index,value in enumerate(data):
+            curr_data = data[index]["data"]
+            curr_data = re.sub(r'\'password\': \'.*?\'', "'password': '******'", curr_data)
+            curr_data = re.sub(r'\'email\': \'.*?\'', "'email': '******'", curr_data)
+            data[index]["data"] = curr_data
             data[index]["add_time"] = utc2bj(data[index]["add_time"])
     except Exception as e:
         logger.error(str(e))
@@ -173,7 +178,7 @@ def get_user_action_msg():
 @is_admin
 def get_system_msg():
     """
-    获取计划任务未读消息
+    获取系统未读消息
     """
     data = request.get_json()
     pageIndex = data.get("page", 0)
