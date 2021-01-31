@@ -310,21 +310,21 @@ layui.define(function(exports){
                                 dataType: "json", //期望后端返回json
                                 contentType: "application/json", //发送的数据的类型
                                 data: JSON.stringify(formData),
-                                timeout: 20000,
-                                success: function (result) {
-                                    if (result.code == 0){
-                                        obj.update({
-                                            "id": formData.id,
-                                            "username": formData.username,
-                                            "role": formData.role,
-                                            "email": formData.email,
-                                            "add_time": formData.add_time,
-                                        });
-                                    }
-                                    layer.msg(result.msg, {offset: '150px', icon: 1, time: 1000});
+                                timeout: 20000
+                            }).success(function (result) {
+                                if (result.code == 0){
+                                    obj.update({
+                                        "id": formData.id,
+                                        "username": formData.username,
+                                        "role": formData.role,
+                                        "email": formData.email,
+                                        "add_time": formData.add_time,
+                                    });
+                                    layer.msg(result.msg, {icon: 1, time: 1000});
+                                } else {
+                                    layer.msg(result.msg, {icon: 2, time: 1000});
                                 }
                             });
-                            // close layer.open()
                             layer.close(index);
                         },
                         end: function(){
@@ -346,12 +346,13 @@ layui.define(function(exports){
                             dataType: "json", //期望后端返回json
                             contentType: "application/json", //发送的数据的类型
                             data: JSON.stringify(data),
-                            timeout: 20000,
-                            success: function (result) {
-                                if (result.code == 0){
-                                    tableIns.reload();
-                                }
-                                layer.msg('删除成功', {offset: '150px', icon: 1, time: 1000});
+                            timeout: 20000
+                        }).success(function (result) {
+                            if (result.code == 0){
+                                tableIns.reload();
+                                layer.msg(result.msg, {icon: 1, time: 1000});
+                            } else {
+                                layer.msg(result.msg, {icon: 2, time: 1000});
                             }
                         });
                     });

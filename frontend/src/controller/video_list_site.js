@@ -91,9 +91,9 @@ layui.define(function(exports){
                                 layer.msg(result.msg, {icon: 2, time: 1000});
                             }
                         }).always(function (){
-                            layer.close(index);
                             layer.close(loading);
                         });
+                        layer.close(index);
                     });
                     break;
                 case 'export-select':
@@ -172,11 +172,9 @@ layui.define(function(exports){
                             } else {
                                 layer.msg(result.msg, {icon: 1, time: 1000});
                             }
-                        }).always(function(){
-                            layer.close(index);
                         });
+                        layer.close(index);
                     });
-
                     break;
             }
         });
@@ -268,9 +266,8 @@ layui.define(function(exports){
                                 } else {
                                     layer.msg(result.msg, {icon: 2, time: 1000});
                                 }
-                            }).always(function (result) {
-                                layer.close(index);
                             });
+                            layer.close(index);
                         }
                     });
                     break;
@@ -293,9 +290,8 @@ layui.define(function(exports){
                             } else {
                                 layer.msg(result.msg, {icon: 2, time: 1000});
                             }
-                        }).always(function (result) {
-                            layer.close(index);
                         });
+                        layer.close(index);
                     });
                     break;
             };
