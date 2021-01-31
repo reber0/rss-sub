@@ -4,7 +4,7 @@
 @Author: reber
 @Mail: reber0ask@qq.com
 @Date: 2021-01-06 09:44:54
-@LastEditTime : 2021-01-30 23:52:26
+@LastEditTime : 2021-01-31 14:37:10
 '''
 
 import re
@@ -261,7 +261,7 @@ class VideoClass(object):
             if m:
                 status = m.group(1)
                 if status:
-                    status = "已完结" if "全集" in status else "连载中"
+                    status = "已完结" if "全" in status else "连载中"
                 else:
                     status = "即将上映"
 
