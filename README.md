@@ -7,14 +7,13 @@
 &emsp;&emsp;一直安装的有 Reeder，而 Reeder 只能订阅有 RSS 文件的站而不能通过正则获取信息，然后发现 Inoreader 等一些 RSS 订阅网站被墙导致 Reeder 获取不到更新，后续搜了下虽然发现了 RSSHub、TTRSS 等工具，但感觉不好用，索性自己写代码实现通过正则获取网站文章信息生成 xml 从而订阅这个功能，所以就有了 RssSub。
 
 ### 安装模块
-pip3 install -r requirements.txt
+* pip3 install -r requirements.txt
 
-### 修改配置
-setting.py 配置说明：
+### 修改 setting.py
 * jwt_key  JWT 生成 token 的 key
 * screct_key  flask 的 secret_key
 
-### 使用
+### 配置
 * ~~生成数据库~~
     * ~~cd /path/to/RssSub/backend/sqlmodule && python3 module.py~~
     * ~~连接数据库，执行 /path/to/RssSub/sql.sql 中的两条语句~~
@@ -26,6 +25,8 @@ setting.py 配置说明：
     * cd /path/to/RssSub
     * sudo supervisord -c supervisor.conf
     * sudo supervisorctl -c supervisor.conf start all
+
+### 使用
 * 通过 `http://127.0.0.1:8083/` 访问即可
     * 默认账户：管理员（admin/admin）、普通用户（test/test）
     * 登录后改密码、改配置中的网站域名即可
