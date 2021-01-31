@@ -4,7 +4,7 @@
 @Author: reber
 @Mail: reber0ask@qq.com
 @Date: 2020-12-31 15:17:06
-@LastEditTime : 2021-01-29 23:37:15
+@LastEditTime : 2021-01-31 20:39:08
 '''
 
 import jwt
@@ -107,8 +107,6 @@ def jwt_decode(access_token):
     except jwt.exceptions.ExpiredSignatureError as e:
         logger.error("Signature has expired")
     except Exception as e:
-        raise e
         logger.error(str(e))
     else:
-        # logger.info(data)
         return data
