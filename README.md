@@ -18,11 +18,15 @@ setting.py 配置说明：
 * ~~生成数据库~~
     * ~~cd /path/to/RssSub/backend/sqlmodule && python3 module.py~~
     * ~~连接数据库，执行 /path/to/RssSub/sql.sql 中的两条语句~~
+* 修改 supervisor.conf
+    * 第 184、197 行，修改 directory 值为自己的路径
+    * command=gunicorn -w 后的 值为workers数量， 建议的 workers 数量是 (2\*CPU)+1）
+    * command=gunicorn -w 4 -b 0.0.0.0:8083 中的端口可修改，现在默认为 8083
 * 运行程序
     * cd /path/to/RssSub
     * sudo supervisord -c supervisor.conf
     * sudo supervisorctl -c supervisor.conf start all
-* 通过 `http://127.0.0.1:8083/` 访问即可（可在 supervisor.conf 里修改端口，建议的 workers 数量是 (2\*CPU)+1）
+* 通过 `http://127.0.0.1:8083/` 访问即可
     * 默认账户：管理员（admin/admin）、普通用户（test/test）
     * 登录后改密码、改配置中的网站域名即可
 * 添加 Blog
