@@ -22,7 +22,7 @@ setting.py 配置说明：
     * cd /path/to/RssSub
     * sudo supervisord -c supervisor.conf
     * sudo supervisorctl -c supervisor.conf start all
-* 通过 `http://127.0.0.1:8083/` 访问即可（可在 supervisor.conf 里修改端口）
+* 通过 `http://127.0.0.1:8083/` 访问即可（可在 supervisor.conf 里修改端口，建议的 workers 数量是 (2\*CPU)+1）
     * 默认账户：管理员（admin/admin）、普通用户（test/test）
     * 登录后改密码、改配置中的网站域名即可
 * 添加 Blog
