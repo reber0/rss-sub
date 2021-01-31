@@ -4,7 +4,7 @@
 @Author: reber
 @Mail: reber0ask@qq.com
 @Date: 2021-01-06 09:44:54
-@LastEditTime : 2021-01-31 14:37:10
+@LastEditTime : 2021-01-31 17:31:54
 '''
 
 import re
@@ -265,7 +265,7 @@ class VideoClass(object):
                 else:
                     status = "即将上映"
 
-                if status != "已完结":
+                if status == "已完结":
                     href_text_list = href_text_list[::-1]
 
         return href_text_list, status, vedio_type
