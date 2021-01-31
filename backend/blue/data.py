@@ -4,7 +4,7 @@
 @Author: reber
 @Mail: reber0ask@qq.com
 @Date: 2020-12-17 17:03:50
-@LastEditTime : 2021-01-29 00:42:16
+@LastEditTime : 2021-01-31 15:46:43
 '''
 
 from datetime import timedelta
@@ -222,9 +222,13 @@ def update_article_data():
 @is_login
 @logger_user_action(msg_type="user")
 def update_video_data():
-    data = request.get_json()
-    data_id = data.get("id", "")
-    status = data.get("status", "")
+    post_data = request.get_json()
+    update_id = post_data.get("update_id", "")
+    update_id_list = post_data.get("update_id_list", "") # 更新选中时的 id 列表
+    status = post_data.get("status", "read")
+
+    if update_id:
+        update_id_list = [update_id]
 
     access_token = request.headers.get('access_token')
     user_id = get_user_id(access_token)
@@ -234,10 +238,11 @@ def update_video_data():
     try:
         with session_maker(rss_sqlite_uri) as db_session:
             results = db_session.query(Data).join(Video, Data.ref_id==Video.id).filter(
-                (Video.user_id==user_id) | (user_role=="root"), Data.id==data_id).first()
-            if len(to_dict(results)) == 1:
+                (Video.user_id==user_id) | (user_role=="root"), Data.id.in_(update_id_list)).first()
+            if len(to_dict(results)):
                 affect_num = db_session.query(Data).filter_by(
-                    category="video", id=data_id).update({"status": status})
+                    category="video").filter(
+                        Data.id.in_(update_id_list)).update({"status": status}, synchronize_session=False)
     except Exception as e:
         logger.error(str(e))
         r_data = {"code": 1, "msg": "操作失败"}

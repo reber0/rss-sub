@@ -83,7 +83,7 @@ layui.define(function(exports){
                 type: 'post',
                 dataType: "json", //期望后端返回json
                 contentType: "application/json", //发送的数据的类型
-                data: JSON.stringify({"id": id, "status": status}),
+                data: JSON.stringify({"update_id": id, "status": status}),
                 timeout: 20000
             }).success(function (result){
                 tableIns.reload({
@@ -109,9 +109,11 @@ layui.define(function(exports){
             where: {
                 status: 'unread'
             },
+            toolbar: '#video-table-toolbar', //头部盒子
             cols: [[
+                {checkbox: true, fixed: true},
                 {field: 'id', title: 'ID', width:65, sort: true, fixed: 'left', align:'center'},
-                {field: 'name', title: 'Name', width:'20%', sort: true, fixed: 'left'},
+                {field: 'name', title: 'Name', width:'23%', sort: true, fixed: 'left'},
                 {field: 'title', title: 'Title', templet:add_link},
                 {field: 'status', title: 'Status', width:95, fixed: 'right', templet:get_status},
                 {field: 'operate', title: 'Operate', width:115, fixed: 'right', align:'center', toolbar: '#video-table-bar'}
@@ -120,7 +122,49 @@ layui.define(function(exports){
                 $('.layui-table').css("width","100%");
             }
         });
-    
+
+        //头工具栏事件监听
+        table.on('toolbar(video-table)', function(obj){
+            switch(obj.event){
+                case 'refresh':
+                    tableIns.reload({
+                        page: {curr: 1}
+                    });
+                    break;
+                case 'read-select':
+                    // 通过 table 的唯一 id 获取选中的复选框的内容
+                    site_table_id = tableIns.config.id; // site-table-id
+                    var checkStatus = table.checkStatus(site_table_id);
+                    var data = checkStatus.data;
+                    if(data.length == 0) return layer.msg('未选中行', {time: 1000});
+
+                    var update_id_list = [];
+                    data.forEach(function(x, i){
+                        update_id_list.push(x.id);
+                    });
+                    layer.confirm('确定删除 '+update_id_list.length+'条数据?', {icon: 3, shadeClose: true}, function(index){
+                        admin.req({
+                            url: '/api/data/video/status/update',
+                            type: 'post',
+                            dataType: "json", //期望后端返回json
+                            contentType: "application/json", //发送的数据的类型
+                            data: JSON.stringify({"update_id_list": update_id_list, "status": "read"}),
+                            timeout: 20000
+                        }).success(function (result) {
+                            if (result.code == 0){
+                                tableIns.reload();
+                                layer.msg(result.msg, {icon: 1, time: 1000});
+                            } else {
+                                layer.msg(result.msg, {icon: 1, time: 1000});
+                            }
+                        }).always(function(){
+                            layer.close(index);
+                        });
+                    });
+                    break;
+            }
+        });
+
         //行工具栏事件监听
         table.on('tool(video-table)', function(obj){
             var data = obj.data;

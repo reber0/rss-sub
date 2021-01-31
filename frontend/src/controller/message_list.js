@@ -2,7 +2,7 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2021-01-29 13:25:56
- * @LastEditTime : 2021-01-31 02:54:54
+ * @LastEditTime : 2021-01-31 15:19:53
  */
 
 layui.define(function(exports){
@@ -264,6 +264,7 @@ layui.define(function(exports){
                 var thisTabs = tabs[type];
                 var data = {
                     "update_all": "true",
+                    "status": "read",
                     "msg_type": type
                 };
     

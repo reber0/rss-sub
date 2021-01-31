@@ -4,7 +4,7 @@
 @Author: reber
 @Mail: reber0ask@qq.com
 @Date: 2021-01-27 01:01:53
-@LastEditTime : 2021-01-31 14:00:29
+@LastEditTime : 2021-01-31 15:26:38
 '''
 
 import re
@@ -88,7 +88,7 @@ def update_msg_status():
     """
     data = request.get_json()
     update_id = data.get("update_id", "") # 单个更新的 id
-    status = data.get("status", "read") # 单个更新时 status，全部已读没有 status 参数使用默认的 read
+    status = data.get("status", "read")
 
     msg_type = data.get("msg_type", "") # 全部更新的 msg_type
     update_all = data.get("update_all", "")

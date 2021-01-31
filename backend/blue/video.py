@@ -4,7 +4,7 @@
 @Author: reber
 @Mail: reber0ask@qq.com
 @Date: 2021-01-05 16:44:38
-@LastEditTime : 2021-01-31 01:27:35
+@LastEditTime : 2021-01-31 15:34:54
 '''
 
 import re
@@ -128,7 +128,6 @@ def update_site():
     user_role = get_user_role(access_token)
 
     try:
-        print(data)
         with session_maker(rss_sqlite_uri) as db_session:
             affect_num = db_session.query(Video).filter(
                 (Video.user_id==user_id) | (user_role=="root"), Video.id==_id).update(data, synchronize_session=False)

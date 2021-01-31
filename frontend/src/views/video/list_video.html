@@ -2,10 +2,10 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2021-01-05 21:23:21
- * @LastEditTime : 2021-01-30 00:02:14
+ * @LastEditTime : 2021-01-31 15:04:08
  -->
 
-<title>简单用法 - 数据表格</title>
+<title>Video</title>
 
 <div class="layui-card layadmin-header">
   <div class="layui-breadcrumb" lay-filter="breadcrumb">
@@ -22,38 +22,46 @@
 </style>
 
 <div class="layui-fluid">
-  <div class="layui-row layui-col-space15">
-    <div class="layui-col-md12">
-      <div class="layui-card">
-        <div class="layui-card-header">管理 Video</div>
-        <div class="layui-card-body">
-            <div class="layui-form search-form">
-                <div class="layui-form-item">
-                Name&nbsp;
-                <div class="layui-inline">
-                    <input class="layui-input" name="name" autocomplete="off" placeholder="根据 Name 搜索">
-                </div>
-                Status&nbsp;
-                <div class="layui-inline">
-                    <select name="status" lay-filter="status-select" lay-search>
-                        <option value=""></option>
-                        <option value="read">read</option>
-                        <option value="unread" selected>unread</option>
-                    </select>
-                </div>
-                <div class="layui-inline">
-                    <button class="layui-btn" lay-submit lay-filter="search-form">
-                        <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
-                    </button>
-                </div>
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <!-- <div class="layui-card-header">管理 Video</div> -->
+                <div class="layui-card-body">
+                    <div class="layui-form search-form">
+                        <div class="layui-form-item">
+                            Name&nbsp;
+                            <div class="layui-inline">
+                                <input class="layui-input" name="name" autocomplete="off" placeholder="根据 Name 搜索">
+                            </div>
+                            Status&nbsp;
+                            <div class="layui-inline">
+                                <select name="status" lay-filter="status-select" lay-search>
+                                    <option value=""></option>
+                                    <option value="read">read</option>
+                                    <option value="unread" selected>unread</option>
+                                </select>
+                            </div>
+                            <div class="layui-inline">
+                                <button class="layui-btn" lay-submit lay-filter="search-form">
+                                    <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <table id="video-table" lay-filter="video-table"></table>
                 </div>
             </div>
-            <table id="video-table" lay-filter="video-table"></table>
         </div>
-      </div>
     </div>
-  </div>
 </div>
+
+
+<script type="text/html" id="video-table-toolbar">
+    <div class="layui-btn-container">
+        <button class="layui-btn layui-btn-sm" lay-event="refresh">刷新</button>
+        <button class="layui-btn layui-btn-sm" lay-event="read-select">已读选中</button>
+    </div>
+</script>
 
 <script type="text/html" id="video-table-bar">
     <button class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</button>
