@@ -112,7 +112,8 @@ class VideoClass(object):
                 message_data_list = [x[0] for x in new_video_msg_list] # 获取 title 的 list 用于保存
                 logger_msg(msg_type="system", username="schedule", action="video check: {}".format(name), data=str(message_data_list))
                 logger_msg(msg_type="user", username=username, action="{} 已更新".format(name), data=str(message_data_list))
-
+                
+                affect_num = 0
                 try:
                     with session_maker(rss_sqlite_uri) as db_session:
                         db_session.add_all(article_data)
@@ -123,7 +124,8 @@ class VideoClass(object):
                 except Exception as e:
                     logger.error(str(e))
                 else:
-                    logger.info("Video check: {} 获取 {} 个新资源".format(name, len(article_data)))
+                    if affect_num:
+                        logger.info("Video check: {} 获取 {} 个新资源".format(name, len(article_data)))
 
     def bilibili(self, url):
         href_text_list = list()
@@ -268,9 +270,7 @@ class VideoClass(object):
                     status = "即将上映"
 
                 if status != "已完结":
-                    # print('dddddd')
                     href_text_list = href_text_list[::-1]
-            # print(href_text_list)
         return href_text_list, status, vedio_type
 
 def video_check():
