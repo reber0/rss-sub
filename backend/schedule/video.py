@@ -18,7 +18,7 @@ from sqlmodule import Video
 from sqlmodule import Data
 
 from libs.auth import get_username
-from libs.request import req
+from libs.request import req, ReqExceptin
 from libs.common import logger_msg
 
 from setting import rss_sqlite_uri
@@ -62,7 +62,7 @@ class VideoClass(object):
                 video_url_list = [video_msg["url"] for video_msg in video_msg_list]
         return video_url_list
 
-    def get_new_video_msg(self, link, video_url_list):
+    def get_new_video_msg(self, username, name, link, video_url_list):
         """
         获取一个动漫的新剧集的信息
         """
@@ -74,7 +74,7 @@ class VideoClass(object):
         elif "acfun" in link:
             href_text_list, status, video_type = self.acfun(link)
         elif "yhdm" in link:
-            href_text_list, status, video_type = self.yhdm(link)
+            href_text_list, status, video_type = self.yhdm(username, name, link)
 
         new_video_msg_list = list()
         for href_text in href_text_list:
@@ -98,7 +98,7 @@ class VideoClass(object):
 
             # logger.info("Video check: {}".format(link))
             video_url_list = self.get_video_exist_url(site_id)
-            new_video_msg_list, curr_status, video_type = self.get_new_video_msg(link, video_url_list)
+            new_video_msg_list, curr_status, video_type = self.get_new_video_msg(username, name, link, video_url_list)
 
             article_data = list()
             for new_video_msg in new_video_msg_list:
@@ -117,7 +117,7 @@ class VideoClass(object):
                     with session_maker(rss_sqlite_uri) as db_session:
                         db_session.add_all(article_data)
                         if curr_status != status:
-                            affect_num = db_session.query(Video).filter_by(key=key).update({"status": curr_status})
+                            affect_num = db_session.query(Video).filter_by(id=site_id).update({"status": curr_status})
                             if affect_num:
                                 logger.info("check {} success".format(name))
                 except Exception as e:
@@ -145,8 +145,8 @@ class VideoClass(object):
             try:
                 resp = req.get(up_video_api.format(up_id))
                 result = resp.json()
-            except Exception as e:
-                logger.error(str(e))
+            except ReqException as e:
+                logger.error(e)
             else:
                 if result.get("code") == 0:
                     vlist = result.get("data").get("list").get("vlist")
@@ -164,8 +164,8 @@ class VideoClass(object):
                 resp = req.get(url)
                 m = re.search(r'season_id":(\d+),', resp.text, re.M|re.S)
                 season_id = m.group(1)
-            except Exception as e:
-                logger.error(str(e))
+            except ReqException as e:
+                logger.error(e)
             else:
                 resp = req.get(bangumi_api.format(season_id))
                 result = resp.json()
@@ -197,8 +197,8 @@ class VideoClass(object):
 
                 status = re.search(r'extendsStatus":"(.*?)",', html, re.S|re.M).group(1)
                 bangumiList = re.search(r'window\.bangumiList = (.*?);', html).group(1)
-            except Exception as e:
-                logger.error(str(e))
+            except ReqException as e:
+                logger.error(e)
             else:
                 items = demjson.decode(bangumiList).get("items")
                 items = sorted(items, key=lambda x:x["priority"], reverse=True)
@@ -237,7 +237,7 @@ class VideoClass(object):
 
         return href_text_list, status, vedio_type
 
-    def yhdm(self, url):
+    def yhdm(self, username, name, url):
         href_text_list = list()
         status = ""
         vedio_type = "yhdm"
@@ -246,8 +246,10 @@ class VideoClass(object):
             resp = req.get(url)
             resp.encoding = resp.apparent_encoding
             html = resp.text
-        except Exception as e:
-            logger.error(str(e))
+        except ReqExceptin as error_msg:
+            logger.error(error_msg)
+            logger_msg(msg_type="system", username="schedule", action="video check: {}".format(name), data=str(error_msg))
+            logger_msg(msg_type="user", username=username, action="{} 更新".format(name), data=str(error_msg))
         else:
             href_text_tag_list = re.findall(r'<li><a href="(/v/.*?)" target="_blank">(.*?)</a>', html, re.S|re.M)
             for href_text in href_text_tag_list:
@@ -265,9 +267,10 @@ class VideoClass(object):
                 else:
                     status = "即将上映"
 
-                if status == "已完结":
+                if status != "已完结":
+                    # print('dddddd')
                     href_text_list = href_text_list[::-1]
-
+            # print(href_text_list)
         return href_text_list, status, vedio_type
 
 def video_check():

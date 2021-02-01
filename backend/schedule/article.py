@@ -9,6 +9,7 @@
 
 import re
 import time
+import requests
 from sqlalchemy import func
 
 from sqlmodule import session_maker
@@ -17,7 +18,7 @@ from sqlmodule import Article
 from sqlmodule import Data
 
 from libs.auth import get_username
-from libs.request import req
+from libs.request import req, ReqExceptin
 from libs.common import logger_msg
 
 from setting import rss_sqlite_uri
@@ -59,18 +60,18 @@ class ArticleClass(object):
                 article_url_list = [article_msg["url"] for article_msg in site_article_list]
         return article_url_list
 
-    def get_site_new_article_msg(self, username, link, regex, article_url_list):
+    def get_site_new_article_msg(self, username, name, link, regex, article_url_list):
         """
         获取一个站点的新文章信息
         """
+        error_msg = ""
         new_article_msg_list = list()
         try:
             resp = req.get(url=link)
-            html = resp.content
-        except Exception as e:
-            logger.error(link+str(e))
-            logger_msg(msg_type="system", username="schedule", action="article check: {}".format(name), data=link+str(e))
-            logger_msg(msg_type="user", username=username, action="{} 更新".format(name), data=link+str(e))
+        except ReqExceptin as error_msg:
+            logger.error(error_msg)
+            logger_msg(msg_type="system", username="schedule", action="article check: {}".format(name), data=str(error_msg))
+            logger_msg(msg_type="user", username=username, action="{} 更新".format(name), data=str(error_msg))
         else:
             href_text_list = re.findall(regex, str(html, encoding='utf-8'), re.S|re.M)
 
@@ -101,7 +102,7 @@ class ArticleClass(object):
 
             # logger.info("Article check: {}".format(link))
             article_url_list = self.get_site_article_url(site_id)
-            new_article_msg_list = self.get_site_new_article_msg(username, link, regex, article_url_list)
+            new_article_msg_list = self.get_site_new_article_msg(username, name, link, regex, article_url_list)
 
             article_data = list()
             for new_article_msg in new_article_msg_list:
