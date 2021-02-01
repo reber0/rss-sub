@@ -68,6 +68,7 @@ class ArticleClass(object):
         new_article_msg_list = list()
         try:
             resp = req.get(url=link)
+            html = resp.content
         except ReqExceptin as error_msg:
             logger.error(error_msg)
             logger_msg(msg_type="system", username="schedule", action="article check: {}".format(name), data=str(error_msg))
