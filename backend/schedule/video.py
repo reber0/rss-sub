@@ -117,7 +117,7 @@ class VideoClass(object):
                     with session_maker(rss_sqlite_uri) as db_session:
                         db_session.add_all(article_data)
                         if curr_status != status:
-                            affect_num = db_session.query(Video).filter_by(key=key).update({"status": curr_status})
+                            affect_num = db_session.query(Video).filter_by(user_id=user_id).update({"status": curr_status})
                             if affect_num:
                                 logger.info("check {} success".format(name))
                 except Exception as e:
@@ -265,7 +265,7 @@ class VideoClass(object):
                 else:
                     status = "即将上映"
 
-                if status == "已完结":
+                if status != "已完结":
                     href_text_list = href_text_list[::-1]
 
         return href_text_list, status, vedio_type
