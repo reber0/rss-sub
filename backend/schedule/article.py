@@ -59,7 +59,7 @@ class ArticleClass(object):
                 article_url_list = [article_msg["url"] for article_msg in site_article_list]
         return article_url_list
 
-    def get_site_new_article_msg(self, username, link, regex, article_url_list):
+    def get_site_new_article_msg(self, username, name, link, regex, article_url_list):
         """
         获取一个站点的新文章信息
         """
@@ -101,7 +101,7 @@ class ArticleClass(object):
 
             # logger.info("Article check: {}".format(link))
             article_url_list = self.get_site_article_url(site_id)
-            new_article_msg_list = self.get_site_new_article_msg(username, link, regex, article_url_list)
+            new_article_msg_list = self.get_site_new_article_msg(username, name, link, regex, article_url_list)
 
             article_data = list()
             for new_article_msg in new_article_msg_list:
