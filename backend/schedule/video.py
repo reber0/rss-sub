@@ -135,7 +135,7 @@ class VideoClass(object):
         # 用户信息接口
         user_info_api = "https://api.bilibili.com/x/space/acc/info?mid={}"
         # up主视频接口
-        up_video_api = "https://api.bilibili.com/x/space/arc/search?mid={}&ps=50&tid=0&pn=1&keyword=&order=pubdate&jsonp=jsonp"
+        up_video_api = "https://api.bilibili.com/x/space/arc/search?mid={}&ps=30&tid=0&pn=1&keyword=&order=pubdate&jsonp=jsonp"
         # up主投稿文章接口
         up_article_api = "https://api.bilibili.com/x/space/article?mid={}&pn=1&ps=12&sort=publish_time&jsonp=jsonp"
         #番剧接口
