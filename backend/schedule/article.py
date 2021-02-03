@@ -106,7 +106,7 @@ class ArticleClass(object):
             new_article_msg_list = self.get_site_new_article_msg(username, name, link, regex, article_url_list)
 
             article_data = list()
-            for new_article_msg in new_article_msg_list:
+            for new_article_msg in new_article_msg_list[:30]: # 获取最新的 30 篇
                 title, url, html = new_article_msg
                 date = func.now()
 
