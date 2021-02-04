@@ -4,11 +4,12 @@
 @Author: reber
 @Mail: reber0ask@qq.com
 @Date: 2021-01-05 16:44:38
-@LastEditTime : 2021-01-31 15:34:54
+@LastEditTime : 2021-02-04 15:31:55
 '''
 
 import re
 import demjson
+from lxml import etree
 from flask import Blueprint
 from flask import request
 from flask import jsonify
@@ -231,5 +232,15 @@ def get_name_status(url):
             status = "已完结" if "全集" in status else "连载中"
         else:
             status = "即将上映"
+
+        return name, status
+    elif "www.yhdm2.com" in url:
+        resp = req.get(url=url)
+        resp.encoding = resp.apparent_encoding
+        html = resp.text
+
+        selector = etree.HTML(html)
+        name = selector.xpath('//*/dt[@class="name"]/text()')[0]
+        status = "连载中"
 
         return name, status

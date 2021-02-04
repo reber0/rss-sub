@@ -4,12 +4,13 @@
 @Author: reber
 @Mail: reber0ask@qq.com
 @Date: 2021-01-06 09:44:54
-@LastEditTime : 2021-01-31 17:31:54
+@LastEditTime : 2021-02-04 15:38:13
 '''
 
 import re
 import time
 import demjson
+from lxml import etree
 from sqlalchemy import func
 
 from sqlmodule import session_maker
@@ -69,12 +70,14 @@ class VideoClass(object):
         href_text_list = list()
         status = ""
 
-        if "bilibili" in link:
-            href_text_list, status, video_type = self.bilibili(link)
-        elif "acfun" in link:
-            href_text_list, status, video_type = self.acfun(link)
-        elif "yhdm" in link:
+        if "bilibili.com" in link:
+            href_text_list, status, video_type = self.bilibili(username, name, link)
+        elif "acfun.com" in link:
+            href_text_list, status, video_type = self.acfun(username, name, link)
+        elif "yhdm.io" in link:
             href_text_list, status, video_type = self.yhdm(username, name, link)
+        elif "yhdm2.com" in link:
+            href_text_list, status, video_type = self.yhdm2(username, name, link)
 
         new_video_msg_list = list()
         for href_text in href_text_list:
@@ -127,7 +130,7 @@ class VideoClass(object):
                     if affect_num:
                         logger.info("Video check: {} 获取 {} 个新资源".format(name, len(article_data)))
 
-    def bilibili(self, url):
+    def bilibili(self, username, name, url):
         href_text_list = list()
         status = ""
         vedio_type = ""
@@ -188,7 +191,7 @@ class VideoClass(object):
                     vedio_type = "bilibili_bangumi"
         return href_text_list, status, vedio_type
 
-    def acfun(self, url):
+    def acfun(self, username, name, url):
         href_text_list = list()
         status = ""
         vedio_type = ""
@@ -271,6 +274,32 @@ class VideoClass(object):
 
                 if status != "已完结":
                     href_text_list = href_text_list[::-1]
+        return href_text_list, status, vedio_type
+
+    def yhdm2(self, username, name, url):
+        href_text_list = list()
+        status = "连载中"
+        vedio_type = "yhdm2"
+
+        try:
+            resp = req.get(url)
+            resp.encoding = resp.apparent_encoding
+            html = resp.text
+        except ReqExceptin as error_msg:
+            logger.error(error_msg)
+            logger_msg(msg_type="system", username="schedule", action="video check: {}".format(name), data=str(error_msg))
+            logger_msg(msg_type="user", username=username, action="{} 更新".format(name), data=str(error_msg))
+        else:
+            selector = etree.HTML(html)
+            li_tag_list = selector.xpath('//*[@id="stab_1_71"]/ul/li')
+            for li_tag in li_tag_list:
+                url = "http://www.yhdm2.com"+li_tag.xpath('a/@href')[0]
+                title = li_tag.xpath('a/text()')[0]
+                href_text_list.append((url, title))
+
+            if status != "已完结":
+                href_text_list = href_text_list[::-1]
+
         return href_text_list, status, vedio_type
 
 def video_check():
