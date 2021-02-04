@@ -83,7 +83,7 @@ def add_site():
     user_id = get_user_id(access_token)
     user_role = get_user_role(access_token)
 
-    name, status = get_name_status(link)
+    name = get_name(link)
 
     r_data = dict()
     affect_num = 0
@@ -93,7 +93,7 @@ def add_site():
             result = demjson.decode(result[0])
             rss_site = result.get("domain")
 
-            site = Video(user_id=user_id, name=name, link=link, status=status)
+            site = Video(user_id=user_id, name=name, link=link, status="连载中")
             db_session.add(site)
             db_session.flush()
             db_session.refresh(site)
@@ -178,7 +178,10 @@ def delete_site():
             r_data = {"code": 1, "msg": "delete error"}
             return make_response(jsonify(r_data), 500)
 
-def get_name_status(url):
+def get_name(url):
+    """
+    获取番剧的名字
+    """
     # 用户信息接口
     user_info_api = "https://api.bilibili.com/x/space/acc/info?mid={}"
     #番剧接口
@@ -191,8 +194,7 @@ def get_name_status(url):
         result = resp.json()
         if result.get("code") == 0:
             name = result.get("data").get("name")
-            status = "连载中"
-            return name, status
+            return name
     elif "www.bilibili.com/bangumi" in url:
         resp = req.get(url=url)
         m = re.search(r'season_id":(\d+),', resp.text, re.S|re.M)
@@ -203,31 +205,27 @@ def get_name_status(url):
             if result.get("code") == 0:
                 result = result.get("result")
                 name = result.get("season_title")
-                status = "连载中"
-        return name, status
+        return name
     elif "www.acfun.cn/bangumi" in url:
         html = req.get(url=url).text
         m = re.search(r'bangumiTitle":"(.*?)",', html, re.S|re.M)
         if m:
             name = m1.group(1)
-            status = "连载中"
-            return name, status
+            return name
     elif "www.acfun.cn/u" in url:
         html = req.get(url=url).text
         m = re.search(r'<span class="name" data-username=(.*?)>', html, re.S|re.M)
         if m:
             name = m.group(1)
-            status = "连载中"
-            return name, status
+            return name
     elif "www.yhdm.io" in url:
         resp = req.get(url=url)
         resp.encoding = resp.apparent_encoding
         html = resp.text
 
         name = re.search(r'<h1>(.*?)</h1>', html, re.S|re.M).group(1)
-        status = "连载中"
 
-        return name, status
+        return name
     elif "www.yhdm2.com" in url:
         resp = req.get(url=url)
         resp.encoding = resp.apparent_encoding
@@ -235,6 +233,5 @@ def get_name_status(url):
 
         selector = etree.HTML(html)
         name = selector.xpath('//*/dt[@class="name"]/text()')[0]
-        status = "连载中"
 
-        return name, status
+        return name
