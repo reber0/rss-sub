@@ -69,6 +69,7 @@ class VideoClass(object):
         """
         href_text_list = list()
         status = ""
+        video_type = ""
 
         if "bilibili.com" in link:
             href_text_list, status, video_type = self.bilibili(username, name, link)
