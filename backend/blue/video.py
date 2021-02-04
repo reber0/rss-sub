@@ -203,16 +203,14 @@ def get_name_status(url):
             if result.get("code") == 0:
                 result = result.get("result")
                 name = result.get("season_title")
-                status = result.get("publish").get("is_finish")
-                status = "已完结" if status else "连载中"
+                status = "连载中"
         return name, status
     elif "www.acfun.cn/bangumi" in url:
         html = req.get(url=url).text
-        m1 = re.search(r'bangumiTitle":"(.*?)",', html, re.S|re.M)
-        m2 = re.search(r'extendsStatus":"(.*?)",', html, re.S|re.M)
-        if m1 and m2:
+        m = re.search(r'bangumiTitle":"(.*?)",', html, re.S|re.M)
+        if m:
             name = m1.group(1)
-            status = m2.group(1)
+            status = "连载中"
             return name, status
     elif "www.acfun.cn/u" in url:
         html = req.get(url=url).text
@@ -227,11 +225,7 @@ def get_name_status(url):
         html = resp.text
 
         name = re.search(r'<h1>(.*?)</h1>', html, re.S|re.M).group(1)
-        status = re.search(r'href="#commen">.*?<p>(.*?)</p>', html, re.S|re.M).group(1)
-        if status:
-            status = "已完结" if "全集" in status else "连载中"
-        else:
-            status = "即将上映"
+        status = "连载中"
 
         return name, status
     elif "www.yhdm2.com" in url:
