@@ -19,7 +19,7 @@ from sqlmodule import Video
 from sqlmodule import Data
 
 from libs.auth import get_username
-from libs.request import req, ReqExceptin
+from libs.request import req, ReqException
 from libs.common import logger_msg
 
 from setting import rss_sqlite_uri
