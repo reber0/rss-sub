@@ -172,6 +172,11 @@ class VideoClass(object):
                 season_id = m.group(1)
             except ReqException as e:
                 logger.error(e)
+            except Exception as e:
+                # 番剧下架的话会获取不到 season_id
+                # 出现 AttributeError: 'NoneType' object has no attribute 'group'
+                if "NoneType' object has no attribute 'group" == str(e):
+                    logger.error("{} 未获取到 season_id，可能下架了...".format(name))
             else:
                 resp = req.get(bangumi_api.format(season_id))
                 result = resp.json()
