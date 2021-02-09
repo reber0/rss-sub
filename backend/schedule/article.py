@@ -18,7 +18,7 @@ from sqlmodule import Article
 from sqlmodule import Data
 
 from libs.auth import get_username
-from libs.request import req, ReqExceptin
+from libs.request import req, ReqException
 from libs.common import logger_msg
 
 from setting import rss_sqlite_uri
@@ -69,7 +69,7 @@ class ArticleClass(object):
         try:
             resp = req.get(url=link)
             html = resp.content
-        except ReqExceptin as error_msg:
+        except ReqException as error_msg:
             logger.error(error_msg)
             logger_msg(msg_type="system", username="schedule", action="article check: {}".format(name), data=str(error_msg))
             logger_msg(msg_type="user", username=username, action="{} 更新".format(name), data=str(error_msg))
