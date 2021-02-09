@@ -55,7 +55,7 @@ def get_headers(random_ua=False, random_xff=False):
     }
 
 
-class ReqExceptin(Exception):
+class ReqException(Exception):
     """
     捕获错误
     """
@@ -128,7 +128,7 @@ class MySession(requests.Session):
                 error_msg = str(e)
             else:
                 return resp
-            raise ReqExceptin("{} {}".format(url, error_msg))
+            raise ReqException("{} {}".format(url, error_msg))
         except KeyboardInterrupt as e:
             raise e
 
