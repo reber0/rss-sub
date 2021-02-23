@@ -213,6 +213,8 @@ class VideoClass(object):
                 bangumiList = re.search(r'window\.bangumiList = (.*?);', html).group(1)
             except ReqException as e:
                 logger.error(e)
+            except Exception as e:
+                logger.error(str(e))
             else:
                 items = demjson.decode(bangumiList).get("items")
                 items = sorted(items, key=lambda x:x["priority"], reverse=True)
@@ -234,6 +236,8 @@ class VideoClass(object):
         elif "www.acfun.cn/u" in url:
             try:
                 html = req.get(url).text
+            except ReqException as e:
+                logger.error(e)
             except Exception as e:
                 logger.error(str(e))
             else:
