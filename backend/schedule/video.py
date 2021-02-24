@@ -73,7 +73,7 @@ class VideoClass(object):
 
         if "bilibili.com" in link:
             href_text_list, status, video_type = self.bilibili(username, name, link)
-        elif "acfun.com" in link:
+        elif "acfun.cn" in link:
             href_text_list, status, video_type = self.acfun(username, name, link)
         elif "yhdm.io" in link:
             href_text_list, status, video_type = self.yhdm(username, name, link)
