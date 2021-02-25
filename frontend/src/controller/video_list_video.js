@@ -86,9 +86,11 @@ layui.define(function(exports){
                 data: JSON.stringify({"update_id": id, "status": status}),
                 timeout: 20000
             }).success(function (result){
-                tableIns.reload({
+                tableIns.reload();
+                /*tableIns.reload({
                     page: {curr: 1} //重新从第 1 页开始
                 });
+                */
                 layer.msg(result.msg, {icon: 1, time: 1000});
             });
         });
