@@ -142,7 +142,7 @@ layui.define(function(exports){
                     data.forEach(function(x, i){
                         update_id_list.push(x.id);
                     });
-                    layer.confirm('确定删除 '+update_id_list.length+'条数据?', {icon: 3, shadeClose: true}, function(index){
+                    layer.confirm('确定已读 '+update_id_list.length+' 条数据?', {icon: 3, shadeClose: true}, function(index){
                         admin.req({
                             url: '/api/data/video/status/update',
                             type: 'post',
