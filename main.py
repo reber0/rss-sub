@@ -4,7 +4,7 @@
 Author: reber
 Mail: reber0ask@qq.com
 Date: 2021-09-15 11:39:21
-LastEditTime: 2021-09-15 19:56:34
+LastEditTime: 2021-09-15 21:20:17
 '''
 import os
 import time
@@ -29,9 +29,8 @@ class MainApp():
             "web", "schedule", "all"
         ]
         example = """Examples:
-                            \r  python3 {shell_name} start
-                            \r  python3 {shell_name} -s web start
-                            \r  python3 {shell_name} -s web status
+                            \r  python3 {shell_name}
+                            \r  python3 {shell_name} -s web
                             """
 
         parser = argparse.ArgumentParser(
@@ -41,7 +40,7 @@ class MainApp():
             )
         parser.epilog = example.format(shell_name=parser.prog)
         parser.add_argument("-s", dest="service_type", type=str, default="all",
-                            choices=service_type_list, help="the type of service")
+                            choices=service_type_list, help="the type of service to start")
 
         # options, args = parser.parse_known_args()
         # parser.print_help()
