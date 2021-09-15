@@ -4,12 +4,13 @@
 @Author: reber
 @Mail: reber0ask@qq.com
 @Date: 2021-01-06 09:40:37
-LastEditTime: 2021-09-15 17:49:39
+LastEditTime: 2021-09-15 21:12:23
 '''
 
 import re
 import time
 import requests
+from urllib.parse import urlparse, urlunparse
 from sqlalchemy import func
 
 from sqlmodule import session_maker
@@ -77,6 +78,9 @@ class ArticleClass(object):
         """
         获取一个站点的新文章信息
         """
+        o = urlparse(link)
+        base_url = urlunparse((o.scheme, o.netloc, "/", "", "", ""))
+
         error_msg = ""
         new_article_msg_list = list()
         try:
@@ -92,7 +96,7 @@ class ArticleClass(object):
             for href_text in href_text_list:
                 a_href = href_text[0].strip()
                 if not a_href.startswith("http"):
-                    a_href = link.rstrip("/")+"/"+a_href.lstrip("/").lstrip(link)
+                    a_href = base_url+a_href.lstrip("/")
                 a_text = href_text[1].strip()
 
                 if a_href not in article_url_list:

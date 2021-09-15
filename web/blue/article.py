@@ -4,12 +4,13 @@
 @Author: reber
 @Mail: reber0ask@qq.com
 @Date: 2020-12-17 17:03:50
-LastEditTime: 2021-09-15 17:21:32
+LastEditTime: 2021-09-15 21:12:13
 '''
 
 import re
 import demjson
 import requests
+from urllib.parse import urlparse, urlunparse
 from flask import Blueprint
 from flask import request
 from flask import jsonify
@@ -44,6 +45,9 @@ def check_regex():
     link = data.get("link", "")
     regex = data.get("regex", "")
 
+    o = urlparse(link)
+    base_url = urlunparse((o.scheme, o.netloc, "/", "", "", ""))
+
     article_tag = list()
     try:
         resp = req.get(url=link)
@@ -52,7 +56,7 @@ def check_regex():
             for href_text in href_text_list:
                 a_href = href_text[0].strip()
                 if not a_href.startswith(link):
-                    a_href = link.rstrip("/")+"/"+a_href.lstrip("/").lstrip(link)
+                    a_href = base_url+a_href.lstrip("/")
                 a_text = href_text[1].strip()
                 article_tag.append({"title": a_text, "url": a_href})
     except requests.exceptions.ConnectionError as e:
