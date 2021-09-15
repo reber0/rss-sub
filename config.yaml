@@ -10,6 +10,4 @@ sqlite_uri: sqlite:///data/RssSub.db
 log_file: log/result.log
 log_err_file: log/error.log
 
-pid_file: data/run.json
-
 upload_file_ext: ['png', 'jpg', 'jpeg']
