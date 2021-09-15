@@ -9,26 +9,16 @@
 ### 安装模块
 * pip3 install -r requirements.txt
 
-### 修改 setting.py
-* jwt_key  JWT 生成 token 的 key
-* screct_key  flask 的 secret_key
+### 运行
+* 修改 config.yaml
+    * jwt_key  JWT 生成 token 的 key
 
-### 配置
-* ~~生成数据库~~
-    * ~~cd /path/to/RssSub/backend/sqlmodule && python3 module.py~~
-    * ~~连接数据库，执行 /path/to/RssSub/sql.sql 中的两条语句~~
-* 修改 supervisor.conf
-    * 第 184、197 行，修改 directory 值为自己的路径
-    * command=gunicorn -w 后的 值为workers数量， 建议的 workers 数量是 (2\*CPU)+1）
-    * command=gunicorn -w 4 -b 0.0.0.0:8083 中的端口可修改，现在默认为 8083
-* 运行程序
-    * cd /path/to/RssSub
-    * sudo supervisord -c supervisor.conf
-    * sudo supervisorctl -c supervisor.conf start all
+* 运行
+    * python3 main.py
 
 ### 使用
 * 通过 `http://127.0.0.1:8083/` 访问即可
     * 默认账户：管理员（admin/admin）、普通用户（test/test）
     * 登录后改密码、改配置中的网站域名即可
 * 添加 Blog
-    * 通过正则添加博客，拿到生成的链接即可使用
+    * 通过正则添加博客，拿到生成的 RSS 链接即可使用

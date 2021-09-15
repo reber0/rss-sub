@@ -1,0 +1,15 @@
+
+timeout: 10
+
+jwt_key: 7sMmCB6JYg59
+web_bind_ip: 0.0.0.0
+web_bind_port: 8083
+
+sqlite_uri: sqlite:///data/RssSub.db
+
+log_file: log/result.log
+log_err_file: log/error.log
+
+pid_file: data/run.json
+
+upload_file_ext: ['png', 'jpg', 'jpeg']
