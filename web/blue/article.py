@@ -4,7 +4,7 @@
 @Author: reber
 @Mail: reber0ask@qq.com
 @Date: 2020-12-17 17:03:50
-LastEditTime: 2021-09-16 11:07:10
+LastEditTime: 2021-09-16 11:21:51
 '''
 
 import re
@@ -55,7 +55,7 @@ def check_regex():
         if href_text_list:
             for href_text in href_text_list:
                 a_href = href_text[0].strip()
-                if not a_href.startswith(link):
+                if not a_href.startswith("http"):
                     a_href = base_url+a_href.lstrip("/")
                 a_text = href_text[1].strip()
                 article_tag.append({"title": a_text, "url": a_href})
