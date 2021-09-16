@@ -4,7 +4,7 @@
 @Author: reber
 @Mail: reber0ask@qq.com
 @Date: 2020-12-17 17:03:50
-LastEditTime: 2021-09-15 21:12:13
+LastEditTime: 2021-09-16 10:37:07
 '''
 
 import re
@@ -208,3 +208,38 @@ def delete_blog():
         else:
             r_data = {"code": 1, "msg": "delete error"}
             return make_response(jsonify(r_data), 403)
+
+@article_blueprint.route("/search", methods=['POST'])
+@is_login
+@logger_user_action(msg_type="user")
+def search_article_site():
+    data = request.get_json()
+    pageIndex = data.get("page", 0)
+    pageSize = data.get("limit", 0)
+    name = data.get("name", "")
+
+    access_token = request.headers.get('access_token')
+    user_id = get_user_id(access_token)
+    user_role = get_user_role(access_token)
+
+    r_data = dict()
+    data = list()
+    try:
+        with session_maker(global_data.sqlite_uri) as db_session:
+            count = db_session.query(func.count(Article.id)).filter(
+                (Article.user_id==user_id) | (user_role=="root"), Article.name.like("%{}%".format(name))).scalar()
+            results = db_session.query(Article).filter(
+                (Article.user_id==user_id) | (user_role=="root"), Article.name.like("%{}%".format(name))).order_by(Article.id.desc()).limit(pageSize).offset((pageIndex-1)*pageSize).all()
+            _data = to_dict(results)
+
+        if _data:
+            for x in _data:
+                x["add_time"] = utc2bj(x["add_time"])
+                data.append(x)
+    except Exception as e:
+        logger.error(str(e))
+        r_data = {"code": 1}
+        return make_response(jsonify(r_data), 500)
+    else:
+        r_data = {"code": 0, "msg": "", "data": data, "count": count}
+        return make_response(jsonify(r_data), 200)

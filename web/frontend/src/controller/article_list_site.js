@@ -20,6 +20,26 @@ layui.define(function(exports){
             }
         });
 
+        // 渲染 form 表单，不然搜索处的 select 不显示
+        form.render();
+
+        // 监听搜索
+        form.on('submit(search-form)', function(data){
+            var formData = data.field;
+
+            //执行重载
+            tableIns.reload({
+                method: "post",
+                url: "/api/article/search",
+                page: {
+                    curr: 1 //重新从第 1 页开始
+                },
+                where: {
+                    name: formData.name
+                }
+            });
+        });
+
         //生成表格
         var tableIns = table.render({
             elem: '#article-table',
@@ -36,7 +56,7 @@ layui.define(function(exports){
             toolbar: '#article-table-toolbar', //头部盒子
             cols: [[
                 {field: 'id', title: 'ID', width:60, sort: true, fixed: 'left', align:'center'},
-                {field: 'name', title: 'Name', width:'20%', sort: true, fixed: 'left'},
+                {field: 'name', title: 'Name', width:'15%', sort: true, fixed: 'left'},
                 {field: 'link', title: 'Link'},
                 {field: 'rss', title: 'Rss', minWidth:520},
                 {field: 'operate', title: 'Operate', width:162, fixed: 'right', align:'center', toolbar: '#article-table-bar'}

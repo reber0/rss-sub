@@ -115,15 +115,29 @@ layui.define(function(exports){
             where: {
                 status: 'unread'
             },
+            toolbar: '#article-table-toolbar', //头部盒子
             cols: [[
                 {field: 'id', title: 'ID', width:65, sort: true, fixed: 'left', align:'center'},
-                {field: 'name', title: 'Name', width:'20%', sort: true, fixed: 'left'},
+                {field: 'name', title: 'Name', width:'15%', sort: true, fixed: 'left'},
                 {field: 'title', title: 'Title', templet:add_link},
                 {field: 'status', title: 'Status', width:95, templet:get_status},
                 {field: 'operate', title: 'Operate', width:115, fixed: 'right', align:'center', toolbar: '#article-table-bar'}
             ]],
             done : function () {
                 $('.layui-table').css("width","100%");
+            }
+        });
+
+        //头工具栏事件监听
+        table.on('toolbar(article-table)', function(obj){
+            switch(obj.event){
+                case 'refresh':
+                    tableIns.reload({
+                        page: {
+                            curr: 1
+                        }
+                    });
+                    break;
             }
         });
 
@@ -184,19 +198,6 @@ layui.define(function(exports){
                     });
                     break;
             };
-        });
-    
-        // 搜索
-        $('.table-search-btn .layui-btn').on('click', function(){
-            var search = $('#table-search');
-            tableIns.reload({
-                page: {
-                    curr: 1 //重新从第 1 页开始
-                }
-                ,where: {
-                    keyword: search.val()
-                }
-            });
         });
     });
 
