@@ -4,7 +4,7 @@
 @Author: reber
 @Mail: reber0ask@qq.com
 @Date: 2020-12-17 17:03:50
-LastEditTime: 2021-09-16 10:37:07
+LastEditTime: 2021-09-16 11:07:10
 '''
 
 import re
@@ -200,7 +200,7 @@ def delete_blog():
     except Exception as e:
         global_data.logger.error(str(e))
         r_data = {"code": 1, "msg": "delete error"}
-        return make_response(jsonify(r_data), 400)
+        return make_response(jsonify(r_data), 500)
     else:
         if affect_num:
             r_data = {"code": 0, "msg": "delete success"}

@@ -4,7 +4,7 @@
 @Author: reber
 @Mail: reber0ask@qq.com
 @Date: 2020-12-17 17:03:50
-LastEditTime: 2021-09-15 16:43:41
+LastEditTime: 2021-09-16 11:06:57
 '''
 
 from datetime import timedelta
@@ -281,7 +281,7 @@ def rss_link(user_id, category, ref_id):
         r_data["code"] = 1
         # r_data["msg"] = str(e).split('\n')[0]
         global_data.logger.error(str(e))
-        return make_response(jsonify(r_data), 400)
+        return make_response(jsonify(r_data), 500)
     else:
         items = ""
         for index,data in enumerate(datas):
