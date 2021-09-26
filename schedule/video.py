@@ -4,7 +4,7 @@
 @Author: reber
 @Mail: reber0ask@qq.com
 @Date: 2021-01-06 09:44:54
-LastEditTime: 2021-09-26 18:07:49
+LastEditTime: 2021-09-26 18:11:45
 '''
 
 import re
@@ -88,7 +88,7 @@ class VideoClass(object):
             href_text_list, status, video_type = self.bilibili(username, name, link)
         elif "acfun.cn" in link:
             href_text_list, status, video_type = self.acfun(username, name, link)
-        elif "yhdm.io" in link:
+        elif "yhdm.so" in link:
             href_text_list, status, video_type = self.yhdm(username, name, link)
         elif "yhdm2.com" in link:
             href_text_list, status, video_type = self.yhdm2(username, name, link)
@@ -288,7 +288,7 @@ class VideoClass(object):
             href_text_tag_list = re.findall(r'<li><a href="(/v/.*?)" target="_blank">(.*?)</a>', html, re.S|re.M)
             for href_text in href_text_tag_list:
                 href = href_text[0]
-                url = "http://www.yhdm.io"+href
+                url = "http://www.yhdm.so"+href
                 title = href_text[1]
                 if "-pv" not in url:
                     href_text_list.append((url, title))
