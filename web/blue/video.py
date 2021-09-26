@@ -4,7 +4,7 @@
 @Author: reber
 @Mail: reber0ask@qq.com
 @Date: 2021-01-05 16:44:38
-LastEditTime: 2021-09-15 17:41:22
+LastEditTime: 2021-09-26 18:00:37
 '''
 
 import re
@@ -218,7 +218,7 @@ def get_name(url):
         if m:
             name = m.group(1)
             return name
-    elif "www.yhdm.io" in url:
+    elif "www.yhdm.so" in url:
         resp = req.get(url=url)
         resp.encoding = resp.apparent_encoding
         html = resp.text

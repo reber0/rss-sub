@@ -4,7 +4,7 @@
 @Author: reber
 @Mail: reber0ask@qq.com
 @Date: 2021-01-06 09:44:54
-LastEditTime: 2021-09-15 17:49:32
+LastEditTime: 2021-09-26 18:07:49
 '''
 
 import re
@@ -324,7 +324,8 @@ class VideoClass(object):
             for li_tag in li_tag_list:
                 url = "http://www.yhdm2.com"+li_tag.xpath('a/@href')[0]
                 title = li_tag.xpath('a/text()')[0]
-                href_text_list.append((url, title))
+                if "pv" not in title or "PV" not in title:
+                    href_text_list.append((url, title))
 
             if status != "已完结":
                 href_text_list = href_text_list[::-1]
