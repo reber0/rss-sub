@@ -1,3 +1,9 @@
+<!--
+ * @Author: reber
+ * @Mail: reber0ask@qq.com
+ * @Date: 2021-10-16 13:05:00
+ * @LastEditTime: 2021-10-16 13:08:40
+-->
 # RssSub
 
 [![platform](https://img.shields.io/static/v1?label=platform&message=macOS%20|%20Linux&color=172b43)](https://github.com/reber0/Rpscan/tree/master)
@@ -10,9 +16,6 @@
 * pip3 install -r requirements.txt
 
 ### 运行
-* 修改 config.yaml
-    * jwt_key  JWT 生成 token 的 key
-
 * 运行
     * python3 main.py
 

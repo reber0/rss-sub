@@ -4,7 +4,7 @@
 Author: reber
 Mail: reber0ask@qq.com
 Date: 2021-09-15 11:39:21
-LastEditTime: 2021-09-15 21:20:17
+LastEditTime: 2021-10-16 13:09:25
 '''
 import os
 import time
@@ -57,6 +57,9 @@ class MainApp():
         # 解析配置
         yaml_data = fileGetContents("config.yaml")
         yaml_config = yaml.safe_load(yaml_data)
+
+        # 设置 jwt_key
+        yaml_config["jwt_key"] = os.urandom(24)
 
         # 设置路径
         root_abspath = pathlib.Path(__file__).parent.resolve()
