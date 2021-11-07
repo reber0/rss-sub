@@ -4,7 +4,7 @@
 @Author: reber
 @Mail: reber0ask@qq.com
 @Date: 2021-01-05 16:44:38
-LastEditTime: 2021-11-07 16:23:30
+LastEditTime: 2021-11-07 17:04:33
 '''
 
 import re
@@ -215,7 +215,7 @@ def get_name(url):
         html = req.get(url=url).text
         m = re.search(r'bangumiTitle":"(.*?)",', html, re.S|re.M)
         if m:
-            name = m1.group(1)
+            name = m.group(1)
     elif url.startswith("https://www.agefans.vip/"):
         resp = req.get(url=url)
         resp.encoding = resp.apparent_encoding
