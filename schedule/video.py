@@ -4,7 +4,7 @@
 @Author: reber
 @Mail: reber0ask@qq.com
 @Date: 2021-01-06 09:44:54
-LastEditTime: 2021-11-07 16:52:00
+LastEditTime: 2021-11-07 17:22:49
 '''
 
 import re
@@ -284,7 +284,7 @@ class VideoClass(object):
 
     def age(self, username, name, url):
         href_text_list = list()
-        status = "连载"
+        status = "连载中"
         vedio_type = "age"
 
         try:
@@ -309,7 +309,7 @@ class VideoClass(object):
             status_kv = detail_imform_kv_list[7]
             status = status_kv.xpath('span[2]/text()')[0]
             if status == "完结":
-                status = "完结"
+                status = "已完结"
 
         return href_text_list, status, vedio_type
 
