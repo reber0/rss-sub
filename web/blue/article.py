@@ -4,7 +4,7 @@
 @Author: reber
 @Mail: reber0ask@qq.com
 @Date: 2020-12-17 17:03:50
-LastEditTime: 2021-11-07 18:48:37
+LastEditTime: 2021-11-07 19:10:16
 '''
 
 import re
@@ -170,7 +170,7 @@ def update_blog():
         return make_response(jsonify(r_data), 500)
     else:
         if affect_num:
-            r_data = {"code": 0}
+            r_data = {"code": 0, "msg": "更新成功"}
             return make_response(jsonify(r_data), 200)
         else:
             r_data = {"code": 1, "msg": "Permission denied"}
