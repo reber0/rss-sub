@@ -4,7 +4,7 @@
 @Author: reber
 @Mail: reber0ask@qq.com
 @Date: 2021-01-05 16:44:38
-LastEditTime: 2021-09-26 18:00:37
+LastEditTime: 2021-11-07 16:23:30
 '''
 
 import re
@@ -182,20 +182,21 @@ def get_name(url):
     """
     获取番剧的名字
     """
+    name = ""
+
     # 用户信息接口
     user_info_api = "https://api.bilibili.com/x/space/acc/info?mid={}"
     #番剧接口
     bangumi_api = "https://api.bilibili.com/pgc/view/web/season?season_id={}"
 
-    if "space.bilibili.com" in url:
+    if url.startswith("https://space.bilibili.com/"):
         mid = url.strip("/").split("/")[-1]
         url = user_info_api.format(mid)
         resp = req.get(url=url)
         result = resp.json()
         if result.get("code") == 0:
             name = result.get("data").get("name")
-            return name
-    elif "www.bilibili.com/bangumi" in url:
+    elif url.startswith("https://www.bilibili.com/bangumi"):
         resp = req.get(url=url)
         m = re.search(r'season_id":(\d+),', resp.text, re.S|re.M)
         if m:
@@ -205,28 +206,24 @@ def get_name(url):
             if result.get("code") == 0:
                 result = result.get("result")
                 name = result.get("season_title")
-        return name
-    elif "www.acfun.cn/bangumi" in url:
-        html = req.get(url=url).text
-        m = re.search(r'bangumiTitle":"(.*?)",', html, re.S|re.M)
-        if m:
-            name = m1.group(1)
-            return name
-    elif "www.acfun.cn/u" in url:
+    elif url.startswith("https://www.acfun.cn/u"):
         html = req.get(url=url).text
         m = re.search(r'<span class="name" data-username=(.*?)>', html, re.S|re.M)
         if m:
             name = m.group(1)
-            return name
-    elif "www.yhdm.so" in url:
+    elif url.startswith("https://www.acfun.cn/bangumi"):
+        html = req.get(url=url).text
+        m = re.search(r'bangumiTitle":"(.*?)",', html, re.S|re.M)
+        if m:
+            name = m1.group(1)
+    elif url.startswith("https://www.agefans.vip/"):
         resp = req.get(url=url)
         resp.encoding = resp.apparent_encoding
         html = resp.text
 
-        name = re.search(r'<h1>(.*?)</h1>', html, re.S|re.M).group(1)
-
-        return name
-    elif "www.yhdm2.com" in url:
+        selector = etree.HTML(html)
+        name = selector.xpath('//*/h4/text()')[0]
+    elif url.startswith("http://www.yhdm2.com/"):
         resp = req.get(url=url)
         resp.encoding = resp.apparent_encoding
         html = resp.text
@@ -234,4 +231,4 @@ def get_name(url):
         selector = etree.HTML(html)
         name = selector.xpath('//*/dt[@class="name"]/text()')[0]
 
-        return name
+    return name
