@@ -4,7 +4,7 @@
 @Author: reber
 @Mail: reber0ask@qq.com
 @Date: 2020-12-17 17:03:50
-LastEditTime: 2021-09-16 11:21:51
+LastEditTime: 2021-11-07 18:48:37
 '''
 
 import re
@@ -67,7 +67,7 @@ def check_regex():
         r_data = {"code": 1, "msg": "server error"}
         return make_response(jsonify(r_data), 500)
     else:
-        r_data = {"code": 0, "msg": "", "data": article_tag[:5], "count": len(article_tag)}
+        r_data = {"code": 0, "msg": "", "data": article_tag, "count": len(article_tag)}
         return make_response(jsonify(r_data), 200)
 
 
