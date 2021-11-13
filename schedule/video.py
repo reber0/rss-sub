@@ -4,7 +4,7 @@
 @Author: reber
 @Mail: reber0ask@qq.com
 @Date: 2021-01-06 09:44:54
-LastEditTime: 2021-11-07 17:22:49
+LastEditTime: 2021-11-13 12:47:24
 '''
 
 import re
@@ -310,6 +310,8 @@ class VideoClass(object):
             status = status_kv.xpath('span[2]/text()')[0]
             if status == "完结":
                 status = "已完结"
+            else status == "连载":
+                status = "连载中"
 
         return href_text_list, status, vedio_type
 
