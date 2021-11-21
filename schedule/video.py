@@ -4,7 +4,7 @@
 @Author: reber
 @Mail: reber0ask@qq.com
 @Date: 2021-01-06 09:44:54
-LastEditTime: 2021-11-13 12:47:24
+LastEditTime: 2021-11-21 14:26:42
 '''
 
 import re
@@ -208,13 +208,23 @@ class VideoClass(object):
             result = resp.json()
             if result.get("code") == 0:
                 result = result.get("result")
-                series_title = result.get("share_copy")
+                title = result.get("title")
 
+                # 获取正片
                 episodes = result.get("episodes")
                 for episode in episodes:
                     badge = episode.get("badge") # 值为 预告 或为空
                     if "预告" not in badge:
-                        title = episode.get("share_copy").replace(series_title, "")
+                        title = episode.get("share_copy").replace("《", "").replace(title, "").replace("》", "").strip()
+                        url = episode.get("share_url")
+                        href_text_list.append((url, title))
+
+                # 获取番外
+                episodes = result.get("section", "").get("episodes", "")
+                for episode in episodes:
+                    badge = episode.get("badge") # 值为 预告 或为空
+                    if "预告" not in badge:
+                        title = episode.get("share_copy").replace("《", "").replace(title, "").replace("》", "").strip()
                         url = episode.get("share_url")
                         href_text_list.append((url, title))
 
