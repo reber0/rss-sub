@@ -4,7 +4,7 @@
 @Author: reber
 @Mail: reber0ask@qq.com
 @Date: 2021-01-06 09:44:54
-LastEditTime: 2021-11-21 14:26:42
+LastEditTime: 2021-11-25 19:20:15
 '''
 
 import re
@@ -208,23 +208,14 @@ class VideoClass(object):
             result = resp.json()
             if result.get("code") == 0:
                 result = result.get("result")
-                title = result.get("title")
+                _title = result.get("title")
 
                 # 获取正片
                 episodes = result.get("episodes")
                 for episode in episodes:
                     badge = episode.get("badge") # 值为 预告 或为空
                     if "预告" not in badge:
-                        title = episode.get("share_copy").replace("《", "").replace(title, "").replace("》", "").strip()
-                        url = episode.get("share_url")
-                        href_text_list.append((url, title))
-
-                # 获取番外
-                episodes = result.get("section", "").get("episodes", "")
-                for episode in episodes:
-                    badge = episode.get("badge") # 值为 预告 或为空
-                    if "预告" not in badge:
-                        title = episode.get("share_copy").replace("《", "").replace(title, "").replace("》", "").strip()
+                        title = episode.get("share_copy").replace("《" + _title + "》", "").strip()
                         url = episode.get("share_url")
                         href_text_list.append((url, title))
 
@@ -320,7 +311,7 @@ class VideoClass(object):
             status = status_kv.xpath('span[2]/text()')[0]
             if status == "完结":
                 status = "已完结"
-            else status == "连载":
+            elif status == "连载":
                 status = "连载中"
 
         return href_text_list, status, vedio_type
