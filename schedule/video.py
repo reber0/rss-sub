@@ -4,7 +4,7 @@
 @Author: reber
 @Mail: reber0ask@qq.com
 @Date: 2021-01-06 09:44:54
-LastEditTime: 2021-11-25 19:20:15
+LastEditTime: 2021-11-28 12:11:10
 '''
 
 import re
@@ -335,7 +335,7 @@ class VideoClass(object):
             for li_tag in li_tag_list:
                 url = "http://www.yhdm2.com"+li_tag.xpath('a/@href')[0]
                 title = li_tag.xpath('a/text()')[0]
-                if "pv" in title.lower() or "备用" in title or "英字" in title:
+                if "pv" in title.lower() or "备用" in title or "英字" in title or "生肉" in title:
                     continue
                 href_text_list.append((url, title))
 
