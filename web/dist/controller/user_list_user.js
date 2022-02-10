@@ -74,7 +74,7 @@ layui.define(function(exports){
                 {field: 'role', title: 'Role', width:70},
                 {field: 'email', title: 'Email'},
                 {field: 'add_time', title: 'Add Time'},
-                {field: 'operate', title: 'Operate', width:165, fixed: 'right', align:'center', toolbar: '#table-bar'},
+                {field: 'operate', title: 'Operate', width:166, fixed: 'right', align:'center', toolbar: '#table-bar'},
             ]],
             done : function () {
                 $('.layui-table').css("width","100%");

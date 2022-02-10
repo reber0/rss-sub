@@ -2,7 +2,7 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2020-02-08 16:28:54
- * @LastEditTime: 2022-02-10 11:58:44
+ * @LastEditTime: 2022-02-10 21:36:26
  -->
 
 <title>设置我的资料</title>
@@ -22,7 +22,7 @@
 </style>
 
 <script id="user-face" type="text/html">
-    <img src="/avatar/{{ d.avatar }}" class="user-info-face">
+    <img src="/avatar/{{ d.data.avatar }}" class="user-info-face">
 </script>
 
 <div class="layui-fluid">
@@ -36,7 +36,7 @@
             <div class="layui-form-item">
               <label class="layui-form-label">用户名</label>
               <div class="layui-input-inline">
-                <input type="text" name="username" class="layui-input">
+                <input type="text" name="uname" class="layui-input">
               </div>
               <div class="layui-form-mid layui-word-aux">用于登录的用户名</div>
             </div>
@@ -98,7 +98,7 @@
             success: function (result) {
                 if (result.code == 0){
                     form.val("user-info-form", {
-                        "username": result.data.username,
+                        "uname": result.data.uname,
                         "role": result.data.role,
                         "email": result.data.email,
                         "add_time": result.data.add_time,
@@ -148,7 +148,7 @@
             var formData = data.field;
 
             admin.req({
-                url: '/api/set/user/info/update',
+                url: '/api/set/user/info_update',
                 type: 'post',
                 dataType: "json", //期望后端返回json
                 contentType: "application/json", //发送的数据的类型

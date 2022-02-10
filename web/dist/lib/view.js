@@ -100,7 +100,6 @@ layui.define(['laytpl', 'layer'], function(exports){
           
           //登录状态失效，清除本地 access_token，并强制跳转到登入页
           else if(res[response.statusName] == statusCode.logout){
-            layer.msg(res["msg"], {offset: '150px', icon: 2, time: 1000});
             view.exit();
           }
           
@@ -126,6 +125,9 @@ layui.define(['laytpl', 'layer'], function(exports){
 
           if (e.status == 400) {
             layer.msg(e.responseJSON.msg, {offset: '150px', icon: 2, time: 1000});
+          } else if (e.status == 401) {
+            layer.msg(e.responseJSON.msg, {offset: '150px', icon: 2, time: 1000});
+            view.exit();
           } else if (e.status == 500) {
             layer.msg(e.responseJSON.msg, {offset: '150px', icon: 2, time: 1000});
           } else if (e.responseJSON) {

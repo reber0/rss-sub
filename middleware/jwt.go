@@ -2,7 +2,7 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-01-06 14:59:35
- * @LastEditTime: 2022-02-10 17:55:11
+ * @LastEditTime: 2022-02-10 22:09:11
  */
 package middleware
 
@@ -75,5 +75,5 @@ func ParserToken(tokenString string) (*CustomClaims, error) {
 		return claims, nil
 	}
 
-	return nil, fmt.Errorf("token 无效")
+	return nil, fmt.Errorf("Token 无效")
 }

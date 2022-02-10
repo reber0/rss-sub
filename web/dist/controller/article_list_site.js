@@ -59,7 +59,7 @@ layui.define(function(exports){
                 {field: 'name', title: 'Name', width:'15%', sort: true},
                 {field: 'link', title: 'Link'},
                 {field: 'rss', title: 'Rss', minWidth:520},
-                {field: 'operate', title: 'Operate', width:165, fixed: 'right', align:'center', toolbar: '#article-table-bar'}
+                {field: 'operate', title: 'Operate', width:166, fixed: 'right', align:'center', toolbar: '#article-table-bar'}
             ]],
             done : function () {
                 $('.layui-table').css("width","100%");

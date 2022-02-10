@@ -2,7 +2,7 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-01-07 10:01:01
- * @LastEditTime: 2022-02-10 16:03:24
+ * @LastEditTime: 2022-02-10 21:29:03
  */
 package middleware
 
@@ -18,9 +18,9 @@ func JWTAuth() gin.HandlerFunc {
 		// 判定是否携带 token
 		token := c.Request.Header.Get("access_token")
 		if token == "" {
-			c.JSON(http.StatusOK, gin.H{
-				"code": 1001, // code 为 1001 时返回登录页
-				"msg":  "请求未携带 token，无权限访问",
+			c.JSON(http.StatusUnauthorized, gin.H{
+				"code": 1,
+				"msg":  "请求未携带 Token",
 			})
 			c.Abort()
 			return
@@ -28,8 +28,8 @@ func JWTAuth() gin.HandlerFunc {
 
 		claims, err := ParserToken(token)
 		if err != nil {
-			c.JSON(401, gin.H{
-				"code": 1001, // code 为 1001 时返回登录页
+			c.JSON(http.StatusUnauthorized, gin.H{
+				"code": 1,
 				"msg":  err.Error(),
 			})
 			c.Abort()

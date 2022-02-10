@@ -57,7 +57,7 @@ layui.define(function(exports){
                 {field: 'link', title: 'Link', hide: true},
                 {field: 'status', title: 'Status', width:90, sort: true},
                 {field: 'rss', title: 'Rss'},
-                {field: 'operate', title: 'Operate', width:165, fixed: 'right', align:'center', toolbar: '#site-table-bar'},
+                {field: 'operate', title: 'Operate', width:166, fixed: 'right', align:'center', toolbar: '#site-table-bar'},
             ]],
             done : function () {
                 $('.layui-table').css("width","100%");

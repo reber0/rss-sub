@@ -2,7 +2,7 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-01-04 20:53:42
- * @LastEditTime: 2022-02-10 11:15:05
+ * @LastEditTime: 2022-02-10 21:41:14
  */
 package routers
 
@@ -313,7 +313,7 @@ func updateInfo(c *gin.Context) {
 func updatePwd(c *gin.Context) {
 	type PostData struct {
 		OldPwd string `form:"old_pwd" json:"old_pwd"`
-		NewPwd string `form:"password" json:"newpwd"`
+		NewPwd string `form:"password" json:"password"`
 	}
 
 	postJson := PostData{}
