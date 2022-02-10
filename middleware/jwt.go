@@ -1,0 +1,79 @@
+/*
+ * @Author: reber
+ * @Mail: reber0ask@qq.com
+ * @Date: 2022-01-06 14:59:35
+ * @LastEditTime: 2022-02-10 17:55:11
+ */
+package middleware
+
+import (
+	"RssSub/utils"
+	"fmt"
+	"time"
+
+	"github.com/golang-jwt/jwt"
+)
+
+var jwtSecret = []byte(utils.RandomStr(8))
+
+// var jwtSecret = []byte("12345678")
+
+// 自定义有效载荷(这里采用自定义的 UserID 作为有效载荷的一部分)
+type CustomClaims struct {
+	UID                string `json:"uid"`
+	UName              string `json:"username"`
+	Role               string `json:"role"`
+	Email              string `json:"email"`
+	Avatar             string `json:"avatar"`
+	jwt.StandardClaims        // StandardClaims 结构体实现了 Claims 接口
+}
+
+// token 生成
+func CreateToken(uid, username, role, email, avatar string) (string, error) {
+	expireTime := time.Now().Add(6 * time.Hour).Unix() // 设置 token 有效时间
+
+	claims := CustomClaims{
+		UID:    uid,
+		UName:  username,
+		Role:   role,
+		Email:  email,
+		Avatar: avatar,
+		StandardClaims: jwt.StandardClaims{
+			ExpiresAt: expireTime, // token 过期时间
+			Issuer:    "RssSub",   // token 发行人
+		},
+	}
+
+	tokenClaims := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+	token, err := tokenClaims.SignedString(jwtSecret)
+	return token, err
+}
+
+// token 解码
+func ParserToken(tokenString string) (*CustomClaims, error) {
+	// 用于解析鉴权的声明，方法内部主要是具体的解码和校验的过程，最终返回 *Token
+	token, err := jwt.ParseWithClaims(tokenString, &CustomClaims{}, func(token *jwt.Token) (interface{}, error) {
+		return jwtSecret, nil
+	})
+
+	if err != nil {
+		if ve, ok := err.(*jwt.ValidationError); ok {
+			if ve.Errors&jwt.ValidationErrorMalformed != 0 {
+				return nil, fmt.Errorf("Token 不可用")
+			} else if ve.Errors&jwt.ValidationErrorExpired != 0 {
+				return nil, fmt.Errorf("Token 过期")
+			} else if ve.Errors&jwt.ValidationErrorNotValidYet != 0 {
+				return nil, fmt.Errorf("Token 无效")
+			} else {
+				return nil, fmt.Errorf("Token 不可用")
+			}
+		}
+	}
+
+	// 将 token 中的 claims 信息解析出来并断言成用户自定义的有效载荷结构
+	if claims, ok := token.Claims.(*CustomClaims); ok && token.Valid {
+		return claims, nil
+	}
+
+	return nil, fmt.Errorf("token 无效")
+}
