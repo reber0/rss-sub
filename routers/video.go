@@ -2,7 +2,7 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-01-04 20:54:15
- * @LastEditTime: 2022-02-08 23:22:55
+ * @LastEditTime: 2022-02-11 10:18:11
  */
 package routers
 
@@ -106,7 +106,7 @@ func videoSiteList(c *gin.Context) {
 		})
 	} else {
 		userId := c.GetString("uid")
-		role := c.GetString("role")
+		_, role := GetUserMsg(userId)
 
 		var count int64
 		var datas []RespData
@@ -154,7 +154,7 @@ func videoSiteUpdate(c *gin.Context) {
 		})
 	} else {
 		userId := c.GetString("uid")
-		role := c.GetString("role")
+		_, role := GetUserMsg(userId)
 
 		updateData := mydb.Video{Name: postJson.Name, Link: postJson.Link, Status: postJson.Status}
 		result := global.Db.Model(&mydb.Video{}).Where(
@@ -188,9 +188,10 @@ func videoSiteDelete(c *gin.Context) {
 			"msg":  "删除失败",
 		})
 	} else {
-		id := postJson.ID
 		userId := c.GetString("uid")
-		role := c.GetString("role")
+		_, role := GetUserMsg(userId)
+
+		id := postJson.ID
 
 		result := global.Db.Where("(uid=? or ?='root') and id=?", userId, role, id).Delete(&mydb.Video{})
 		if result.Error != nil {
@@ -244,10 +245,10 @@ func videoSiteSearch(c *gin.Context) {
 			"msg":  "查询失败",
 		})
 	} else {
-		keyword := fmt.Sprintf("%%%s%%", postJson.KeyWord)
-
 		userId := c.GetString("uid")
-		role := c.GetString("role")
+		_, role := GetUserMsg(userId)
+
+		keyword := fmt.Sprintf("%%%s%%", postJson.KeyWord)
 
 		var count int64
 		var datas []RespData

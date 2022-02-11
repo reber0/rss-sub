@@ -2,7 +2,7 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-01-04 20:53:07
- * @LastEditTime: 2022-02-10 17:35:27
+ * @LastEditTime: 2022-02-11 10:17:00
  */
 package routers
 
@@ -33,7 +33,8 @@ func MessageRouter(r *gin.Engine) {
 
 // 显示消息的 tab
 func msgTabs(c *gin.Context) {
-	role := c.GetString("role")
+	userId := c.GetString("uid")
+	_, role := GetUserMsg(userId)
 
 	if role == "root" {
 		c.JSON(200, gin.H{
@@ -54,8 +55,8 @@ func msgTabs(c *gin.Context) {
 
 // 获取未读消息条数
 func msgCount(c *gin.Context) {
-	role := c.GetString("role")
-	uname := c.GetString("uname")
+	userId := c.GetString("uid")
+	uname, role := GetUserMsg(userId)
 
 	var count int64
 	if role == "root" {
@@ -94,13 +95,13 @@ func msgUserList(c *gin.Context) {
 			"msg":  "查询失败",
 		})
 	} else {
-		role := c.GetString("role")
-		username := c.GetString("uname")
+		userId := c.GetString("uid")
+		uname, role := GetUserMsg(userId)
 
 		var count int64
 		var datas []RespData
 		result := global.Db.Model(&mydb.Message{}).Where(
-			"(uname=? or ?='root') and action like '%更新%'", username, role).Count(&count).Order("id desc").Count(&count).Limit(postJson.PageSize).Offset((postJson.PageIndex - 1) * postJson.PageSize).Find(&datas)
+			"(uname=? or ?='root') and action like '%更新%'", uname, role).Count(&count).Order("id desc").Count(&count).Limit(postJson.PageSize).Offset((postJson.PageIndex - 1) * postJson.PageSize).Find(&datas)
 		if result.Error != nil {
 			global.Log.Error(result.Error.Error())
 			c.JSON(500, gin.H{
@@ -112,7 +113,7 @@ func msgUserList(c *gin.Context) {
 
 		var unread_count int64
 		result = global.Db.Model(&mydb.Message{}).Where(
-			"(uname=? or ?='root') and action like '%更新%' and status='unread'", username, role).Count(&unread_count)
+			"(uname=? or ?='root') and action like '%更新%' and status='unread'", uname, role).Count(&unread_count)
 		if result.Error != nil {
 			global.Log.Error(result.Error.Error())
 			c.JSON(500, gin.H{
@@ -159,13 +160,13 @@ func msgApiList(c *gin.Context) {
 			"msg":  "查询失败",
 		})
 	} else {
-		role := c.GetString("role")
-		username := c.GetString("uname")
+		userId := c.GetString("uid")
+		uname, role := GetUserMsg(userId)
 
 		var count int64
 		var datas []RespData
 		result := global.Db.Model(&mydb.Message{}).Where(
-			"(uname=? or ?='root') and action like '/api/%'", username, role).Count(&count).Order("id desc").Count(&count).Limit(postJson.PageSize).Offset((postJson.PageIndex - 1) * postJson.PageSize).Find(&datas)
+			"(uname=? or ?='root') and action like '/api/%'", uname, role).Count(&count).Order("id desc").Count(&count).Limit(postJson.PageSize).Offset((postJson.PageIndex - 1) * postJson.PageSize).Find(&datas)
 		if result.Error != nil {
 			global.Log.Error(result.Error.Error())
 			c.JSON(500, gin.H{
@@ -177,7 +178,7 @@ func msgApiList(c *gin.Context) {
 
 		var unread_count int64
 		result = global.Db.Model(&mydb.Message{}).Where(
-			"(uname=? or ?='root') and action like '/api/%' and status='unread'", username, role).Count(&unread_count)
+			"(uname=? or ?='root') and action like '/api/%' and status='unread'", uname, role).Count(&unread_count)
 		if result.Error != nil {
 			global.Log.Error(result.Error.Error())
 			c.JSON(500, gin.H{
@@ -215,8 +216,8 @@ func msgUpdate(c *gin.Context) {
 			"msg":  "更新失败",
 		})
 	} else {
-		role := c.GetString("role")
-		uname := c.GetString("uname")
+		userId := c.GetString("uid")
+		uname, role := GetUserMsg(userId)
 
 		updateIDList := postJson.UpdateIDList
 		status := postJson.Status
@@ -253,8 +254,8 @@ func msgReadAll(c *gin.Context) {
 			"msg":  "更新失败",
 		})
 	} else {
-		role := c.GetString("role")
-		uname := c.GetString("uname")
+		userId := c.GetString("uid")
+		uname, role := GetUserMsg(userId)
 
 		msgtype := postJson.MsgType
 
@@ -297,8 +298,8 @@ func msgDelete(c *gin.Context) {
 			"msg":  "删除失败",
 		})
 	} else {
-		role := c.GetString("role")
-		uname := c.GetString("uname")
+		userId := c.GetString("uid")
+		uname, role := GetUserMsg(userId)
 
 		deleteIDList := postJson.DeleteIDList
 
@@ -334,8 +335,8 @@ func msgDeleteAll(c *gin.Context) {
 			"msg":  "更新失败",
 		})
 	} else {
-		role := c.GetString("role")
-		uname := c.GetString("uname")
+		userId := c.GetString("uid")
+		uname, role := GetUserMsg(userId)
 
 		msgtype := postJson.MsgType
 

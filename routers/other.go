@@ -2,7 +2,7 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-01-10 13:35:18
- * @LastEditTime: 2022-02-10 01:46:48
+ * @LastEditTime: 2022-02-11 10:17:09
  */
 package routers
 
@@ -167,7 +167,8 @@ func copyright(c *gin.Context) {
 
 // 获取左侧目录
 func menu(c *gin.Context) {
-	role := c.GetString("role")
+	userId := c.GetString("uid")
+	_, role := GetUserMsg(userId)
 
 	if role == "root" {
 		res, err := simplejson.NewJson([]byte(menu_root))

@@ -2,7 +2,7 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-01-04 20:53:25
- * @LastEditTime: 2022-02-09 17:59:44
+ * @LastEditTime: 2022-02-11 10:20:57
  */
 package routers
 
@@ -58,7 +58,7 @@ func dataArticleList(c *gin.Context) {
 		})
 	} else {
 		userId := c.GetString("uid")
-		role := c.GetString("role")
+		_, role := GetUserMsg(userId)
 
 		status := postJson.Status
 		keyword := fmt.Sprintf("%%%s%%", postJson.KeyWord)
@@ -103,15 +103,15 @@ func dataArticleUpdate(c *gin.Context) {
 			"msg":  "更新失败",
 		})
 	} else {
-		uid := c.GetString("uid")
-		role := c.GetString("role")
+		userId := c.GetString("uid")
+		_, role := GetUserMsg(userId)
 
 		updateIDList := postJson.UpdateIDList
 		status := postJson.Status
 
 		var count int64
 		result := global.Db.Model(&mydb.Data{}).Joins("JOIN article ON data.ref_id = article.id").Where(
-			"(article.uid=? or ?='root') and data.id in ?", uid, role, updateIDList).Count(&count)
+			"(article.uid=? or ?='root') and data.id in ?", userId, role, updateIDList).Count(&count)
 		if result.Error != nil {
 			global.Log.Error(result.Error.Error())
 			c.JSON(500, gin.H{
@@ -152,9 +152,10 @@ func dataArticleDelete(c *gin.Context) {
 			"msg":  "删除失败",
 		})
 	} else {
-		id := postJson.ID
 		userId := c.GetString("uid")
-		role := c.GetString("role")
+		_, role := GetUserMsg(userId)
+
+		id := postJson.ID
 
 		var count int64
 		result := global.Db.Model(&mydb.Data{}).Joins("JOIN article ON data.ref_id = article.id").Where(
@@ -212,7 +213,7 @@ func dataVideoList(c *gin.Context) {
 		})
 	} else {
 		userId := c.GetString("uid")
-		role := c.GetString("role")
+		_, role := GetUserMsg(userId)
 
 		status := postJson.Status
 		keyword := fmt.Sprintf("%%%s%%", postJson.KeyWord)
@@ -257,15 +258,15 @@ func dataVideoUpdate(c *gin.Context) {
 			"msg":  "更新失败",
 		})
 	} else {
-		uid := c.GetString("uid")
-		role := c.GetString("role")
+		userId := c.GetString("uid")
+		_, role := GetUserMsg(userId)
 
 		updateIDList := postJson.UpdateIDList
 		status := postJson.Status
 
 		var count int64
 		result := global.Db.Model(&mydb.Data{}).Joins("JOIN video ON data.ref_id = video.id").Where(
-			"(video.uid=? or ?='root') and data.id in ?", uid, role, updateIDList).Count(&count)
+			"(video.uid=? or ?='root') and data.id in ?", userId, role, updateIDList).Count(&count)
 		if result.Error != nil {
 			global.Log.Error(result.Error.Error())
 			c.JSON(500, gin.H{
@@ -306,9 +307,10 @@ func dataVideoDelete(c *gin.Context) {
 			"msg":  "删除失败",
 		})
 	} else {
-		id := postJson.ID
 		userId := c.GetString("uid")
-		role := c.GetString("role")
+		_, role := GetUserMsg(userId)
+
+		id := postJson.ID
 
 		var count int64
 		result := global.Db.Model(&mydb.Data{}).Joins("JOIN video ON data.ref_id = video.id").Where(

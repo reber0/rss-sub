@@ -2,7 +2,7 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-01-04 20:52:53
- * @LastEditTime: 2022-02-08 23:19:37
+ * @LastEditTime: 2022-02-11 10:22:52
  */
 package routers
 
@@ -153,7 +153,7 @@ func articleSiteList(c *gin.Context) {
 		})
 	} else {
 		userId := c.GetString("uid")
-		role := c.GetString("role")
+		_, role := GetUserMsg(userId)
 
 		var count int64
 		var datas []RespData
@@ -201,7 +201,7 @@ func articleSiteUpdate(c *gin.Context) {
 		})
 	} else {
 		userId := c.GetString("uid")
-		role := c.GetString("role")
+		_, role := GetUserMsg(userId)
 
 		updateData := mydb.Article{Name: postJson.Name, Link: postJson.Link, Regex: postJson.Regex}
 		result := global.Db.Model(&mydb.Article{}).Where(
@@ -235,9 +235,10 @@ func articleSiteDelete(c *gin.Context) {
 			"msg":  "删除失败",
 		})
 	} else {
-		id := postJson.ID
 		userId := c.GetString("uid")
-		role := c.GetString("role")
+		_, role := GetUserMsg(userId)
+
+		id := postJson.ID
 
 		result := global.Db.Where("(uid=? or ?='root') and id=?", userId, role, id).Delete(&mydb.Article{})
 		if result.Error != nil {
@@ -290,10 +291,10 @@ func articleSiteSearch(c *gin.Context) {
 			"msg":  "查询失败",
 		})
 	} else {
-		keyword := fmt.Sprintf("%%%s%%", postJson.KeyWord)
-
 		userId := c.GetString("uid")
-		role := c.GetString("role")
+		_, role := GetUserMsg(userId)
+
+		keyword := fmt.Sprintf("%%%s%%", postJson.KeyWord)
 
 		var count int64
 		var datas []RespData

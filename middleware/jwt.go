@@ -2,7 +2,7 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-01-06 14:59:35
- * @LastEditTime: 2022-02-10 22:09:11
+ * @LastEditTime: 2022-02-11 10:03:58
  */
 package middleware
 
@@ -21,23 +21,15 @@ var jwtSecret = []byte(utils.RandomStr(8))
 // 自定义有效载荷(这里采用自定义的 UserID 作为有效载荷的一部分)
 type CustomClaims struct {
 	UID                string `json:"uid"`
-	UName              string `json:"username"`
-	Role               string `json:"role"`
-	Email              string `json:"email"`
-	Avatar             string `json:"avatar"`
 	jwt.StandardClaims        // StandardClaims 结构体实现了 Claims 接口
 }
 
 // token 生成
-func CreateToken(uid, username, role, email, avatar string) (string, error) {
+func CreateToken(uid string) (string, error) {
 	expireTime := time.Now().Add(6 * time.Hour).Unix() // 设置 token 有效时间
 
 	claims := CustomClaims{
-		UID:    uid,
-		UName:  username,
-		Role:   role,
-		Email:  email,
-		Avatar: avatar,
+		UID: uid,
 		StandardClaims: jwt.StandardClaims{
 			ExpiresAt: expireTime, // token 过期时间
 			Issuer:    "RssSub",   // token 发行人

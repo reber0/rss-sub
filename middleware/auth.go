@@ -2,7 +2,7 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-01-07 10:01:01
- * @LastEditTime: 2022-02-10 21:29:03
+ * @LastEditTime: 2022-02-11 12:27:55
  */
 package middleware
 
@@ -16,7 +16,7 @@ import (
 func JWTAuth() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		// 判定是否携带 token
-		token := c.Request.Header.Get("access_token")
+		token := c.GetHeader("access_token")
 		if token == "" {
 			c.JSON(http.StatusUnauthorized, gin.H{
 				"code": 1,
@@ -38,10 +38,6 @@ func JWTAuth() gin.HandlerFunc {
 
 		// 将解析后的有效载荷写入 gin.Context 引用对象中
 		c.Set("uid", claims.UID)
-		c.Set("uname", claims.UName)
-		c.Set("role", claims.Role)
-		c.Set("email", claims.Email)
-		c.Set("avatar", claims.Avatar)
 	}
 }
 

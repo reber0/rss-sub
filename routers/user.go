@@ -2,7 +2,7 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-01-04 15:14:59
- * @LastEditTime: 2022-02-09 16:11:00
+ * @LastEditTime: 2022-02-11 10:20:22
  */
 package routers
 
@@ -57,7 +57,7 @@ func login(c *gin.Context) {
 		})
 		return
 	} else if data.PassWord == md5_pwd {
-		token, err := middleware.CreateToken(data.UID, data.Uname, data.Role, data.Email, data.Avatar)
+		token, err := middleware.CreateToken(data.UID)
 		if err != nil {
 			c.JSON(500, gin.H{ // 服务端生成 token 错误
 				"code": 500,
@@ -92,7 +92,8 @@ func logout(c *gin.Context) {
 
 // 获取头像名字
 func userAvatar(c *gin.Context) {
-	avatar := c.GetString("avatar")
+	userId := c.GetString("uid")
+	avatar := GetAvatar(userId)
 
 	c.JSON(200, gin.H{
 		"code":   0,
