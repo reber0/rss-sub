@@ -2,7 +2,7 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-01-04 21:19:24
- * @LastEditTime: 2022-02-08 23:11:45
+ * @LastEditTime: 2022-02-11 17:55:34
  */
 package mydb
 
@@ -51,7 +51,7 @@ type Article struct {
 	Link      string `gorm:"column:link; type:varchar(100); not null; comment:文章网站的网址"`
 	Regex     string `gorm:"column:regex; type:text; not null; comment:正则"`
 	Rss       string `gorm:"column:rss; type:varchar(100); comment:RSS 地址"`
-	CreatedAt int64  `gorm:"autoCreateTime; column:create_at; comment:添加时间"`
+	CreatedAt int    `gorm:"autoCreateTime; column:create_at; comment:添加时间"`
 }
 
 func (Article) TableName() string {
