@@ -2,12 +2,12 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-01-04 15:14:04
- * @LastEditTime: 2022-02-10 17:57:53
+ * @LastEditTime: 2022-02-11 14:57:29
  */
 package main
 
 import (
-	"RssSub/core"
+	"RssSub/entry"
 	"RssSub/global"
 	"RssSub/routers"
 	"RssSub/schedule"
@@ -25,7 +25,7 @@ import (
 var web embed.FS
 
 func main() {
-	core.AppInit()
+	entry.AppInit()
 
 	// 启动计划任务
 	go schedule.Start()

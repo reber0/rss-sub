@@ -2,9 +2,9 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-01-18 09:23:30
- * @LastEditTime: 2022-02-09 17:18:13
+ * @LastEditTime: 2022-02-11 14:57:14
  */
-package core
+package entry
 
 import (
 	"RssSub/global"
