@@ -2,7 +2,7 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-01-04 22:20:57
- * @LastEditTime: 2022-02-09 17:18:43
+ * @LastEditTime: 2022-02-11 17:22:02
  */
 package mydb
 
@@ -15,7 +15,7 @@ import (
 
 // 返回数据库连接句柄
 func GetDbConn() *gorm.DB {
-	db, err := gorm.Open(sqlite.Open(global.RootPath+"/data/RssSub.db"), &gorm.Config{})
+	db, err := gorm.Open(sqlite.Open(global.RootPath+"/data/data.db"), &gorm.Config{})
 	if err != nil {
 		panic("failed to connect database")
 	}

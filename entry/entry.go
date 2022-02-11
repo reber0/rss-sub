@@ -21,7 +21,7 @@ func AppInit() {
 	global.RootPath, _ = os.Getwd()
 	global.Log = mylog.NewLogger()
 
-	if !utils.IsExist(global.RootPath + "/data/RssSub.db") {
+	if !utils.IsExist(global.RootPath + "/data/data.db") {
 		mydb.CreateDb()
 	}
 

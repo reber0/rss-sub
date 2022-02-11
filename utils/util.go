@@ -2,7 +2,7 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2021-11-10 09:48:35
- * @LastEditTime: 2022-02-08 14:13:29
+ * @LastEditTime: 2022-02-11 17:22:37
  */
 
 package utils
@@ -10,6 +10,7 @@ package utils
 import (
 	"bufio"
 	"crypto/md5"
+	"crypto/sha1"
 	"fmt"
 	"math/rand"
 	"os"
@@ -35,6 +36,12 @@ func HandleError(action string, err error) {
 	}
 }
 
+// Sha1 加密
+func Sha1(content string) string {
+	return fmt.Sprintf("%x", sha1.Sum([]byte(content)))
+}
+
+// md5 加密
 func Md5(content string) string {
 	return fmt.Sprintf("%x", md5.Sum([]byte(content)))
 }
