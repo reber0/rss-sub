@@ -2,7 +2,7 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-01-04 20:54:15
- * @LastEditTime: 2022-02-11 10:18:11
+ * @LastEditTime: 2022-02-13 14:06:18
  */
 package routers
 
@@ -334,7 +334,7 @@ func getName(targetURL string) string {
 		if len(m) > 0 {
 			name = m[1]
 		}
-	} else if strings.HasPrefix(targetURL, "https://www.yhdmp.cc/") {
+	} else if strings.HasPrefix(targetURL, "http://www.yinghuacd.com/") {
 		resp, _ := global.Client.Get(targetURL)
 
 		reg := regexp.MustCompile(`<h1>(.*?)</h1>`)

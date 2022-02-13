@@ -2,7 +2,7 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-01-04 21:12:34
- * @LastEditTime: 2022-02-09 16:16:12
+ * @LastEditTime: 2022-02-13 14:16:16
  */
 package schedule
 
@@ -115,8 +115,8 @@ func getNewVideoMsg(link string, videoURLSlice []string) ([][]string, string, er
 		href_text_list, status, err = acfunBangumi(link)
 	} else if strings.HasPrefix(link, "https://www.agemys.com/") {
 		href_text_list, status, err = age(link)
-	} else if strings.HasPrefix(link, "https://www.yhdmp.cc/") {
-		href_text_list, status, err = yhdmp(link)
+	} else if strings.HasPrefix(link, "http://www.yinghuacd.com/") {
+		href_text_list, status, err = yinghuacd(link)
 	}
 	if err != nil {
 		return newVideoMsgList, status, err
@@ -324,7 +324,7 @@ func age(link string) ([][]string, string, error) {
 		status = m[1]
 		if status == "完结" {
 			status = "已完结"
-		} else if status == "连载" {
+		} else {
 			status = "连载中"
 		}
 	}
@@ -336,7 +336,7 @@ func age(link string) ([][]string, string, error) {
 	return newVideoMsgList, status, nil
 }
 
-func yhdmp(link string) ([][]string, string, error) {
+func yinghuacd(link string) ([][]string, string, error) {
 	var status string
 	var newVideoMsgList [][]string
 
@@ -349,7 +349,7 @@ func yhdmp(link string) ([][]string, string, error) {
 			fmt.Println(err)
 		}
 
-		movurl := dom.Find(`div[style="display:none"]`).Eq(0)
+		movurl := dom.Find(`div[class="movurl"]`)
 		movurl.Find(`ul>li>a`).Each(func(i int, node *goquery.Selection) {
 			url, _ := node.Attr("href")
 			title := node.Text()
@@ -358,13 +358,12 @@ func yhdmp(link string) ([][]string, string, error) {
 			}
 		})
 
-		reg := regexp.MustCompile(`(?sm)status=(.*?)"`)
-		m := reg.FindStringSubmatch(html)
-		status = m[1]
-		if status == "完结" {
+		title := dom.Find("title").Text()
+		if strings.Contains(title, "全集") {
 			status = "已完结"
-		} else if status == "连载" {
+		} else {
 			status = "连载中"
+			newVideoMsgList = utils.ReverseSlice(newVideoMsgList)
 		}
 	}
 	if err != nil {
