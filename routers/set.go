@@ -2,7 +2,7 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-01-04 20:53:42
- * @LastEditTime: 2022-02-14 10:15:55
+ * @LastEditTime: 2022-02-14 15:02:00
  */
 package routers
 
@@ -324,8 +324,8 @@ func updatePwd(c *gin.Context) {
 			"msg":  "更新失败",
 		})
 	} else {
-		old_pwd := utils.Md5(postJson.OldPwd)
-		new_pwd := utils.Md5(postJson.NewPwd)
+		old_pwd := utils.Md5([]byte(postJson.OldPwd))
+		new_pwd := utils.Md5([]byte(postJson.NewPwd))
 
 		userId := c.GetString("uid")
 

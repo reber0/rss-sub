@@ -2,7 +2,7 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-01-04 20:53:53
- * @LastEditTime: 2022-02-09 17:09:27
+ * @LastEditTime: 2022-02-14 15:02:37
  */
 package routers
 
@@ -70,7 +70,7 @@ func upAvatar(c *gin.Context) {
 		}
 
 		// 保存图片
-		avatar := utils.Md5(uuid.New().String()) + fileExt
+		avatar := utils.Md5([]byte(uuid.New().String())) + fileExt
 		filename := global.RootPath + "/avatar/" + avatar
 		if err := c.SaveUploadedFile(file, filename); err != nil {
 			global.Log.Error(err.Error())

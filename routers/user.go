@@ -2,7 +2,7 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-01-04 15:14:59
- * @LastEditTime: 2022-02-11 10:20:22
+ * @LastEditTime: 2022-02-14 15:03:23
  */
 package routers
 
@@ -45,7 +45,7 @@ func login(c *gin.Context) {
 	if err != nil {
 		c.JSON(500, gin.H{"err": err})
 	}
-	md5_pwd := utils.Md5(json.PassWord)
+	md5_pwd := utils.Md5([]byte(json.PassWord))
 
 	data := mydb.User{}
 	result := global.Db.Where("uname = ?", json.UserName).First(&data)
@@ -190,7 +190,7 @@ func userAdd(c *gin.Context) {
 	} else {
 		user_id := strings.ReplaceAll(uuid.New().String(), "-", "")
 		username := postJson.UserName
-		password := utils.Md5(postJson.PassWord)
+		password := utils.Md5([]byte(postJson.PassWord))
 		role := postJson.Role
 		email := postJson.Email
 		avatar := strconv.Itoa(utils.RandInt(1, 9)) + ".png"
@@ -230,7 +230,7 @@ func userUpdate(c *gin.Context) {
 			"msg":  "更新失败",
 		})
 	} else {
-		postJson.Password = utils.Md5(postJson.Password)
+		postJson.Password = utils.Md5([]byte(postJson.Password))
 
 		updateData := mydb.User{Uname: postJson.Uname, PassWord: postJson.Password, Email: postJson.Email, Role: postJson.Role}
 		result := global.Db.Model(&mydb.User{}).Where("id=?", postJson.ID).Updates(updateData)
