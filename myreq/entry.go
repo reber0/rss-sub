@@ -2,12 +2,13 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-01-07 22:02:18
- * @LastEditTime: 2022-01-07 22:44:32
+ * @LastEditTime: 2022-02-14 16:55:13
  */
 package myreq
 
 import (
 	"net/http"
+	"net/url"
 )
 
 func New() *Client {
@@ -19,5 +20,6 @@ func New() *Client {
 	return &Client{
 		httpClient: client,
 		Header:     http.Header{},
+		FormData:   url.Values{},
 	}
 }
