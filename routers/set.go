@@ -2,7 +2,7 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-01-04 20:53:42
- * @LastEditTime: 2022-02-10 21:41:14
+ * @LastEditTime: 2022-02-14 10:15:55
  */
 package routers
 
@@ -45,7 +45,7 @@ func getWebSite(c *gin.Context) {
 	datas := make(map[string]string, 10)
 	for _, config := range configs {
 		k, v := config.Key, config.Value
-		if k == "sitename" || k == "domain" || k == "upload_max_size" || k == "title" || k == "keywords" || k == "descript" || k == "copyright" {
+		if k == "sitename" || k == "domain" || k == "upload_max_size" || k == "title" || k == "keyword" || k == "descript" || k == "copyright" {
 			datas[k] = v
 		}
 	}
