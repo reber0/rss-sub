@@ -107,7 +107,7 @@ layui.define(function(exports){
             url: '/api/data/video/list',
             method: 'post',
             dataType: "json",
-            headers: {access_token: layui.data('layuiAdmin').access_token},
+            headers: {Token: layui.data('layuiAdmin').Token},
             contentType: 'application/json',
             page: true, //分页
             limit: 10,

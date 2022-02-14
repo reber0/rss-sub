@@ -18,7 +18,7 @@ import (
 func JWTAuth() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		// 判定是否携带 token
-		token := c.GetHeader("access_token")
+		token := c.GetHeader("Token")
 		if token == "" {
 			c.JSON(http.StatusUnauthorized, gin.H{
 				"code": 1,

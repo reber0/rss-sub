@@ -2,7 +2,7 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2020-02-08 16:28:54
- * @LastEditTime: 2022-02-10 11:47:12
+ * @LastEditTime: 2022-02-14 17:15:14
  -->
 
 <script type="text/html" template>
@@ -69,10 +69,10 @@ layui.use(['admin', 'form'], function(){
             data: JSON.stringify(obj.field),
             timeout: 20000,
             done: function (res) {
-                //请求成功后，写入 access_token
+                //请求成功后，写入 Token
                 layui.data(setter.tableName, {
                     key: setter.request.tokenName
-                    ,value: res.data.access_token
+                    ,value: res.data.Token
                 });
                 //登入成功的提示与跳转
                 layer.msg('登入成功', {

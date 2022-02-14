@@ -71,7 +71,7 @@ func login(c *gin.Context) {
 		c.JSON(200, gin.H{
 			"code": 0,
 			"data": gin.H{
-				"access_token": token,
+				"Token": token,
 			},
 		})
 	} else {

@@ -118,7 +118,7 @@ layui.define(function(exports){
                         url: '/api/message/api_list',
                         method: 'post',
                         dataType: "json",
-                        headers: {access_token: layui.data('layuiAdmin').access_token},
+                        headers: {Token: layui.data('layuiAdmin').Token},
                         contentType: 'application/json',
                         page: true, //分页
                         limit: 10,
@@ -151,7 +151,7 @@ layui.define(function(exports){
                         url: '/api/message/user_list',
                         method: 'post',
                         dataType: "json",
-                        headers: {access_token: layui.data('layuiAdmin').access_token},
+                        headers: {Token: layui.data('layuiAdmin').Token},
                         contentType: 'application/json',
                         page: true, //分页
                         limit: 10,

@@ -98,7 +98,7 @@ layui.define(['laytpl', 'layer'], function(exports){
             typeof options.done === 'function' && options.done(res); 
           } 
           
-          //登录状态失效，清除本地 access_token，并强制跳转到登入页
+          //登录状态失效，清除本地 Token，并强制跳转到登入页
           else if(res[response.statusName] == statusCode.logout){
             view.exit();
           }

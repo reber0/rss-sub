@@ -124,7 +124,7 @@
             auto: false, // 是否选完文件后自动上传
             bindAction: '#file-upload', // 指向一个按钮触发上传，一般配合 auto: false 来使用
             // drag: true, // 是否接受拖拽的文件上传
-            headers: {access_token: layui.data('layuiAdmin').access_token},
+            headers: {Token: layui.data('layuiAdmin').Token},
             choose: function(obj){
                 //预读本地文件示例，不支持ie8
                 obj.preview(function(index, file, result){
