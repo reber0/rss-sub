@@ -2,11 +2,13 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-01-07 10:01:01
- * @LastEditTime: 2022-02-11 12:27:55
+ * @LastEditTime: 2022-02-14 10:00:40
  */
 package middleware
 
 import (
+	"RssSub/global"
+	"RssSub/mydb"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -44,7 +46,14 @@ func JWTAuth() gin.HandlerFunc {
 // 定义 RootAuth 中间件，校验用户是否为 root 权限
 func RootAuth() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		role := c.GetString("role")
+		uid := c.GetString("uid")
+
+		var role string
+		result := global.Db.Model(&mydb.User{}).Select("role").Where("uid = ?", uid).First(&role)
+		if result.Error != nil {
+			global.Log.Error(result.Error.Error())
+		}
+
 		if role != "root" {
 			c.JSON(403, gin.H{
 				"code": 403,
