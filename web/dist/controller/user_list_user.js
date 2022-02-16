@@ -73,7 +73,7 @@ layui.define(function(exports){
                 {field: 'avatar', title: 'Avatar', width:310},
                 {field: 'role', title: 'Role', width:70},
                 {field: 'email', title: 'Email'},
-                {field: 'add_time', title: 'Add Time'},
+                {field: 'created_at', title: 'Add Time'},
                 {field: 'operate', title: 'Operate', width:166, fixed: 'right', align:'center', toolbar: '#table-bar'},
             ]],
             done : function () {
@@ -107,7 +107,7 @@ layui.define(function(exports){
                             var mask = $(".layui-layer-shade");
                             mask.appendTo(layero.parent()); //其中：layero是弹层的DOM对象
 
-                            // 隐藏 id 行和 add_time 行
+                            // 隐藏 id 行和 created_at 行
                             layero.find('.user-form').children().first().addClass("layui-hide");
                             layero.find('.user-form').children().last().addClass("layui-hide");
 
@@ -143,7 +143,7 @@ layui.define(function(exports){
                         },
                         end: function(){
                             // end - 层销毁后触发的回调
-                            // 还原隐藏的 id 行和 add_time 行，不然 edit 加载 html 显示不全
+                            // 还原隐藏的 id 行和 created_at 行，不然 edit 加载 html 显示不全
                             $('.user-form').children().first().removeClass("layui-hide");
                             $('.user-form').children().last().removeClass("layui-hide");
 
@@ -260,7 +260,7 @@ layui.define(function(exports){
                                     {x: "Name", y: data.uname},
                                     {x: "Role", y: data.role},
                                     {x: "email", y: data.email},
-                                    {x: "Add Time", y: data.add_time},
+                                    {x: "Add Time", y: data.created_at},
                                 ],
                                 cols: [[
                                     { field: 'x', width: "30%", align:'right'},
@@ -289,7 +289,7 @@ layui.define(function(exports){
                                 "password": "",
                                 "role": data.role,
                                 "email": data.email,
-                                "add_time": data.add_time,
+                                "created_at": data.created_at,
                             });
 
                             // 解决 layui 的遮罩层使用出现遮罩层覆盖弹窗情况
@@ -319,7 +319,7 @@ layui.define(function(exports){
                                         "uname": formData.uname,
                                         "role": formData.role,
                                         "email": formData.email,
-                                        "add_time": formData.add_time,
+                                        "created_at": formData.created_at,
                                     });
                                     layer.msg(result.msg, {icon: 1, time: 1000});
                                 } else {

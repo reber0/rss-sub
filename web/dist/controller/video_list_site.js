@@ -203,7 +203,7 @@ layui.define(function(exports){
                                     {x: "Link", y: data.link},
                                     {x: "Status", y: data.status},
                                     {x: "Rss", y: data.rss},
-                                    {x: "Add Time", y: data.add_time},
+                                    {x: "Add Time", y: data.created_at},
                                 ],
                                 cols: [[
                                     { field: 'x', width: "18%", align:'right'},
@@ -232,7 +232,7 @@ layui.define(function(exports){
                                 "link": data.link,
                                 "status": data.status,
                                 "rss": data.rss,
-                                "add_time": data.add_time,
+                                "created_at": data.created_at,
                             });
 
                             // 解决 layui 的遮罩层使用出现遮罩层覆盖弹窗情况
@@ -264,7 +264,7 @@ layui.define(function(exports){
                                         "link": formData.link,
                                         "status": formData.status,
                                         "rss": formData.rss,
-                                        "add_time": formData.add_time,
+                                        "created_at": formData.created_at,
                                     });
                                     layer.msg(result.msg, {icon: 1, time: 1000});
                                 } else {

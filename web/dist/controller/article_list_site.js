@@ -124,7 +124,7 @@ layui.define(function(exports){
                                     {x: "Link", y: data.link},
                                     {x: "Regex", y: data.regex},
                                     {x: "Rss", y: data.rss},
-                                    {x: "Add Time", y: data.add_time},
+                                    {x: "Add Time", y: data.created_at},
                                 ],
                                 cols: [[
                                     { field: 'x', width: "18%", align:'right'},
@@ -153,7 +153,7 @@ layui.define(function(exports){
                                 "link": data.link,
                                 "regex": data.regex,
                                 "rss": data.rss,
-                                "add_time": data.add_time
+                                "created_at": data.created_at
                             });
 
                             // 解决 layui 的遮罩层使用出现遮罩层覆盖弹窗情况

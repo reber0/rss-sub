@@ -190,7 +190,7 @@ layui.define(function(exports){
                                     {x: "Name", y: data.name},
                                     {x: "Title", y: data.title},
                                     {x: "URL", y: data.url},
-                                    {x: "Add Time", y: data.add_time},
+                                    {x: "Add Time", y: data.created_at},
                                 ],
                                 cols: [[
                                     { field: 'x', width: "18%", align:'right'},

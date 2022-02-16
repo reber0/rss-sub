@@ -84,7 +84,7 @@ func msgUserList(c *gin.Context) {
 		Action    string `json:"action" gorm:"column:action; type:text; comment:执行的操作触发的 URI、计划任务动作"`
 		Data      string `json:"data" gorm:"column:data; type:text; comment:POST 的数据、得到的数据"`
 		Status    string `json:"status" gorm:"column:status; type:varchar(10); comment:状态，是否已读、已看"`
-		CreatedAt string `json:"add_time" gorm:"column:create_at; comment:添加时间"`
+		CreatedAt string `json:"created_at" gorm:"column:create_at; comment:添加时间"`
 	}
 
 	postJson := PostData{}
@@ -149,7 +149,7 @@ func msgApiList(c *gin.Context) {
 		Action    string `json:"action" gorm:"column:action; type:text; comment:执行的操作触发的 URI、计划任务动作"`
 		Data      string `json:"data" gorm:"column:data; type:text; comment:POST 的数据、得到的数据"`
 		Status    string `json:"status" gorm:"column:status; type:varchar(10); comment:状态，是否已读、已看"`
-		CreatedAt string `json:"add_time" gorm:"column:create_at; comment:添加时间"`
+		CreatedAt string `json:"created_at" gorm:"column:create_at; comment:添加时间"`
 	}
 
 	postJson := PostData{}

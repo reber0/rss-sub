@@ -46,7 +46,7 @@ func dataArticleList(c *gin.Context) {
 		Title     string `json:"title" gorm:"column:title; type:text; comment:标题，文章名字、番剧每集名字"`
 		URL       string `json:"url" gorm:"column:url; type:text; comment:网址，文章链接、番剧每集 URL"`
 		Status    string `json:"status" gorm:"column:status; type:varchar(10); comment:状态，是否已读、已看"`
-		CreatedAt string `json:"add_time" gorm:"column:create_at; comment:添加时间"`
+		CreatedAt string `json:"created_at" gorm:"column:create_at; comment:添加时间"`
 	}
 
 	postJson := PostData{}
@@ -201,7 +201,7 @@ func dataVideoList(c *gin.Context) {
 		Title     string `json:"title" gorm:"column:title; type:text; comment:标题，文章名字、番剧每集名字"`
 		URL       string `json:"url" gorm:"column:url; type:text; comment:网址，文章链接、番剧每集 URL"`
 		Status    string `json:"status" gorm:"column:status; type:varchar(10); comment:状态，是否已读、已看"`
-		CreatedAt string `json:"add_time" gorm:"column:create_at; comment:添加时间"`
+		CreatedAt string `json:"created_at" gorm:"column:create_at; comment:添加时间"`
 	}
 
 	postJson := PostData{}

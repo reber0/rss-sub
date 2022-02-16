@@ -94,7 +94,7 @@ func videoSiteList(c *gin.Context) {
 		Link      string `json:"link" gorm:"column:link; type:varchar(100); not null; comment:主页目录，比如番剧主页、UP 主主页的 URL"`
 		Status    string `json:"status" gorm:"column:status; type:varchar(100); comment:连载状态"`
 		Rss       string `json:"rss" gorm:"column:rss; type:varchar(100); comment:RSS 地址"`
-		CreatedAt string `json:"add_time" gorm:"column:create_at; comment:添加时间"`
+		CreatedAt string `json:"created_at" gorm:"column:create_at; comment:添加时间"`
 	}
 
 	postJson := PostData{}
@@ -234,7 +234,7 @@ func videoSiteSearch(c *gin.Context) {
 		Link      string `json:"link" gorm:"column:link; type:varchar(100); not null; comment:文章网站的网址"`
 		Regex     string `json:"regex" gorm:"column:regex; type:text; not null; comment:正则"`
 		Rss       string `json:"rss" gorm:"column:rss; type:varchar(100); comment:RSS 地址"`
-		CreatedAt string `json:"add_time" gorm:"column:create_at; type:varchar(100); comment:添加时间"`
+		CreatedAt string `json:"created_at" gorm:"column:create_at; type:varchar(100); comment:添加时间"`
 	}
 
 	postJson := PostData{}

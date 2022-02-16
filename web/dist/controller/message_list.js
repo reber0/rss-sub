@@ -128,7 +128,7 @@ layui.define(function(exports){
                             {field: 'username', title: 'UserName', width:120, sort: true},
                             {field: 'action', title: 'Action', width:'24%'},
                             {field: 'data', title: 'Data'},
-                            {field: 'add_time', title: 'Add Time', width:162},
+                            {field: 'created_at', title: 'Add Time', width:162},
                             {field: 'status', title: 'Status', width:95, fixed: 'right', templet:get_status},
                         ]],
                         done : function (res, curr, count) {
@@ -161,7 +161,7 @@ layui.define(function(exports){
                             {field: 'username', title: 'UserName', width:120, sort: true},
                             {field: 'action', title: 'Action', width:'24%'},
                             {field: 'data', title: 'Data'},
-                            {field: 'add_time', title: 'Add Time', width:162},
+                            {field: 'created_at', title: 'Add Time', width:162},
                             {field: 'status', title: 'Status', width:95, fixed: 'right', templet:get_status},
                         ]],
                         done : function (res, curr, count) {

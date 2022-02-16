@@ -252,7 +252,7 @@ func getInfo(c *gin.Context) {
 		Role      string `json:"role" gorm:"column:role; type:varchar(10); not null; comment:用户身份，root/user/e.g."`
 		Email     string `json:"email" gorm:"column:email; type:varchar(100); not null; comment:用户邮箱"`
 		Avatar    string `json:"avatar" gorm:"column:avatar; type:varchar(40); not null; comment:头像图片名"`
-		CreatedAt string `json:"add_time" gorm:"column:create_at; comment:添加时间"`
+		CreatedAt string `json:"created_at" gorm:"column:create_at; comment:添加时间"`
 	}
 
 	userId := c.GetString("uid")
