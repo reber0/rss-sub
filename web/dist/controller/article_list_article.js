@@ -54,7 +54,9 @@ layui.define(function(exports){
         });
         //监听搜索的 select
         form.on('select(status-select)', function(data){
-            status = data.value;
+            var status = data.value;
+            var keyword = $("input[name='keyword']").val();
+            var title = $("input[name='title']").val();
 
             //执行重载
             tableIns.reload({
@@ -62,6 +64,8 @@ layui.define(function(exports){
                     curr: 1 //重新从第 1 页开始
                 }
                 ,where: {
+                    keyword: keyword,
+                    title: title,
                     status: status,
                 }
             });
