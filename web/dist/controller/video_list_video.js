@@ -91,12 +91,17 @@ layui.define(function(exports){
                 data: JSON.stringify({"id_list": id_list, "status": status}),
                 timeout: 20000
             }).success(function (result){
-                tableIns.reload();
-                /*tableIns.reload({
-                    page: {curr: 1} //重新从第 1 页开始
-                });
-                */
-                layer.msg(result.msg, {icon: 1, time: 1000});
+                if (result.code == 0){
+                    tableIns.reload();
+                    // tableIns.reload({
+                    //     page: {
+                    //         curr: 1 //重新从第 1 页开始
+                    //     }
+                    // });
+                    layer.msg(result.msg, {icon: 1, time: 1000});
+                } else {
+                    layer.msg(result.msg, {icon: 2, time: 1000});
+                }
             });
         });
 
