@@ -2,7 +2,7 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-01-04 20:53:25
- * @LastEditTime: 2022-02-11 10:20:57
+ * @LastEditTime: 2022-02-17 17:47:50
  */
 package routers
 
@@ -37,6 +37,7 @@ func dataArticleList(c *gin.Context) {
 		PageIndex int    `form:"page" json:"page"`
 		PageSize  int    `form:"limit" json:"limit"`
 		KeyWord   string `form:"keyword" json:"keyword"`
+		Title     string `form:"title" json:"title"`
 		Status    string `form:"status" json:"status"`
 	}
 
@@ -62,12 +63,20 @@ func dataArticleList(c *gin.Context) {
 
 		status := postJson.Status
 		keyword := fmt.Sprintf("%%%s%%", postJson.KeyWord)
+		title := fmt.Sprintf("%%%s%%", postJson.Title)
+
+		var statusSlice []string
+		if status == "" {
+			statusSlice = []string{"read", "unread"}
+		} else {
+			statusSlice = append(statusSlice, status)
+		}
 
 		var count int64
 		var datas []RespData
 		result := global.Db.Model(&mydb.Data{}).Joins("JOIN article ON data.ref_id = article.id").Select(
 			"data.id", "article.name", "data.title", "data.url", "data.status", "data.create_at").Where(
-			"(uid=? or ?='root') and category='article' and article.name like ? and data.status=? ", userId, role, keyword, status).Count(&count).Order("data.id desc").Limit(postJson.PageSize).Offset((postJson.PageIndex - 1) * postJson.PageSize).Find(&datas)
+			"(uid=? or ?='root') and category='article' and article.name like ? and data.title like ? and data.status in ?", userId, role, keyword, title, statusSlice).Count(&count).Order("data.id desc").Limit(postJson.PageSize).Offset((postJson.PageIndex - 1) * postJson.PageSize).Find(&datas)
 		if result.Error != nil {
 			global.Log.Error(result.Error.Error())
 			c.JSON(500, gin.H{
@@ -218,11 +227,18 @@ func dataVideoList(c *gin.Context) {
 		status := postJson.Status
 		keyword := fmt.Sprintf("%%%s%%", postJson.KeyWord)
 
+		var statusSlice []string
+		if status == "" {
+			statusSlice = []string{"read", "unread"}
+		} else {
+			statusSlice = append(statusSlice, status)
+		}
+
 		var count int64
 		var datas []RespData
 		result := global.Db.Model(&mydb.Data{}).Joins("JOIN video ON data.ref_id = video.id").Select(
 			"data.id", "video.name", "data.title", "data.url", "data.status", "data.create_at").Where(
-			"(video.uid=? or ?='root') and category='video' and video.name like ? and data.status=?", userId, role, keyword, status).Count(&count).Limit(postJson.PageSize).Offset((postJson.PageIndex - 1) * postJson.PageSize).Find(&datas)
+			"(video.uid=? or ?='root') and category='video' and video.name like ? and data.status in ?", userId, role, keyword, statusSlice).Count(&count).Limit(postJson.PageSize).Offset((postJson.PageIndex - 1) * postJson.PageSize).Find(&datas)
 		if result.Error != nil {
 			global.Log.Error(result.Error.Error())
 			c.JSON(500, gin.H{

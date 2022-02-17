@@ -47,6 +47,7 @@ layui.define(function(exports){
                 }
                 ,where: {
                     keyword: formData.keyword,
+                    title: formData.title,
                     status: formData.status
                 }
             });
