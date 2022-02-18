@@ -139,9 +139,12 @@ layui.define(function(exports){
         table.on('toolbar(video-table)', function(obj){
             switch(obj.event){
                 case 'refresh':
-                    tableIns.reload({
-                        page: {curr: 1}
-                    });
+                    tableIns.reload();
+                    // tableIns.reload({
+                    //     page: {
+                    //         curr: 1
+                    //     }
+                    // });
                     break;
                 case 'read-select':
                     // 通过 table 的唯一 id 获取选中的复选框的内容
@@ -231,20 +234,6 @@ layui.define(function(exports){
                     });
                     break;
             };
-        });
-    
-        // 搜索
-        $('.table-search-btn .layui-btn').on('click', function(){
-            var demoReload = $('#table-search');
-
-            tableIns.reload({
-              page: {
-                curr: 1 //重新从第 1 页开始
-              }
-              ,where: {
-                keyword: demoReload.val()
-              }
-            });
         });
     });
 

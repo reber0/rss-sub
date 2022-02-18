@@ -68,9 +68,12 @@ layui.define(function(exports){
         table.on('toolbar(site-table)', function(obj){
             switch(obj.event){
                 case 'refresh':
-                    tableIns.reload({
-                        page: {curr: 1}
-                    });
+                    tableIns.reload();
+                    // tableIns.reload({
+                    //     page: {
+                    //         curr: 1
+                    //     }
+                    // });
                     break;
                 case 'add':
                     layer.prompt({title:"输入链接", formType: 2, area:["400px",'40px'], shadeClose: true}, function(text, index){

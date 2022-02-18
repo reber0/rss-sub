@@ -142,11 +142,12 @@ layui.define(function(exports){
         table.on('toolbar(article-table)', function(obj){
             switch(obj.event){
                 case 'refresh':
-                    tableIns.reload({
-                        page: {
-                            curr: 1
-                        }
-                    });
+                    tableIns.reload();
+                    // tableIns.reload({
+                    //     page: {
+                    //         curr: 1
+                    //     }
+                    // });
                     break;
                 case 'read-select':
                     // 通过 table 的唯一 id 获取选中的复选框的内容

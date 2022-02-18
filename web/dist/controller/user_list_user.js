@@ -85,11 +85,12 @@ layui.define(function(exports){
         table.on('toolbar(user-table)', function(obj){
             switch(obj.event){
                 case 'refresh':
-                    tableIns.reload({
-                        page: {
-                            curr: 1
-                        }
-                    });
+                    tableIns.reload();
+                    // tableIns.reload({
+                    //     page: {
+                    //         curr: 1
+                    //     }
+                    // });
                     break;
                 case "add":
                     admin.popup({
