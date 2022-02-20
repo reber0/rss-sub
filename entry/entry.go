@@ -2,7 +2,7 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-01-18 09:23:30
- * @LastEditTime: 2022-02-11 14:57:14
+ * @LastEditTime: 2022-02-20 23:57:31
  */
 package entry
 
@@ -35,5 +35,5 @@ func AppInit() {
 	}
 	global.Client = myreq.New().SetTransport(&transport).SkipVerify(true).
 		SetHeader("User-Agent", "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:78.0) Gecko/20100101 Firefox/78.0").
-		SetTimeout(time.Duration(10) * time.Second)
+		SetTimeout(time.Duration(20) * time.Second)
 }
