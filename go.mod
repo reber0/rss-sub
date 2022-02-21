@@ -5,7 +5,7 @@ go 1.17
 require (
 	github.com/PuerkitoBio/goquery v1.8.0
 	github.com/gin-gonic/gin v1.7.7
-	github.com/reber0/go-common v0.0.0-20220221083519-21486c92ff95
+	github.com/reber0/go-common v0.0.0-20220221085415-37a1a760e94f
 	gorm.io/driver/sqlite v1.2.6
 	gorm.io/gorm v1.22.4
 )
