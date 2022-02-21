@@ -2,7 +2,7 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-01-04 21:12:25
- * @LastEditTime: 2022-02-08 15:23:16
+ * @LastEditTime: 2022-02-21 16:06:51
  */
 package schedule
 
@@ -10,10 +10,11 @@ import (
 	"RssSub/global"
 	"RssSub/mydb"
 	"RssSub/parse"
-	"RssSub/utils"
 	"fmt"
 	"regexp"
 	"strings"
+
+	"github.com/reber0/go-common/utils"
 )
 
 func checkArticle() {

@@ -2,7 +2,7 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-01-04 15:14:59
- * @LastEditTime: 2022-02-14 15:03:23
+ * @LastEditTime: 2022-02-21 16:06:36
  */
 package routers
 
@@ -10,13 +10,13 @@ import (
 	"RssSub/global"
 	"RssSub/middleware"
 	"RssSub/mydb"
-	"RssSub/utils"
 	"fmt"
 	"strconv"
 	"strings"
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
+	"github.com/reber0/go-common/utils"
 )
 
 // User 相关路由
