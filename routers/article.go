@@ -141,7 +141,7 @@ func articleSiteList(c *gin.Context) {
 		Link      string `json:"link" gorm:"column:link; type:varchar(100); not null; comment:文章网站的网址"`
 		Regex     string `json:"regex" gorm:"column:regex; type:text; not null; comment:正则"`
 		Rss       string `json:"rss" gorm:"column:rss; type:varchar(100); comment:RSS 地址"`
-		CreatedAt string `json:"created_at" gorm:"column:create_at; type:varchar(100); comment:添加时间"`
+		CreatedAt string `json:"created_at" gorm:"column:created_at; type:varchar(100); comment:添加时间"`
 	}
 
 	postJson := PostData{}
@@ -157,7 +157,7 @@ func articleSiteList(c *gin.Context) {
 
 		var count int64
 		var datas []RespData
-		result := global.Db.Model(&mydb.Article{}).Select("id", "name", "link", "regex", "rss", "create_at").Where(
+		result := global.Db.Model(&mydb.Article{}).Select("id", "name", "link", "regex", "rss", "created_at").Where(
 			"uid=? or ?='root'", userId, role).Order("id desc").Count(&count).Limit(postJson.PageSize).Offset((postJson.PageIndex - 1) * postJson.PageSize).Find(&datas)
 		if result.Error != nil {
 			global.Log.Error(result.Error.Error())
@@ -280,7 +280,7 @@ func articleSiteSearch(c *gin.Context) {
 		Link      string `json:"link" gorm:"column:link; type:varchar(100); not null; comment:文章网站的网址"`
 		Regex     string `json:"regex" gorm:"column:regex; type:text; not null; comment:正则"`
 		Rss       string `json:"rss" gorm:"column:rss; type:varchar(100); comment:RSS 地址"`
-		CreatedAt string `json:"created_at" gorm:"column:create_at; type:varchar(100); comment:添加时间"`
+		CreatedAt string `json:"created_at" gorm:"column:created_at; type:varchar(100); comment:添加时间"`
 	}
 
 	postJson := PostData{}
@@ -298,7 +298,7 @@ func articleSiteSearch(c *gin.Context) {
 
 		var count int64
 		var datas []RespData
-		result := global.Db.Model(&mydb.Article{}).Select("id", "name", "link", "regex", "rss", "create_at").Where(
+		result := global.Db.Model(&mydb.Article{}).Select("id", "name", "link", "regex", "rss", "created_at").Where(
 			"(uid=? or ?='root') and name like ?", userId, role, keyword).Order("id desc").Count(&count).Limit(postJson.PageSize).Offset((postJson.PageIndex - 1) * postJson.PageSize).Find(&datas)
 		if result.Error != nil {
 			global.Log.Error(result.Error.Error())

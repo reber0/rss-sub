@@ -2,7 +2,7 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-01-04 20:54:15
- * @LastEditTime: 2022-02-21 16:06:44
+ * @LastEditTime: 2022-04-11 12:53:29
  */
 package routers
 
@@ -94,7 +94,7 @@ func videoSiteList(c *gin.Context) {
 		Link      string `json:"link" gorm:"column:link; type:varchar(100); not null; comment:主页目录，比如番剧主页、UP 主主页的 URL"`
 		Status    string `json:"status" gorm:"column:status; type:varchar(100); comment:连载状态"`
 		Rss       string `json:"rss" gorm:"column:rss; type:varchar(100); comment:RSS 地址"`
-		CreatedAt string `json:"created_at" gorm:"column:create_at; comment:添加时间"`
+		CreatedAt string `json:"created_at" gorm:"column:created_at; comment:添加时间"`
 	}
 
 	postJson := PostData{}
@@ -110,7 +110,7 @@ func videoSiteList(c *gin.Context) {
 
 		var count int64
 		var datas []RespData
-		result := global.Db.Model(&mydb.Video{}).Select("id", "name", "link", "status", "rss", "create_at").Where(
+		result := global.Db.Model(&mydb.Video{}).Select("id", "name", "link", "status", "rss", "created_at").Where(
 			"uid=? or ?='root'", userId, role).Order("id desc").Count(&count).Limit(postJson.PageSize).Offset((postJson.PageIndex - 1) * postJson.PageSize).Find(&datas)
 		if result.Error != nil {
 			global.Log.Error(result.Error.Error())
@@ -234,7 +234,7 @@ func videoSiteSearch(c *gin.Context) {
 		Link      string `json:"link" gorm:"column:link; type:varchar(100); not null; comment:文章网站的网址"`
 		Regex     string `json:"regex" gorm:"column:regex; type:text; not null; comment:正则"`
 		Rss       string `json:"rss" gorm:"column:rss; type:varchar(100); comment:RSS 地址"`
-		CreatedAt string `json:"created_at" gorm:"column:create_at; type:varchar(100); comment:添加时间"`
+		CreatedAt string `json:"created_at" gorm:"column:created_at; type:varchar(100); comment:添加时间"`
 	}
 
 	postJson := PostData{}
@@ -252,7 +252,7 @@ func videoSiteSearch(c *gin.Context) {
 
 		var count int64
 		var datas []RespData
-		result := global.Db.Model(&mydb.Video{}).Select("id", "name", "link", "status", "rss", "create_at").Where(
+		result := global.Db.Model(&mydb.Video{}).Select("id", "name", "link", "status", "rss", "created_at").Where(
 			"(uid=? or ?='root') and name like ?", userId, role, keyword).Order("id desc").Count(&count).Limit(postJson.PageSize).Offset((postJson.PageIndex - 1) * postJson.PageSize).Find(&datas)
 		if result.Error != nil {
 			global.Log.Error(result.Error.Error())

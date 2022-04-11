@@ -47,7 +47,7 @@ func dataArticleList(c *gin.Context) {
 		Title     string `json:"title" gorm:"column:title; type:text; comment:标题，文章名字、番剧每集名字"`
 		URL       string `json:"url" gorm:"column:url; type:text; comment:网址，文章链接、番剧每集 URL"`
 		Status    string `json:"status" gorm:"column:status; type:varchar(10); comment:状态，是否已读、已看"`
-		CreatedAt string `json:"created_at" gorm:"column:create_at; comment:添加时间"`
+		CreatedAt string `json:"created_at" gorm:"column:created_at; comment:添加时间"`
 	}
 
 	postJson := PostData{}
@@ -75,7 +75,7 @@ func dataArticleList(c *gin.Context) {
 		var count int64
 		var datas []RespData
 		result := global.Db.Model(&mydb.Data{}).Joins("JOIN article ON data.ref_id = article.id").Select(
-			"data.id", "article.name", "data.title", "data.url", "data.status", "data.create_at").Where(
+			"data.id", "article.name", "data.title", "data.url", "data.status", "data.created_at").Where(
 			"(uid=? or ?='root') and category='article' and article.name like ? and data.title like ? and data.status in ?", userId, role, keyword, title, statusSlice).Count(&count).Order("data.id desc").Limit(postJson.PageSize).Offset((postJson.PageIndex - 1) * postJson.PageSize).Find(&datas)
 		if result.Error != nil {
 			global.Log.Error(result.Error.Error())
@@ -210,7 +210,7 @@ func dataVideoList(c *gin.Context) {
 		Title     string `json:"title" gorm:"column:title; type:text; comment:标题，文章名字、番剧每集名字"`
 		URL       string `json:"url" gorm:"column:url; type:text; comment:网址，文章链接、番剧每集 URL"`
 		Status    string `json:"status" gorm:"column:status; type:varchar(10); comment:状态，是否已读、已看"`
-		CreatedAt string `json:"created_at" gorm:"column:create_at; comment:添加时间"`
+		CreatedAt string `json:"created_at" gorm:"column:created_at; comment:添加时间"`
 	}
 
 	postJson := PostData{}
@@ -237,7 +237,7 @@ func dataVideoList(c *gin.Context) {
 		var count int64
 		var datas []RespData
 		result := global.Db.Model(&mydb.Data{}).Joins("JOIN video ON data.ref_id = video.id").Select(
-			"data.id", "video.name", "data.title", "data.url", "data.status", "data.create_at").Where(
+			"data.id", "video.name", "data.title", "data.url", "data.status", "data.created_at").Where(
 			"(video.uid=? or ?='root') and category='video' and video.name like ? and data.status in ?", userId, role, keyword, statusSlice).Count(&count).Limit(postJson.PageSize).Offset((postJson.PageIndex - 1) * postJson.PageSize).Find(&datas)
 		if result.Error != nil {
 			global.Log.Error(result.Error.Error())
