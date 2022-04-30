@@ -2,7 +2,7 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-01-04 15:14:59
- * @LastEditTime: 2022-02-21 16:06:36
+ * @LastEditTime: 2022-04-30 09:33:57
  */
 package routers
 
@@ -174,7 +174,7 @@ func userList(c *gin.Context) {
 
 func userAdd(c *gin.Context) {
 	type PostData struct {
-		UserName string `form:"username" json:"username"`
+		UName    string `form:"uname" json:"uname"`
 		PassWord string `form:"password" json:"password"`
 		Role     string `form:"role" json:"role"`
 		Email    string `form:"email" json:"email"`
@@ -189,13 +189,13 @@ func userAdd(c *gin.Context) {
 		})
 	} else {
 		user_id := strings.ReplaceAll(uuid.New().String(), "-", "")
-		username := postJson.UserName
+		uname := postJson.UName
 		password := utils.Md5([]byte(postJson.PassWord))
 		role := postJson.Role
 		email := postJson.Email
 		avatar := strconv.Itoa(utils.RandInt(1, 9)) + ".png"
 
-		u := mydb.User{UID: user_id, Uname: username, PassWord: password, Role: role, Email: email, Avatar: avatar}
+		u := mydb.User{UID: user_id, Uname: uname, PassWord: password, Role: role, Email: email, Avatar: avatar}
 		result := global.Db.Create(&u)
 		if result.Error != nil {
 			global.Log.Error(result.Error.Error())
@@ -230,9 +230,16 @@ func userUpdate(c *gin.Context) {
 			"msg":  "更新失败",
 		})
 	} else {
-		postJson.Password = utils.Md5([]byte(postJson.Password))
+		uname := postJson.Uname
+		password := utils.Md5([]byte(postJson.Password))
 
-		updateData := mydb.User{Uname: postJson.Uname, PassWord: postJson.Password, Email: postJson.Email, Role: postJson.Role}
+		updateData := make(map[string]interface{})
+		if uname != "" {
+			updateData["uname"] = uname
+		}
+		if password != "" {
+			updateData["password"] = password
+		}
 		result := global.Db.Model(&mydb.User{}).Where("id=?", postJson.ID).Updates(updateData)
 		if result.Error != nil {
 			global.Log.Error(result.Error.Error())

@@ -2,7 +2,7 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-01-04 21:12:34
- * @LastEditTime: 2022-02-21 16:55:52
+ * @LastEditTime: 2022-04-30 09:39:35
  */
 package schedule
 
@@ -35,7 +35,7 @@ func checkVideo() {
 			global.Log.Error(result.Error.Error())
 		}
 
-		fmt.Printf("schedule video check ==> %s\n", name)
+		global.Log.Info("schedule video check ==> %s\n", name)
 		videoURLSlice := getVideoURL(site_id)
 		newVideoMsgList, status, err := getNewVideoMsg(link, videoURLSlice)
 		if err != nil {
@@ -149,7 +149,10 @@ func bilibiliUp(link string) ([][]string, string, error) {
 	_tmp := strings.Split(strings.Trim(link, "/"), "/")
 	up_id := _tmp[len(_tmp)-1]
 	resp, err := global.Client.Get(strings.ReplaceAll(up_video_api, "{mid}", up_id))
-	if resp != nil {
+	if err != nil {
+		global.Log.Error(err.Error())
+		return newVideoMsgList, "连载中", err
+	} else {
 		result := resp.Json()
 
 		if result.Get("code").MustInt() == 0 {
@@ -164,10 +167,6 @@ func bilibiliUp(link string) ([][]string, string, error) {
 			newVideoMsgList = utils.ReverseSlice(newVideoMsgList)
 		}
 	}
-	if err != nil {
-		global.Log.Error(err.Error())
-		return newVideoMsgList, "连载中", err
-	}
 
 	return newVideoMsgList, "连载中", nil
 }
@@ -181,7 +180,10 @@ func bilibiliBangumi(link string) ([][]string, string, error) {
 
 	// 获取视频列表
 	resp, err := global.Client.Get(link)
-	if resp != nil {
+	if err != nil {
+		global.Log.Error(err.Error())
+		return newVideoMsgList, "连载中", err
+	} else {
 		html := resp.Html()
 
 		reg := regexp.MustCompile(`season_id":(\d+),`)
@@ -189,7 +191,10 @@ func bilibiliBangumi(link string) ([][]string, string, error) {
 		season_id := m[1]
 
 		resp, err := global.Client.Get(strings.ReplaceAll(bangumi_api, "{season_id}", season_id))
-		if resp != nil {
+		if err != nil {
+			global.Log.Error(err.Error())
+			return newVideoMsgList, "连载中", err
+		} else {
 			json := resp.Json()
 
 			if json.Get("code").MustInt() == 0 {
@@ -215,14 +220,7 @@ func bilibiliBangumi(link string) ([][]string, string, error) {
 				}
 			}
 		}
-		if err != nil {
-			global.Log.Error(err.Error())
-			return newVideoMsgList, "连载中", err
-		}
-	}
-	if err != nil {
-		global.Log.Error(err.Error())
-		return newVideoMsgList, "连载中", err
+
 	}
 
 	return newVideoMsgList, status, nil
@@ -232,7 +230,10 @@ func acfunUp(link string) ([][]string, string, error) {
 	var newVideoMsgList [][]string
 
 	resp, err := global.Client.Get(link)
-	if resp != nil {
+	if err != nil {
+		global.Log.Error(err.Error())
+		return newVideoMsgList, "连载中", err
+	} else {
 		html := resp.Html()
 
 		var movurl_list []string
@@ -248,10 +249,6 @@ func acfunUp(link string) ([][]string, string, error) {
 		}
 		newVideoMsgList = utils.ReverseSlice(newVideoMsgList)
 	}
-	if err != nil {
-		global.Log.Error(err.Error())
-		return newVideoMsgList, "连载中", err
-	}
 
 	return newVideoMsgList, "连载中", nil
 }
@@ -261,7 +258,10 @@ func acfunBangumi(link string) ([][]string, string, error) {
 	var newVideoMsgList [][]string
 
 	resp, err := global.Client.Get(link)
-	if resp != nil {
+	if err != nil {
+		global.Log.Error(err.Error())
+		return newVideoMsgList, "连载中", err
+	} else {
 		html := resp.Html()
 
 		reg1 := regexp.MustCompile(`(?sm)extendsStatus":"(.*?)",`)
@@ -290,10 +290,6 @@ func acfunBangumi(link string) ([][]string, string, error) {
 			}
 		}
 	}
-	if err != nil {
-		global.Log.Error(err.Error())
-		return newVideoMsgList, "连载中", err
-	}
 
 	return newVideoMsgList, status, nil
 }
@@ -303,7 +299,10 @@ func age(link string) ([][]string, string, error) {
 	var newVideoMsgList [][]string
 
 	resp, err := global.Client.Get(link)
-	if resp != nil {
+	if err != nil {
+		global.Log.Error(err.Error())
+		return newVideoMsgList, "连载中", err
+	} else {
 		html := resp.Html()
 
 		dom, err := goquery.NewDocumentFromReader(strings.NewReader(html))
@@ -328,10 +327,6 @@ func age(link string) ([][]string, string, error) {
 			status = "连载中"
 		}
 	}
-	if err != nil {
-		global.Log.Error(err.Error())
-		return newVideoMsgList, "连载中", err
-	}
 
 	return newVideoMsgList, status, nil
 }
@@ -341,7 +336,10 @@ func yinghuacd(link string) ([][]string, string, error) {
 	var newVideoMsgList [][]string
 
 	resp, err := global.Client.Get(link)
-	if resp != nil {
+	if err != nil {
+		global.Log.Error(err.Error())
+		return newVideoMsgList, "连载中", err
+	} else {
 		html := resp.Html()
 
 		dom, err := goquery.NewDocumentFromReader(strings.NewReader(html))
@@ -365,10 +363,6 @@ func yinghuacd(link string) ([][]string, string, error) {
 			status = "连载中"
 			newVideoMsgList = utils.ReverseSlice(newVideoMsgList)
 		}
-	}
-	if err != nil {
-		global.Log.Error(err.Error())
-		return newVideoMsgList, "连载中", err
 	}
 
 	return newVideoMsgList, status, nil

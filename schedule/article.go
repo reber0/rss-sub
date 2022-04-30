@@ -2,14 +2,13 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-01-04 21:12:25
- * @LastEditTime: 2022-02-21 16:55:45
+ * @LastEditTime: 2022-04-30 09:40:26
  */
 package schedule
 
 import (
 	"RssSub/global"
 	"RssSub/mydb"
-	"fmt"
 	"regexp"
 	"strings"
 
@@ -34,7 +33,7 @@ func checkArticle() {
 			global.Log.Error(result.Error.Error())
 		}
 
-		fmt.Printf("schedule article check ==> %s\n", name)
+		global.Log.Info("schedule article check ==> %s\n", name)
 		articleURLSlice := getArticleURL(site_id)
 		newArticleMsgList, err := getNewArticleMsg(link, regex, articleURLSlice)
 		if err != nil {
@@ -89,7 +88,10 @@ func getNewArticleMsg(link, regex string, articleURLSlice []string) ([][]string,
 	var newArticleMsgList [][]string
 
 	resp, err := global.Client.Get(link)
-	if resp != nil {
+	if err != nil {
+		global.Log.Error(err.Error())
+		return newArticleMsgList, err
+	} else {
 		html := resp.Html()
 		baseURL := parse.NewParseURL(link).BaseURL()
 
@@ -108,10 +110,6 @@ func getNewArticleMsg(link, regex string, articleURLSlice []string) ([][]string,
 			}
 		}
 		newArticleMsgList = utils.ReverseSlice(newArticleMsgList)
-	}
-	if err != nil {
-		global.Log.Error(err.Error())
-		return newArticleMsgList, err
 	}
 
 	return newArticleMsgList, nil
