@@ -2,7 +2,7 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-01-04 21:12:34
- * @LastEditTime: 2022-04-30 09:39:35
+ * @LastEditTime: 2022-04-30 09:42:39
  */
 package schedule
 
@@ -307,7 +307,7 @@ func age(link string) ([][]string, string, error) {
 
 		dom, err := goquery.NewDocumentFromReader(strings.NewReader(html))
 		if err != nil {
-			fmt.Println(err)
+			global.Log.Error(err)
 		}
 
 		dom.Find(`div[style="display:block"]>ul>li>a`).Each(func(i int, node *goquery.Selection) {
@@ -344,7 +344,7 @@ func yinghuacd(link string) ([][]string, string, error) {
 
 		dom, err := goquery.NewDocumentFromReader(strings.NewReader(html))
 		if err != nil {
-			fmt.Println(err)
+			global.Log.Error(err)
 		}
 
 		movurl := dom.Find(`div[class="movurl"]`)
