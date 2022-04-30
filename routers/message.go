@@ -2,7 +2,7 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-01-04 20:53:07
- * @LastEditTime: 2022-02-21 16:06:08
+ * @LastEditTime: 2022-04-30 09:51:15
  */
 package routers
 
@@ -124,7 +124,7 @@ func msgUserList(c *gin.Context) {
 		}
 
 		for index, data := range datas {
-			datas[index].CreatedAt = utils.UnixToTime(data.CreatedAt)
+			datas[index].CreatedAt = utils.UnixToStr(data.CreatedAt)
 		}
 
 		c.JSON(200, gin.H{
@@ -189,7 +189,7 @@ func msgApiList(c *gin.Context) {
 		}
 
 		for index, data := range datas {
-			datas[index].CreatedAt = utils.UnixToTime(data.CreatedAt)
+			datas[index].CreatedAt = utils.UnixToStr(data.CreatedAt)
 		}
 
 		c.JSON(200, gin.H{

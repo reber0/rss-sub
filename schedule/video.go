@@ -2,7 +2,7 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-01-04 21:12:34
- * @LastEditTime: 2022-04-30 09:42:39
+ * @LastEditTime: 2022-04-30 09:52:25
  */
 package schedule
 
@@ -35,7 +35,7 @@ func checkVideo() {
 			global.Log.Error(result.Error.Error())
 		}
 
-		global.Log.Info("schedule video check ==> %s\n", name)
+		global.Log.Info(fmt.Sprintf("schedule video check ==> %s\n", name))
 		videoURLSlice := getVideoURL(site_id)
 		newVideoMsgList, status, err := getNewVideoMsg(link, videoURLSlice)
 		if err != nil {
@@ -164,7 +164,7 @@ func bilibiliUp(link string) ([][]string, string, error) {
 				url := strings.ReplaceAll("https://www.bilibili.com/video/{bvid}", "{bvid}", bvid)
 				newVideoMsgList = append(newVideoMsgList, []string{title, url})
 			}
-			newVideoMsgList = utils.ReverseSlice(newVideoMsgList)
+			newVideoMsgList = utils.SliceReverse(newVideoMsgList)
 		}
 	}
 
@@ -247,7 +247,7 @@ func acfunUp(link string) ([][]string, string, error) {
 			url := movurl_list[index]
 			newVideoMsgList = append(newVideoMsgList, []string{title[1], url})
 		}
-		newVideoMsgList = utils.ReverseSlice(newVideoMsgList)
+		newVideoMsgList = utils.SliceReverse(newVideoMsgList)
 	}
 
 	return newVideoMsgList, "连载中", nil
@@ -307,7 +307,7 @@ func age(link string) ([][]string, string, error) {
 
 		dom, err := goquery.NewDocumentFromReader(strings.NewReader(html))
 		if err != nil {
-			global.Log.Error(err)
+			global.Log.Error(err.Error())
 		}
 
 		dom.Find(`div[style="display:block"]>ul>li>a`).Each(func(i int, node *goquery.Selection) {
@@ -344,7 +344,7 @@ func yinghuacd(link string) ([][]string, string, error) {
 
 		dom, err := goquery.NewDocumentFromReader(strings.NewReader(html))
 		if err != nil {
-			global.Log.Error(err)
+			global.Log.Error(err.Error())
 		}
 
 		movurl := dom.Find(`div[class="movurl"]`)
@@ -361,7 +361,7 @@ func yinghuacd(link string) ([][]string, string, error) {
 			status = "已完结"
 		} else {
 			status = "连载中"
-			newVideoMsgList = utils.ReverseSlice(newVideoMsgList)
+			newVideoMsgList = utils.SliceReverse(newVideoMsgList)
 		}
 	}
 

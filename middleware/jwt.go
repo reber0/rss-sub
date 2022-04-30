@@ -2,7 +2,7 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-01-06 14:59:35
- * @LastEditTime: 2022-02-21 16:05:31
+ * @LastEditTime: 2022-04-30 09:50:21
  */
 package middleware
 
@@ -14,7 +14,7 @@ import (
 	"github.com/reber0/go-common/utils"
 )
 
-var jwtSecret = []byte(utils.RandomStr(8))
+var jwtSecret = []byte(utils.RandomString(8))
 
 // var jwtSecret = []byte("12345678")
 

@@ -2,7 +2,7 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-01-04 20:54:15
- * @LastEditTime: 2022-04-11 12:53:29
+ * @LastEditTime: 2022-04-30 09:51:48
  */
 package routers
 
@@ -126,7 +126,7 @@ func videoSiteList(c *gin.Context) {
 
 		for index, data := range datas {
 			datas[index].Rss = strings.TrimRight(domain, "/") + data.Rss
-			datas[index].CreatedAt = utils.UnixToTime(data.CreatedAt)
+			datas[index].CreatedAt = utils.UnixToStr(data.CreatedAt)
 		}
 
 		c.JSON(200, gin.H{
@@ -264,7 +264,7 @@ func videoSiteSearch(c *gin.Context) {
 		}
 
 		for index, data := range datas {
-			datas[index].CreatedAt = utils.UnixToTime(data.CreatedAt)
+			datas[index].CreatedAt = utils.UnixToStr(data.CreatedAt)
 		}
 
 		c.JSON(200, gin.H{

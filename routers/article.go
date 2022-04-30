@@ -2,7 +2,7 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-01-04 20:52:53
- * @LastEditTime: 2022-02-21 16:55:32
+ * @LastEditTime: 2022-04-30 09:50:38
  */
 package routers
 
@@ -173,7 +173,7 @@ func articleSiteList(c *gin.Context) {
 
 		for index, data := range datas {
 			datas[index].Rss = strings.TrimRight(domain, "/") + data.Rss
-			datas[index].CreatedAt = utils.UnixToTime(data.CreatedAt)
+			datas[index].CreatedAt = utils.UnixToStr(data.CreatedAt)
 		}
 
 		c.JSON(200, gin.H{
@@ -310,7 +310,7 @@ func articleSiteSearch(c *gin.Context) {
 		}
 
 		for index, data := range datas {
-			datas[index].CreatedAt = utils.UnixToTime(data.CreatedAt)
+			datas[index].CreatedAt = utils.UnixToStr(data.CreatedAt)
 		}
 
 		c.JSON(200, gin.H{

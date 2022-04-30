@@ -2,7 +2,7 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-01-04 15:14:59
- * @LastEditTime: 2022-04-30 09:33:57
+ * @LastEditTime: 2022-04-30 09:51:37
  */
 package routers
 
@@ -45,7 +45,7 @@ func login(c *gin.Context) {
 	if err != nil {
 		c.JSON(500, gin.H{"err": err})
 	}
-	md5_pwd := utils.Md5([]byte(json.PassWord))
+	md5_pwd := utils.Md5(json.PassWord)
 
 	data := mydb.User{}
 	result := global.Db.Where("uname = ?", json.UserName).First(&data)
@@ -161,7 +161,7 @@ func userList(c *gin.Context) {
 		}
 
 		for index, data := range datas {
-			datas[index].CreatedAt = utils.UnixToTime(data.CreatedAt)
+			datas[index].CreatedAt = utils.UnixToStr(data.CreatedAt)
 		}
 
 		c.JSON(200, gin.H{
@@ -190,10 +190,10 @@ func userAdd(c *gin.Context) {
 	} else {
 		user_id := strings.ReplaceAll(uuid.New().String(), "-", "")
 		uname := postJson.UName
-		password := utils.Md5([]byte(postJson.PassWord))
+		password := utils.Md5(postJson.PassWord)
 		role := postJson.Role
 		email := postJson.Email
-		avatar := strconv.Itoa(utils.RandInt(1, 9)) + ".png"
+		avatar := strconv.Itoa(utils.RandomInt(1, 9)) + ".png"
 
 		u := mydb.User{UID: user_id, Uname: uname, PassWord: password, Role: role, Email: email, Avatar: avatar}
 		result := global.Db.Create(&u)
@@ -231,7 +231,7 @@ func userUpdate(c *gin.Context) {
 		})
 	} else {
 		uname := postJson.Uname
-		password := utils.Md5([]byte(postJson.Password))
+		password := utils.Md5(postJson.Password)
 
 		updateData := make(map[string]interface{})
 		if uname != "" {

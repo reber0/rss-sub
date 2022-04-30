@@ -2,7 +2,7 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-01-04 20:53:25
- * @LastEditTime: 2022-02-21 16:05:59
+ * @LastEditTime: 2022-04-30 09:50:56
  */
 package routers
 
@@ -87,7 +87,7 @@ func dataArticleList(c *gin.Context) {
 		}
 
 		for index, data := range datas {
-			datas[index].CreatedAt = utils.UnixToTime(data.CreatedAt)
+			datas[index].CreatedAt = utils.UnixToStr(data.CreatedAt)
 		}
 
 		c.JSON(200, gin.H{
@@ -249,7 +249,7 @@ func dataVideoList(c *gin.Context) {
 		}
 
 		for index, data := range datas {
-			datas[index].CreatedAt = utils.UnixToTime(data.CreatedAt)
+			datas[index].CreatedAt = utils.UnixToStr(data.CreatedAt)
 		}
 
 		c.JSON(200, gin.H{
@@ -439,7 +439,7 @@ func getRss(c *gin.Context) {
 	for _, data := range datas {
 		title := data.Title
 		url := data.URL
-		date := utils.UnixToTime(data.CreatedAt)
+		date := utils.UnixToStr(data.CreatedAt)
 		description := data.Description
 
 		var item Item
