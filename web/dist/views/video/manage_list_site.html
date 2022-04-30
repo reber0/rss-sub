@@ -1,0 +1,113 @@
+<!--
+ * @Author: reber
+ * @Mail: reber0ask@qq.com
+ * @Date: 2022-04-30 10:27:55
+ * @LastEditTime: 2022-04-30 11:32:50
+-->
+
+<title>Video</title>
+
+<div class="layui-card layadmin-header">
+  <div class="layui-breadcrumb" lay-filter="breadcrumb">
+    <a lay-href="">主页</a>
+    <a><cite>Video</cite></a>
+    <a><cite>管理 Site</cite></a>
+  </div>
+</div>
+
+<style>
+    .search-form .layui-form-item {margin-bottom: 5px;}
+    .search-form input {width:150px}
+</style>
+
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <!-- <div class="layui-card-header">小徽章大家族</div> -->
+                <div class="layui-card-body">
+                    <div class="layui-form search-form">
+                        <div class="layui-form-item">
+                            Name&nbsp;
+                            <div class="layui-inline">
+                                <input class="layui-input" name="keyword" autocomplete="off" placeholder="根据 Name 搜索">
+                            </div>
+                            <div class="layui-inline">
+                                <button class="layui-btn" lay-submit lay-filter="search-form">
+                                    <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <table id="site-table" lay-filter="site-table"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/html" id="site-table-toolbar">
+    <div class="layui-btn-container">
+        <button class="layui-btn layui-btn-sm" lay-event="refresh">刷新</button>
+        <button class="layui-btn layui-btn-sm" lay-event="add">添加</button>
+        <button class="layui-btn layui-btn-sm" lay-event="export-select">导出选中</button>
+        <button class="layui-btn layui-btn-sm" lay-event="export-all">导出全部</button>
+        <button class="layui-btn layui-btn-sm layui-btn-danger" lay-event="delete-select">删除选中</button>
+    </div>
+</script>
+
+<script type="text/html" id="site-table-bar">
+    <button class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</button>
+    <button class="layui-btn layui-btn-xs" lay-event="edit">编辑</button>
+    <button class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete">删除</button>
+</script>
+
+
+<div class="layui-form layui-hide edit-form" lay-filter="edit-form">
+    <div class="layui-form-item">
+        <label class="layui-form-label">ID</label>
+        <div class="layui-input-inline">
+            <input type="text" name="id" class="layui-input layui-disabled" readonly>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">Name</label>
+        <div class="layui-input-inline">
+            <input type="text" name="name" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">Link</label>
+        <div class="layui-input-inline">
+            <input type="text" name="link" class="layui-input" lay-verify="required|url">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">Status</label>
+        <div class="layui-input-inline">
+            <select name="status" lay-verify="required">
+                <option value="连载中">连载中</option>
+                <option value="已完结">已完结</option>
+                <option value="即将上映">即将上映</option>
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">Rss</label>
+        <div class="layui-input-inline">
+            <input type="text" name="rss" class="layui-input layui-disabled" readonly>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">Add Time</label>
+        <div class="layui-input-inline">
+            <input type="text" name="created_at" class="layui-input layui-disabled" readonly>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    layui.use('video/manage_list_site', layui.factory('video/manage_list_site'));
+</script>

@@ -2,7 +2,7 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-01-10 13:35:18
- * @LastEditTime: 2022-02-11 10:17:09
+ * @LastEditTime: 2022-04-30 12:42:44
  */
 package routers
 
@@ -33,7 +33,7 @@ var menu_root = `[{
     }, {
         "name": "article_list_site",
         "title": "管理 Site",
-        "jump": "article/list_site"
+        "jump": "article/manage_list_site"
     }, {
         "name": "article_list_article",
         "title": "管理 Article",
@@ -45,7 +45,7 @@ var menu_root = `[{
     "list": [{
         "name": "video_list_site",
         "title": "管理 Site",
-        "jump": "video/list_site"
+        "jump": "video/manage_list_site"
     }, {
         "name": "video_list_video",
         "title": "管理 Video",

@@ -2,7 +2,7 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-01-04 20:54:15
- * @LastEditTime: 2022-04-30 09:51:48
+ * @LastEditTime: 2022-04-30 12:44:21
  */
 package routers
 
@@ -90,6 +90,7 @@ func videoSiteList(c *gin.Context) {
 
 	type RespData struct {
 		ID        int    `json:"id"`
+		Uname     string `json:"uname,omitempty" gorm:"column:uname; type:varchar(50); comment:用户名"`
 		Name      string `json:"name" gorm:"column:name; type:varchar(100); not null; comment:系列名字，比如番剧名"`
 		Link      string `json:"link" gorm:"column:link; type:varchar(100); not null; comment:主页目录，比如番剧主页、UP 主主页的 URL"`
 		Status    string `json:"status" gorm:"column:status; type:varchar(100); comment:连载状态"`
@@ -110,8 +111,8 @@ func videoSiteList(c *gin.Context) {
 
 		var count int64
 		var datas []RespData
-		result := global.Db.Model(&mydb.Video{}).Select("id", "name", "link", "status", "rss", "created_at").Where(
-			"uid=? or ?='root'", userId, role).Order("id desc").Count(&count).Limit(postJson.PageSize).Offset((postJson.PageIndex - 1) * postJson.PageSize).Find(&datas)
+		result := global.Db.Model(&mydb.Video{}).Joins("JOIN user ON user.uid = video.uid").Select("video.id,user.uname,video.name,video.link,video.status,video.rss,video.created_at").Where(
+			"video.uid=? or ?='root'", userId, role).Order("video.id desc").Count(&count).Limit(postJson.PageSize).Offset((postJson.PageIndex - 1) * postJson.PageSize).Find(&datas)
 		if result.Error != nil {
 			global.Log.Error(result.Error.Error())
 			c.JSON(500, gin.H{
@@ -125,6 +126,9 @@ func videoSiteList(c *gin.Context) {
 		global.Db.Model(&mydb.Config{}).Select("value").Where("key='domain'").First(&domain)
 
 		for index, data := range datas {
+			if role == "user" {
+				datas[index].Uname = ""
+			}
 			datas[index].Rss = strings.TrimRight(domain, "/") + data.Rss
 			datas[index].CreatedAt = utils.UnixToStr(data.CreatedAt)
 		}

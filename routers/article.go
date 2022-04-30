@@ -2,7 +2,7 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-01-04 20:52:53
- * @LastEditTime: 2022-04-30 09:50:38
+ * @LastEditTime: 2022-04-30 12:40:54
  */
 package routers
 
@@ -137,6 +137,7 @@ func articleSiteList(c *gin.Context) {
 
 	type RespData struct {
 		ID        int    `json:"id"`
+		Uname     string `json:"uname,omitempty" gorm:"column:uname; type:varchar(50); comment:用户名"`
 		Name      string `json:"name" gorm:"column:name; type:varchar(100); not null; comment:博客名字"`
 		Link      string `json:"link" gorm:"column:link; type:varchar(100); not null; comment:文章网站的网址"`
 		Regex     string `json:"regex" gorm:"column:regex; type:text; not null; comment:正则"`
@@ -157,8 +158,8 @@ func articleSiteList(c *gin.Context) {
 
 		var count int64
 		var datas []RespData
-		result := global.Db.Model(&mydb.Article{}).Select("id", "name", "link", "regex", "rss", "created_at").Where(
-			"uid=? or ?='root'", userId, role).Order("id desc").Count(&count).Limit(postJson.PageSize).Offset((postJson.PageIndex - 1) * postJson.PageSize).Find(&datas)
+		result := global.Db.Model(&mydb.Article{}).Joins("JOIN user ON user.uid = article.uid").Select("article.id,user.uname,article.name,article.link,article.regex,article.rss,article.created_at").Where(
+			"article.uid=? or ?='root'", userId, role).Order("article.id desc").Count(&count).Limit(postJson.PageSize).Offset((postJson.PageIndex - 1) * postJson.PageSize).Find(&datas)
 		if result.Error != nil {
 			global.Log.Error(result.Error.Error())
 			c.JSON(500, gin.H{
@@ -172,6 +173,9 @@ func articleSiteList(c *gin.Context) {
 		global.Db.Model(&mydb.Config{}).Select("value").Where("key='domain'").First(&domain)
 
 		for index, data := range datas {
+			if role == "user" {
+				datas[index].Uname = ""
+			}
 			datas[index].Rss = strings.TrimRight(domain, "/") + data.Rss
 			datas[index].CreatedAt = utils.UnixToStr(data.CreatedAt)
 		}
