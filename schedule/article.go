@@ -2,7 +2,7 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-01-04 21:12:25
- * @LastEditTime: 2022-04-30 09:51:56
+ * @LastEditTime: 2022-05-07 11:21:36
  */
 package schedule
 
@@ -93,7 +93,7 @@ func getNewArticleMsg(link, regex string, articleURLSlice []string) ([][]string,
 		global.Log.Error(err.Error())
 		return newArticleMsgList, err
 	} else {
-		html := resp.Html()
+		html := resp.String()
 		baseURL := parse.NewParseURL(link).BaseURL()
 
 		reg := regexp.MustCompile(`(?sm)` + regex)
