@@ -58,6 +58,7 @@ layui.define(function(exports){
                 {field: 'id', title: 'ID', width:60, sort: true, fixed: 'left', align:'center'},
                 {field: 'name', title: 'Name', width:'15%'},
                 {field: 'link', title: 'Link'},
+                {field: 'regex', title: 'Regex', hide: true},
                 {field: 'rss', title: 'Rss', minWidth:520},
                 {field: 'operate', title: 'Operate', width:166, fixed: 'right', align:'center', toolbar: '#article-table-bar'}
             ]],
