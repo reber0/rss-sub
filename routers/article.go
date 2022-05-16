@@ -2,7 +2,7 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-01-04 20:52:53
- * @LastEditTime: 2022-05-07 11:38:20
+ * @LastEditTime: 2022-05-16 09:57:55
  */
 package routers
 
@@ -176,8 +176,9 @@ func articleSiteList(c *gin.Context) {
 			if role == "user" {
 				datas[index].Uname = ""
 			}
+			datas[index].Regex = utils.HtmlEntityEncode(data.Regex)
 			datas[index].Rss = strings.TrimRight(domain, "/") + data.Rss
-			datas[index].CreatedAt = utils.UnixToStr(data.CreatedAt)
+			datas[index].CreatedAt = utils.Unix2String(data.CreatedAt)
 		}
 
 		c.JSON(200, gin.H{
@@ -314,7 +315,7 @@ func articleSiteSearch(c *gin.Context) {
 		}
 
 		for index, data := range datas {
-			datas[index].CreatedAt = utils.UnixToStr(data.CreatedAt)
+			datas[index].CreatedAt = utils.Unix2String(data.CreatedAt)
 		}
 
 		c.JSON(200, gin.H{

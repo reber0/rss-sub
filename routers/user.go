@@ -161,7 +161,7 @@ func userList(c *gin.Context) {
 		}
 
 		for index, data := range datas {
-			datas[index].CreatedAt = utils.UnixToStr(data.CreatedAt)
+			datas[index].CreatedAt = utils.Unix2String(data.CreatedAt)
 		}
 
 		c.JSON(200, gin.H{

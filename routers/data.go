@@ -87,7 +87,7 @@ func dataArticleList(c *gin.Context) {
 		}
 
 		for index, data := range datas {
-			datas[index].CreatedAt = utils.UnixToStr(data.CreatedAt)
+			datas[index].CreatedAt = utils.Unix2String(data.CreatedAt)
 		}
 
 		c.JSON(200, gin.H{
@@ -249,7 +249,7 @@ func dataVideoList(c *gin.Context) {
 		}
 
 		for index, data := range datas {
-			datas[index].CreatedAt = utils.UnixToStr(data.CreatedAt)
+			datas[index].CreatedAt = utils.Unix2String(data.CreatedAt)
 		}
 
 		c.JSON(200, gin.H{
@@ -439,7 +439,7 @@ func getRss(c *gin.Context) {
 	for _, data := range datas {
 		title := data.Title
 		url := data.URL
-		date := utils.UnixToStr(data.CreatedAt)
+		date := utils.Unix2String(data.CreatedAt)
 		description := data.Description
 
 		var item Item
