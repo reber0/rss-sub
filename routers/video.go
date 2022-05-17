@@ -2,7 +2,7 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-01-04 20:54:15
- * @LastEditTime: 2022-05-17 21:19:29
+ * @LastEditTime: 2022-05-17 21:22:34
  */
 package routers
 
@@ -234,6 +234,7 @@ func videoSiteSearch(c *gin.Context) {
 	type RespData struct {
 		ID        int    `json:"id"`
 		UID       string `json:"uid" gorm:"column:uid; size:32; not null; unique; comment:用户唯一 id(uuid)"`
+		Uname     string `json:"uname,omitempty" gorm:"column:uname; type:varchar(50); comment:用户名"`
 		Name      string `json:"name" gorm:"column:name; type:varchar(100); not null; comment:博客名字"`
 		Link      string `json:"link" gorm:"column:link; type:varchar(100); not null; comment:文章网站的网址"`
 		Regex     string `json:"regex" gorm:"column:regex; type:text; not null; comment:正则"`
