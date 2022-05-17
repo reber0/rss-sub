@@ -2,7 +2,7 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-01-04 20:54:15
- * @LastEditTime: 2022-05-17 21:22:34
+ * @LastEditTime: 2022-05-17 21:27:37
  */
 package routers
 
@@ -233,13 +233,12 @@ func videoSiteSearch(c *gin.Context) {
 
 	type RespData struct {
 		ID        int    `json:"id"`
-		UID       string `json:"uid" gorm:"column:uid; size:32; not null; unique; comment:用户唯一 id(uuid)"`
 		Uname     string `json:"uname,omitempty" gorm:"column:uname; type:varchar(50); comment:用户名"`
-		Name      string `json:"name" gorm:"column:name; type:varchar(100); not null; comment:博客名字"`
-		Link      string `json:"link" gorm:"column:link; type:varchar(100); not null; comment:文章网站的网址"`
-		Regex     string `json:"regex" gorm:"column:regex; type:text; not null; comment:正则"`
+		Name      string `json:"name" gorm:"column:name; type:varchar(100); not null; comment:系列名字，比如番剧名"`
+		Link      string `json:"link" gorm:"column:link; type:varchar(100); not null; comment:主页目录，比如番剧主页、UP 主主页的 URL"`
+		Status    string `json:"status" gorm:"column:status; type:varchar(100); comment:连载状态"`
 		Rss       string `json:"rss" gorm:"column:rss; type:varchar(100); comment:RSS 地址"`
-		CreatedAt string `json:"created_at" gorm:"column:created_at; type:varchar(100); comment:添加时间"`
+		CreatedAt string `json:"created_at" gorm:"column:created_at; comment:添加时间"`
 	}
 
 	postJson := PostData{}
