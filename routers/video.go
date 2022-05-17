@@ -2,7 +2,7 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-01-04 20:54:15
- * @LastEditTime: 2022-05-17 21:27:37
+ * @LastEditTime: 2022-05-17 21:29:52
  */
 package routers
 
@@ -274,7 +274,6 @@ func videoSiteSearch(c *gin.Context) {
 			if role == "user" {
 				datas[index].Uname = ""
 			}
-			datas[index].Regex = utils.HtmlEntityEncode(data.Regex)
 			datas[index].Rss = strings.TrimRight(domain, "/") + data.Rss
 			datas[index].CreatedAt = utils.Unix2String(data.CreatedAt)
 		}
