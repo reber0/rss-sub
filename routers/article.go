@@ -2,7 +2,7 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-01-04 20:52:53
- * @LastEditTime: 2022-05-16 09:57:55
+ * @LastEditTime: 2022-05-17 21:19:13
  */
 package routers
 
@@ -314,7 +314,15 @@ func articleSiteSearch(c *gin.Context) {
 			return
 		}
 
+		var domain string
+		global.Db.Model(&mydb.Config{}).Select("value").Where("key='domain'").First(&domain)
+
 		for index, data := range datas {
+			if role == "user" {
+				datas[index].Uname = ""
+			}
+			datas[index].Regex = utils.HtmlEntityEncode(data.Regex)
+			datas[index].Rss = strings.TrimRight(domain, "/") + data.Rss
 			datas[index].CreatedAt = utils.Unix2String(data.CreatedAt)
 		}
 
