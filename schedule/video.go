@@ -2,7 +2,7 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-01-04 21:12:34
- * @LastEditTime: 2022-04-30 09:52:25
+ * @LastEditTime: 2022-05-31 15:38:15
  */
 package schedule
 
@@ -17,6 +17,7 @@ import (
 	"github.com/bitly/go-simplejson"
 	"github.com/reber0/go-common/parse"
 	"github.com/reber0/go-common/utils"
+	"github.com/tidwall/gjson"
 )
 
 func checkVideo() {
@@ -148,19 +149,19 @@ func bilibiliUp(link string) ([][]string, string, error) {
 	// 获取视频列表
 	_tmp := strings.Split(strings.Trim(link, "/"), "/")
 	up_id := _tmp[len(_tmp)-1]
-	resp, err := global.Client.Get(strings.ReplaceAll(up_video_api, "{mid}", up_id))
+	resp, err := global.Client.R().Get(strings.ReplaceAll(up_video_api, "{mid}", up_id))
 	if err != nil {
 		global.Log.Error(err.Error())
 		return newVideoMsgList, "连载中", err
 	} else {
-		result := resp.Json()
+		html := utils.EncodeToUTF8(resp)
 
-		if result.Get("code").MustInt() == 0 {
-			vlist := result.Get("data").Get("list").Get("vlist").MustArray()
+		code := gjson.Get(html, "code").Int()
+		if code == 0 {
+			vlist := gjson.Get("html", "data.list.vlist").Array()
 			for _, v := range vlist {
-				v := v.(map[string]interface{})
-				title := v["title"].(string)
-				bvid := v["bvid"].(string)
+				title := v.Get("title").String()
+				bvid := v.Get("bvid").String()
 				url := strings.ReplaceAll("https://www.bilibili.com/video/{bvid}", "{bvid}", bvid)
 				newVideoMsgList = append(newVideoMsgList, []string{title, url})
 			}
@@ -179,41 +180,41 @@ func bilibiliBangumi(link string) ([][]string, string, error) {
 	bangumi_api := "https://api.bilibili.com/pgc/view/web/season?season_id={season_id}"
 
 	// 获取视频列表
-	resp, err := global.Client.Get(link)
+	resp, err := global.Client.R().Get(link)
 	if err != nil {
 		global.Log.Error(err.Error())
 		return newVideoMsgList, "连载中", err
 	} else {
-		html := resp.Html()
+		html := utils.EncodeToUTF8(resp)
 
 		reg := regexp.MustCompile(`season_id":(\d+),`)
 		m := reg.FindStringSubmatch(html)
 		season_id := m[1]
 
-		resp, err := global.Client.Get(strings.ReplaceAll(bangumi_api, "{season_id}", season_id))
+		resp, err := global.Client.R().Get(strings.ReplaceAll(bangumi_api, "{season_id}", season_id))
 		if err != nil {
 			global.Log.Error(err.Error())
 			return newVideoMsgList, "连载中", err
 		} else {
-			json := resp.Json()
+			html := utils.EncodeToUTF8(resp)
 
-			if json.Get("code").MustInt() == 0 {
-				result := json.Get("result")
-				_title := result.Get("title").MustString()
+			code := gjson.Get(html, "code").Int()
+			if code == 0 {
+				// result := gjson.Get(html, "result")
+				_title := gjson.Get(html, "result.title").String()
 
 				// 获取正片
-				episodes := result.Get("episodes")
-				for _, episode := range episodes.MustArray() {
-					episode := episode.(map[string]interface{})
-					badge := episode["badge"].(string)
+				episodes := gjson.Get(html, "result.episodes").Array()
+				for _, episode := range episodes {
+					badge := episode.Get("badge").String()
 					if !strings.Contains(badge, "预告") {
-						share_copy := episode["share_copy"].(string)
+						share_copy := episode.Get("share_copy").String()
 						title := strings.TrimSpace(strings.ReplaceAll(share_copy, "《"+_title+"》", ""))
-						url := episode["share_url"].(string)
+						url := episode.Get("share_url").String()
 						newVideoMsgList = append(newVideoMsgList, []string{title, url})
 					}
 				}
-				if result.Get("publish").Get("is_finish").MustInt() == 1 {
+				if gjson.Get(html, "result.publish.is_finish").Int() == 1 {
 					status = "已完结"
 				} else {
 					status = "连载中"
@@ -229,12 +230,12 @@ func bilibiliBangumi(link string) ([][]string, string, error) {
 func acfunUp(link string) ([][]string, string, error) {
 	var newVideoMsgList [][]string
 
-	resp, err := global.Client.Get(link)
+	resp, err := global.Client.R().Get(link)
 	if err != nil {
 		global.Log.Error(err.Error())
 		return newVideoMsgList, "连载中", err
 	} else {
-		html := resp.Html()
+		html := utils.EncodeToUTF8(resp)
 
 		var movurl_list []string
 		reg1 := regexp.MustCompile(`<a href="(.*?)" target="_blank" class="ac-space-video`)
@@ -257,12 +258,12 @@ func acfunBangumi(link string) ([][]string, string, error) {
 	var status string
 	var newVideoMsgList [][]string
 
-	resp, err := global.Client.Get(link)
+	resp, err := global.Client.R().Get(link)
 	if err != nil {
 		global.Log.Error(err.Error())
 		return newVideoMsgList, "连载中", err
 	} else {
-		html := resp.Html()
+		html := utils.EncodeToUTF8(resp)
 
 		reg1 := regexp.MustCompile(`(?sm)extendsStatus":"(.*?)",`)
 		m1 := reg1.FindStringSubmatch(html)
@@ -298,13 +299,12 @@ func age(link string) ([][]string, string, error) {
 	var status string
 	var newVideoMsgList [][]string
 
-	resp, err := global.Client.Get(link)
+	resp, err := global.Client.R().Get(link)
 	if err != nil {
 		global.Log.Error(err.Error())
 		return newVideoMsgList, "连载中", err
 	} else {
-		html := resp.Html()
-
+		html := utils.EncodeToUTF8(resp)
 		dom, err := goquery.NewDocumentFromReader(strings.NewReader(html))
 		if err != nil {
 			global.Log.Error(err.Error())
@@ -335,12 +335,12 @@ func yinghuacd(link string) ([][]string, string, error) {
 	var status string
 	var newVideoMsgList [][]string
 
-	resp, err := global.Client.Get(link)
+	resp, err := global.Client.R().Get(link)
 	if err != nil {
 		global.Log.Error(err.Error())
 		return newVideoMsgList, "连载中", err
 	} else {
-		html := resp.Html()
+		html := utils.EncodeToUTF8(resp)
 
 		dom, err := goquery.NewDocumentFromReader(strings.NewReader(html))
 		if err != nil {

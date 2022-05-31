@@ -2,7 +2,7 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-01-04 20:52:53
- * @LastEditTime: 2022-05-17 21:22:27
+ * @LastEditTime: 2022-05-31 15:21:37
  */
 package routers
 
@@ -47,7 +47,7 @@ func articleCheckRegex(c *gin.Context) {
 		})
 	} else {
 		base_url := parse.NewParseURL(postJson.Link).BaseURL()
-		resp, err := global.Client.Get(postJson.Link)
+		resp, err := global.Client.R().Get(postJson.Link)
 		if resp != nil {
 			html := resp.String()
 

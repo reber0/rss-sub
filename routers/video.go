@@ -2,7 +2,7 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-01-04 20:54:15
- * @LastEditTime: 2022-05-17 21:29:52
+ * @LastEditTime: 2022-05-31 15:31:00
  */
 package routers
 
@@ -16,6 +16,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/reber0/go-common/utils"
+	"github.com/tidwall/gjson"
 )
 
 // Video Site 相关路由
@@ -298,58 +299,63 @@ func getName(targetURL string) string {
 		mid := uSlice[len(uSlice)-1]
 
 		url := strings.Replace(user_info_api, "{}", mid, 1)
-		resp, _ := global.Client.Get(url)
-		jsonData := resp.Json()
+		resp, _ := global.Client.R().Get(url)
+		html := utils.EncodeToUTF8(resp)
 
-		code := jsonData.Get("code").MustInt()
+		code := gjson.Get(html, "code").Int()
 		if code == 0 {
-			name = jsonData.Get("data").Get("name").MustString()
+			name = gjson.Get(html, "data.name").String()
 		}
 	} else if strings.HasPrefix(targetURL, "https://www.bilibili.com/bangumi") {
-		resp, _ := global.Client.Get(targetURL)
+		resp, _ := global.Client.R().Get(targetURL)
+		html := utils.EncodeToUTF8(resp)
 
 		reg := regexp.MustCompile(`season_id":(\d+),`)
-		m := reg.FindStringSubmatch(resp.Html())
+		m := reg.FindStringSubmatch(html)
 		if len(m) > 0 {
 			seasonId := m[1]
 			url := strings.Replace(bangumi_api, "{}", seasonId, 1)
-			resp, _ = global.Client.Get(url)
-			jsonData := resp.Json()
+			resp, _ = global.Client.R().Get(url)
+			html := utils.EncodeToUTF8(resp)
 
-			code := jsonData.Get("code").MustInt()
+			code := gjson.Get(html, "code").Int()
 			if code == 0 {
-				name = jsonData.Get("result").Get("season_title").MustString()
+				name = gjson.Get(html, "result.season_title").String()
 			}
 		}
 	} else if strings.HasPrefix(targetURL, "https://www.acfun.cn/u") {
-		resp, _ := global.Client.Get(targetURL)
+		resp, _ := global.Client.R().Get(targetURL)
+		html := utils.EncodeToUTF8(resp)
 
 		reg := regexp.MustCompile(`<span class="name" data-username=(.*?)>`)
-		m := reg.FindStringSubmatch(resp.Html())
+		m := reg.FindStringSubmatch(html)
 		if len(m) > 0 {
 			name = m[1]
 		}
 	} else if strings.HasPrefix(targetURL, "https://www.acfun.cn/bangumi") {
-		resp, _ := global.Client.Get(targetURL)
+		resp, _ := global.Client.R().Get(targetURL)
+		html := utils.EncodeToUTF8(resp)
 
 		reg := regexp.MustCompile(`bangumiTitle":"(.*?)",`)
-		m := reg.FindStringSubmatch(resp.Html())
+		m := reg.FindStringSubmatch(html)
 		if len(m) > 0 {
 			name = m[1]
 		}
 	} else if strings.HasPrefix(targetURL, "https://www.agemys.com/") {
-		resp, _ := global.Client.Get(targetURL)
+		resp, _ := global.Client.R().Get(targetURL)
+		html := utils.EncodeToUTF8(resp)
 
 		reg := regexp.MustCompile(`detail_imform_name">(.*?)<`)
-		m := reg.FindStringSubmatch(resp.Html())
+		m := reg.FindStringSubmatch(html)
 		if len(m) > 0 {
 			name = m[1]
 		}
 	} else if strings.HasPrefix(targetURL, "http://www.yinghuacd.com/") {
-		resp, _ := global.Client.Get(targetURL)
+		resp, _ := global.Client.R().Get(targetURL)
+		html := utils.EncodeToUTF8(resp)
 
 		reg := regexp.MustCompile(`<h1>(.*?)</h1>`)
-		m := reg.FindStringSubmatch(resp.Html())
+		m := reg.FindStringSubmatch(html)
 		if len(m) > 0 {
 			name = m[1]
 		}

@@ -2,13 +2,12 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-01-05 11:23:54
- * @LastEditTime: 2022-02-21 16:05:11
+ * @LastEditTime: 2022-05-31 15:20:24
  */
 package global
 
 import (
-	"github.com/reber0/go-common/myreq"
-
+	"github.com/go-resty/resty/v2"
 	"go.uber.org/zap"
 	"gorm.io/gorm"
 )
@@ -18,5 +17,5 @@ var (
 	Log      *zap.Logger
 
 	Db     *gorm.DB
-	Client *myreq.Client
+	Client *resty.Client
 )

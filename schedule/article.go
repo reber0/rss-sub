@@ -2,7 +2,7 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-01-04 21:12:25
- * @LastEditTime: 2022-05-07 11:21:36
+ * @LastEditTime: 2022-05-31 15:21:17
  */
 package schedule
 
@@ -88,7 +88,7 @@ func getArticleURL(articleID int) []string {
 func getNewArticleMsg(link, regex string, articleURLSlice []string) ([][]string, error) {
 	var newArticleMsgList [][]string
 
-	resp, err := global.Client.Get(link)
+	resp, err := global.Client.R().Get(link)
 	if err != nil {
 		global.Log.Error(err.Error())
 		return newArticleMsgList, err
