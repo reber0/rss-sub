@@ -7,9 +7,9 @@
 package middleware
 
 import (
-	"RssSub/global"
-	"RssSub/mydb"
 	"net/http"
+	"rsssub/global"
+	"rsssub/mydb"
 
 	"github.com/gin-gonic/gin"
 )

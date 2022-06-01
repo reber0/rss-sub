@@ -2,12 +2,12 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-01-04 22:20:57
- * @LastEditTime: 2022-02-11 17:22:02
+ * @LastEditTime: 2022-06-02 00:00:21
  */
 package mydb
 
 import (
-	"RssSub/global"
+	"rsssub/global"
 
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"

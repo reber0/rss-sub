@@ -2,15 +2,15 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-01-04 21:12:25
- * @LastEditTime: 2022-05-31 15:21:17
+ * @LastEditTime: 2022-06-02 00:02:28
  */
 package schedule
 
 import (
-	"RssSub/global"
-	"RssSub/mydb"
 	"fmt"
 	"regexp"
+	"rsssub/global"
+	"rsssub/mydb"
 	"strings"
 
 	"github.com/reber0/go-common/parse"

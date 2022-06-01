@@ -1,4 +1,4 @@
-module RssSub
+module rsssub
 
 go 1.18
 
@@ -9,7 +9,7 @@ require (
 	github.com/go-resty/resty/v2 v2.7.0
 	github.com/golang-jwt/jwt v3.2.2+incompatible
 	github.com/google/uuid v1.3.0
-	github.com/reber0/go-common v1.0.0
+	github.com/reber0/go-common v1.1.0
 	github.com/robfig/cron v1.2.0
 	go.uber.org/zap v1.21.0
 	gorm.io/driver/sqlite v1.3.2

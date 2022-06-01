@@ -7,10 +7,10 @@
 package schedule
 
 import (
-	"RssSub/global"
-	"RssSub/mydb"
 	"fmt"
 	"regexp"
+	"rsssub/global"
+	"rsssub/mydb"
 	"strings"
 
 	"github.com/PuerkitoBio/goquery"

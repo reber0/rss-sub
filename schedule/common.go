@@ -2,13 +2,13 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-01-06 17:14:01
- * @LastEditTime: 2022-02-08 10:15:12
+ * @LastEditTime: 2022-06-02 00:02:36
  */
 package schedule
 
 import (
-	"RssSub/global"
-	"RssSub/mydb"
+	"rsssub/global"
+	"rsssub/mydb"
 )
 
 // 记录后台计划任务、程序错误信息等

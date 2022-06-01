@@ -2,19 +2,19 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-01-04 15:14:04
- * @LastEditTime: 2022-02-11 14:57:29
+ * @LastEditTime: 2022-06-01 23:59:47
  */
 package main
 
 import (
-	"RssSub/entry"
-	"RssSub/global"
-	"RssSub/routers"
-	"RssSub/schedule"
 	"embed"
 	"fmt"
 	"io/fs"
 	"net/http"
+	"rsssub/entry"
+	"rsssub/global"
+	"rsssub/routers"
+	"rsssub/schedule"
 
 	"github.com/gin-gonic/gin"
 

@@ -2,16 +2,16 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-01-04 20:54:15
- * @LastEditTime: 2022-05-31 15:31:00
+ * @LastEditTime: 2022-06-02 00:02:18
  */
 package routers
 
 import (
-	"RssSub/global"
-	"RssSub/middleware"
-	"RssSub/mydb"
 	"fmt"
 	"regexp"
+	"rsssub/global"
+	"rsssub/middleware"
+	"rsssub/mydb"
 	"strings"
 
 	"github.com/gin-gonic/gin"

@@ -2,15 +2,15 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-01-18 09:23:30
- * @LastEditTime: 2022-05-31 15:19:56
+ * @LastEditTime: 2022-06-01 23:59:59
  */
 package entry
 
 import (
-	"RssSub/global"
-	"RssSub/mydb"
 	"crypto/tls"
 	"os"
+	"rsssub/global"
+	"rsssub/mydb"
 	"time"
 
 	"github.com/go-resty/resty/v2"
