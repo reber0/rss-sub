@@ -2,7 +2,7 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-01-04 21:12:34
- * @LastEditTime: 2022-05-31 15:38:15
+ * @LastEditTime: 2022-06-02 18:07:10
  */
 package schedule
 
@@ -158,7 +158,7 @@ func bilibiliUp(link string) ([][]string, string, error) {
 
 		code := gjson.Get(html, "code").Int()
 		if code == 0 {
-			vlist := gjson.Get("html", "data.list.vlist").Array()
+			vlist := gjson.Get(html, "data.list.vlist").Array()
 			for _, v := range vlist {
 				title := v.Get("title").String()
 				bvid := v.Get("bvid").String()
