@@ -2,7 +2,7 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-01-04 20:54:15
- * @LastEditTime: 2022-06-02 00:02:18
+ * @LastEditTime: 2022-06-28 21:05:30
  */
 package routers
 
@@ -341,7 +341,7 @@ func getName(targetURL string) string {
 		if len(m) > 0 {
 			name = m[1]
 		}
-	} else if strings.HasPrefix(targetURL, "https://www.agemys.com/") {
+	} else if strings.HasPrefix(targetURL, "https://www.agemys.cc/") {
 		resp, _ := global.Client.R().Get(targetURL)
 		html := utils.EncodeToUTF8(resp)
 

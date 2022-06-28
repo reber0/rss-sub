@@ -114,7 +114,7 @@ func getNewVideoMsg(link string, videoURLSlice []string) ([][]string, string, er
 		href_text_list, status, err = acfunUp(link)
 	} else if strings.HasPrefix(link, "https://www.acfun.cn/bangumi") {
 		href_text_list, status, err = acfunBangumi(link)
-	} else if strings.HasPrefix(link, "https://www.agemys.com/") {
+	} else if strings.HasPrefix(link, "https://www.agemys.cc/") {
 		href_text_list, status, err = age(link)
 	} else if strings.HasPrefix(link, "http://www.yinghuacd.com/") {
 		href_text_list, status, err = yinghuacd(link)
