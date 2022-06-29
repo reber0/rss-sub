@@ -9,16 +9,13 @@ require (
 	github.com/go-resty/resty/v2 v2.7.0
 	github.com/golang-jwt/jwt v3.2.2+incompatible
 	github.com/google/uuid v1.3.0
-	github.com/reber0/go-common v1.1.0
+	github.com/reber0/go-common v1.3.0
 	github.com/robfig/cron v1.2.0
+	github.com/tidwall/match v1.1.1 // indirect
+	github.com/tidwall/pretty v1.2.0 // indirect
 	go.uber.org/zap v1.21.0
 	gorm.io/driver/sqlite v1.3.2
 	gorm.io/gorm v1.23.5
-)
-
-require (
-	github.com/tidwall/match v1.1.1 // indirect
-	github.com/tidwall/pretty v1.2.0 // indirect
 )
 
 require (
