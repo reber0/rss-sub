@@ -2,7 +2,7 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-01-04 20:52:53
- * @LastEditTime: 2022-06-02 00:00:42
+ * @LastEditTime: 2022-06-30 00:44:44
  */
 package routers
 
@@ -49,7 +49,7 @@ func articleCheckRegex(c *gin.Context) {
 		base_url := parse.NewParseURL(postJson.Link).BaseURL()
 		resp, err := global.Client.R().Get(postJson.Link)
 		if resp != nil {
-			html := resp.String()
+			html := utils.EncodeToUTF8(resp)
 
 			article_tag := make([]map[string]string, 0, 100)
 			reg := regexp.MustCompile(`(?sm)` + postJson.Regex)
