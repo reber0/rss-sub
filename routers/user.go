@@ -2,12 +2,11 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-01-04 15:14:59
- * @LastEditTime: 2022-06-02 00:02:02
+ * @LastEditTime: 2022-07-04 17:50:46
  */
 package routers
 
 import (
-	"fmt"
 	"rsssub/global"
 	"rsssub/middleware"
 	"rsssub/mydb"
@@ -128,37 +127,28 @@ func userList(c *gin.Context) {
 			"msg":  "检查失败",
 		})
 	} else {
-		username := fmt.Sprintf("%%%s%%", postJson.UserName)
-		email := fmt.Sprintf("%%%s%%", postJson.Email)
-		role := fmt.Sprintf("%%%s%%", postJson.Role)
+		username := postJson.UserName
+		email := postJson.Email
+		role := postJson.Role
 
 		var count int64
 		var datas []RespData
+		tx := global.Db.Model(&mydb.User{})
 		if postJson.ExportIdList != nil {
-			result := global.Db.Model(&mydb.User{}).Where(
-				"id in ?", postJson.ExportIdList).Order("id desc").Limit(postJson.PageSize).Offset((postJson.PageIndex - 1) * postJson.PageSize).Find(&datas)
-			if result.Error != nil {
-				global.Log.Error(result.Error.Error())
-				c.JSON(500, gin.H{
-					"code": 500,
-					"msg":  "查询失败",
-				})
-				return
-			}
-			count = result.RowsAffected
+			tx.Where("id in ?", postJson.ExportIdList)
 		} else {
-			result := global.Db.Model(&mydb.User{}).Where(
-				"uname like ? and email like ? and role like ?", username, email, role).Order("id desc").Limit(postJson.PageSize).Offset((postJson.PageIndex - 1) * postJson.PageSize).Find(&datas)
-			if result.Error != nil {
-				global.Log.Error(result.Error.Error())
-				c.JSON(500, gin.H{
-					"code": 500,
-					"msg":  "查询失败",
-				})
-				return
+			if username != "" {
+				tx = tx.Where("uname like ?", "%"+username+"%")
 			}
-			count = result.RowsAffected
+			if email != "" {
+				tx = tx.Where("email like ?", "%"+email+"%")
+			}
+			if role != "" {
+				tx = tx.Where("role in ?", []string{role})
+			}
 		}
+		tx = tx.Count(&count).Order("id desc")
+		tx = tx.Limit(postJson.PageSize).Offset((postJson.PageIndex - 1) * postJson.PageSize).Find(&datas)
 
 		for index, data := range datas {
 			datas[index].CreatedAt = utils.Unix2String(data.CreatedAt)

@@ -2,13 +2,12 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-01-04 20:53:25
- * @LastEditTime: 2022-06-02 00:00:58
+ * @LastEditTime: 2022-07-04 17:36:12
  */
 package routers
 
 import (
 	"encoding/xml"
-	"fmt"
 	"rsssub/global"
 	"rsssub/middleware"
 	"rsssub/mydb"
@@ -61,24 +60,29 @@ func dataArticleList(c *gin.Context) {
 		userId := c.GetString("uid")
 		_, role := GetUserMsg(userId)
 
+		keyword := postJson.KeyWord
+		title := postJson.Title
 		status := postJson.Status
-		keyword := fmt.Sprintf("%%%s%%", postJson.KeyWord)
-		title := fmt.Sprintf("%%%s%%", postJson.Title)
-
-		var statusSlice []string
-		if status == "" {
-			statusSlice = []string{"read", "unread"}
-		} else {
-			statusSlice = append(statusSlice, status)
-		}
 
 		var count int64
 		var datas []RespData
-		result := global.Db.Model(&mydb.Data{}).Joins("JOIN article ON data.ref_id = article.id").Select(
-			"data.id", "article.name", "data.title", "data.url", "data.status", "data.created_at").Where(
-			"(uid=? or ?='root') and category='article' and article.name like ? and data.title like ? and data.status in ?", userId, role, keyword, title, statusSlice).Count(&count).Order("data.id desc").Limit(postJson.PageSize).Offset((postJson.PageIndex - 1) * postJson.PageSize).Find(&datas)
-		if result.Error != nil {
-			global.Log.Error(result.Error.Error())
+		tx := global.Db.Model(&mydb.Data{}).Joins("JOIN article ON data.ref_id = article.id")
+		tx = tx.Select("data.id", "article.name", "data.title", "data.url", "data.status", "data.created_at")
+		tx = tx.Where("article.uid=? or ?='root'", userId, role)
+		tx = tx.Where("data.category='article'")
+		if keyword != "" {
+			tx = tx.Where("article.name like ?", "%"+keyword+"%")
+		}
+		if title != "" {
+			tx = tx.Where("data.title like ?", "%"+title+"%")
+		}
+		if status != "" {
+			tx = tx.Where("data.status in ?", []string{status})
+		}
+		tx = tx.Count(&count).Order("data.id desc")
+		tx = tx.Limit(postJson.PageSize).Offset((postJson.PageIndex - 1) * postJson.PageSize).Find(&datas)
+		if tx.Error != nil {
+			global.Log.Error(tx.Error.Error())
 			c.JSON(500, gin.H{
 				"code": 500,
 				"msg":  "查询失败",
@@ -225,22 +229,24 @@ func dataVideoList(c *gin.Context) {
 		_, role := GetUserMsg(userId)
 
 		status := postJson.Status
-		keyword := fmt.Sprintf("%%%s%%", postJson.KeyWord)
-
-		var statusSlice []string
-		if status == "" {
-			statusSlice = []string{"read", "unread"}
-		} else {
-			statusSlice = append(statusSlice, status)
-		}
+		keyword := postJson.KeyWord
 
 		var count int64
 		var datas []RespData
-		result := global.Db.Model(&mydb.Data{}).Joins("JOIN video ON data.ref_id = video.id").Select(
-			"data.id", "video.name", "data.title", "data.url", "data.status", "data.created_at").Where(
-			"(video.uid=? or ?='root') and category='video' and video.name like ? and data.status in ?", userId, role, keyword, statusSlice).Count(&count).Limit(postJson.PageSize).Offset((postJson.PageIndex - 1) * postJson.PageSize).Find(&datas)
-		if result.Error != nil {
-			global.Log.Error(result.Error.Error())
+		tx := global.Db.Model(&mydb.Data{}).Joins("JOIN video ON data.ref_id = video.id")
+		tx = tx.Select("data.id", "video.name", "data.title", "data.url", "data.status", "data.created_at")
+		tx = tx.Where("video.uid=? or ?='root'", userId, role)
+		tx = tx.Where("data.category='video'")
+		if keyword != "" {
+			tx = tx.Where("data.name like ?", "%"+keyword+"%")
+		}
+		if status != "" {
+			tx = tx.Where("data.status in ?", []string{status})
+		}
+		tx = tx.Count(&count).Order("data.id desc")
+		tx = tx.Limit(postJson.PageSize).Offset((postJson.PageIndex - 1) * postJson.PageSize).Find(&datas)
+		if tx.Error != nil {
+			global.Log.Error(tx.Error.Error())
 			c.JSON(500, gin.H{
 				"code": 500,
 				"msg":  "查询失败",

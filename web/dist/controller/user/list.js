@@ -39,7 +39,9 @@ layui.define(function(exports){
         });
         //监听搜索的 select
         form.on('select(role-select)', function(data){
-            role = data.value;
+            var role = data.value;
+            var username = $("input[name='username']").val();
+            var email = $("input[name='email']").val();
 
             //执行重载
             tableIns.reload({
@@ -47,6 +49,8 @@ layui.define(function(exports){
                     curr: 1 //重新从第 1 页开始
                 }
                 ,where: {
+                    username:username,
+                    email:email,
                     role: role,
                 }
             });
