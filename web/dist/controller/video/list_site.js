@@ -19,6 +19,9 @@ layui.define(function(exports){
             }
         });
 
+        // 渲染 form 表单，不然搜索处的 select 不显示
+        form.render();
+
         //监听搜索
         form.on('submit(search-form)', function(data){
             var formData = data.field;
@@ -26,12 +29,29 @@ layui.define(function(exports){
             //执行重载
             tableIns.reload({
                 method: "post",
-                url: "/api/video/search",
+                url: "/api/video/list",
                 page: {
                     curr: 1 //重新从第 1 页开始
                 },
                 where: {
-                    keyword: formData.keyword
+                    keyword: formData.keyword,
+                    status: formData.status
+                }
+            });
+        });
+        //监听搜索的 select
+        form.on('select(status-select)', function(data){
+            var status = data.value;
+            var keyword = $("input[name='keyword']").val();
+
+            //执行重载
+            tableIns.reload({
+                page: {
+                    curr: 1 //重新从第 1 页开始
+                }
+                ,where: {
+                    keyword: keyword,
+                    status: status,
                 }
             });
         });

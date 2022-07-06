@@ -2,7 +2,7 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-01-04 20:54:15
- * @LastEditTime: 2022-06-28 21:05:30
+ * @LastEditTime: 2022-07-06 16:47:12
  */
 package routers
 
@@ -27,7 +27,6 @@ func VideoRouter(r *gin.Engine) {
 		videoGroup.POST("/list", videoSiteList)
 		videoGroup.POST("/update", videoSiteUpdate)
 		videoGroup.POST("/delete", videoSiteDelete)
-		videoGroup.POST("/search", videoSiteSearch)
 	}
 }
 
@@ -85,8 +84,10 @@ func videoSiteAdd(c *gin.Context) {
 
 func videoSiteList(c *gin.Context) {
 	type PostData struct {
-		PageIndex int `form:"page" json:"page"`
-		PageSize  int `form:"limit" json:"limit"`
+		PageIndex int    `form:"page" json:"page"`
+		PageSize  int    `form:"limit" json:"limit"`
+		KeyWord   string `from:"keyword" json:"keyword"`
+		Status    string `form:"status" json:"status"`
 	}
 
 	type RespData struct {
@@ -110,12 +111,23 @@ func videoSiteList(c *gin.Context) {
 		userId := c.GetString("uid")
 		_, role := GetUserMsg(userId)
 
+		keyword := postJson.KeyWord
+		status := postJson.Status
+
 		var count int64
 		var datas []RespData
-		result := global.Db.Model(&mydb.Video{}).Joins("JOIN user ON user.uid = video.uid").Select("video.id,user.uname,video.name,video.link,video.status,video.rss,video.created_at").Where(
-			"video.uid=? or ?='root'", userId, role).Order("video.id desc").Count(&count).Limit(postJson.PageSize).Offset((postJson.PageIndex - 1) * postJson.PageSize).Find(&datas)
-		if result.Error != nil {
-			global.Log.Error(result.Error.Error())
+		tx := global.Db.Model(&mydb.Video{}).Joins("JOIN user ON user.uid = video.uid")
+		tx = tx.Select("video.id,user.uname,video.name,video.link,video.status,video.rss,video.created_at")
+		tx = tx.Where("video.uid=? or ?='root'", userId, role)
+		if keyword != "" {
+			tx = tx.Where("video.name like ?", "%"+keyword+"%")
+		}
+		if status != "" {
+			tx = tx.Where("video.status=?", status)
+		}
+		tx = tx.Order("video.id desc").Count(&count).Limit(postJson.PageSize).Offset((postJson.PageIndex - 1) * postJson.PageSize).Find(&datas)
+		if tx.Error != nil {
+			global.Log.Error(tx.Error.Error())
 			c.JSON(500, gin.H{
 				"code": 500,
 				"msg":  "查询失败",
@@ -220,69 +232,6 @@ func videoSiteDelete(c *gin.Context) {
 		c.JSON(200, gin.H{
 			"code": 0,
 			"msg":  "删除成功",
-		})
-	}
-}
-
-func videoSiteSearch(c *gin.Context) {
-	type PostData struct {
-		PageIndex int    `form:"page" json:"page"`
-		PageSize  int    `form:"limit" json:"limit"`
-		KeyWord   string `form:"keyword" json:"keyword"`
-		Status    string `form:"status" json:"status"`
-	}
-
-	type RespData struct {
-		ID        int    `json:"id"`
-		Uname     string `json:"uname,omitempty" gorm:"column:uname; type:varchar(50); comment:用户名"`
-		Name      string `json:"name" gorm:"column:name; type:varchar(100); not null; comment:系列名字，比如番剧名"`
-		Link      string `json:"link" gorm:"column:link; type:varchar(100); not null; comment:主页目录，比如番剧主页、UP 主主页的 URL"`
-		Status    string `json:"status" gorm:"column:status; type:varchar(100); comment:连载状态"`
-		Rss       string `json:"rss" gorm:"column:rss; type:varchar(100); comment:RSS 地址"`
-		CreatedAt string `json:"created_at" gorm:"column:created_at; comment:添加时间"`
-	}
-
-	postJson := PostData{}
-	if err := c.BindJSON(&postJson); err != nil {
-		global.Log.Error(err.Error())
-		c.JSON(400, gin.H{
-			"code": 400,
-			"msg":  "查询失败",
-		})
-	} else {
-		userId := c.GetString("uid")
-		_, role := GetUserMsg(userId)
-
-		keyword := fmt.Sprintf("%%%s%%", postJson.KeyWord)
-
-		var count int64
-		var datas []RespData
-		result := global.Db.Model(&mydb.Video{}).Select("id", "name", "link", "status", "rss", "created_at").Where(
-			"(uid=? or ?='root') and name like ?", userId, role, keyword).Order("id desc").Count(&count).Limit(postJson.PageSize).Offset((postJson.PageIndex - 1) * postJson.PageSize).Find(&datas)
-		if result.Error != nil {
-			global.Log.Error(result.Error.Error())
-			c.JSON(500, gin.H{
-				"code": 500,
-				"msg":  "查询失败",
-			})
-			return
-		}
-
-		var domain string
-		global.Db.Model(&mydb.Config{}).Select("value").Where("key='domain'").First(&domain)
-
-		for index, data := range datas {
-			if role == "user" {
-				datas[index].Uname = ""
-			}
-			datas[index].Rss = strings.TrimRight(domain, "/") + data.Rss
-			datas[index].CreatedAt = utils.Unix2String(data.CreatedAt)
-		}
-
-		c.JSON(200, gin.H{
-			"code":  0,
-			"data":  datas,
-			"count": count,
 		})
 	}
 }
