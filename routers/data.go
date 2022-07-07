@@ -2,7 +2,7 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-01-04 20:53:25
- * @LastEditTime: 2022-07-04 17:36:12
+ * @LastEditTime: 2022-07-07 09:21:48
  */
 package routers
 
@@ -243,7 +243,7 @@ func dataVideoList(c *gin.Context) {
 		if status != "" {
 			tx = tx.Where("data.status in ?", []string{status})
 		}
-		tx = tx.Count(&count).Order("data.id desc")
+		tx = tx.Count(&count).Order("data.id asc")
 		tx = tx.Limit(postJson.PageSize).Offset((postJson.PageIndex - 1) * postJson.PageSize).Find(&datas)
 		if tx.Error != nil {
 			global.Log.Error(tx.Error.Error())
