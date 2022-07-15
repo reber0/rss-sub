@@ -2,7 +2,7 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-01-04 20:53:25
- * @LastEditTime: 2022-07-07 09:21:48
+ * @LastEditTime: 2022-07-15 19:01:38
  */
 package routers
 
@@ -238,7 +238,7 @@ func dataVideoList(c *gin.Context) {
 		tx = tx.Where("video.uid=? or ?='root'", userId, role)
 		tx = tx.Where("data.category='video'")
 		if keyword != "" {
-			tx = tx.Where("data.name like ?", "%"+keyword+"%")
+			tx = tx.Where("video.name like ?", "%"+keyword+"%")
 		}
 		if status != "" {
 			tx = tx.Where("data.status in ?", []string{status})
