@@ -2,7 +2,7 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-01-04 22:20:57
- * @LastEditTime: 2022-06-02 00:00:21
+ * @LastEditTime: 2022-09-09 10:45:18
  */
 package mydb
 
@@ -22,7 +22,8 @@ func GetDbConn() *gorm.DB {
 	return db
 }
 
-func CreateDb() {
+// 初始化数据库
+func DbInit() {
 	Db := GetDbConn()
 
 	// 自动迁移，创建表
