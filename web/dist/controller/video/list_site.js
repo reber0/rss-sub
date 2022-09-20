@@ -69,6 +69,9 @@ layui.define(function(exports){
             contentType: 'application/json',
             page: true, //分页
             limit: 10,
+            where: {
+                status: '连载中'
+            },
             toolbar: '#site-table-toolbar', //头部盒子
             cols: [[
                 {checkbox: true, fixed: true},
