@@ -76,7 +76,7 @@ layui.define(function(exports){
             cols: [[
                 {checkbox: true, fixed: true},
                 {field: 'id', title: 'ID', width:60, sort: true, fixed: 'left', align:'center'},
-                {field: 'name', title: 'Name', width:'23%', sort: true},
+                {field: 'name', title: 'Name', width:'23%', sort: true, fixed: 'left'},
                 {field: 'link', title: 'Link', hide: true},
                 {field: 'status', title: 'Status', width:90, sort: true},
                 {field: 'rss', title: 'Rss'},
