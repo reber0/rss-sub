@@ -2,7 +2,7 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-01-04 15:14:04
- * @LastEditTime: 2022-06-01 23:59:47
+ * @LastEditTime: 2022-09-20 10:38:20
  */
 package main
 
@@ -11,12 +11,12 @@ import (
 	"fmt"
 	"io/fs"
 	"net/http"
-	"rsssub/entry"
-	"rsssub/global"
-	"rsssub/routers"
-	"rsssub/schedule"
 
 	"github.com/gin-gonic/gin"
+	"github.com/reber0/RssSub/entry"
+	"github.com/reber0/RssSub/global"
+	"github.com/reber0/RssSub/routers"
+	"github.com/reber0/RssSub/schedule"
 
 	_ "embed"
 )

@@ -7,8 +7,8 @@
 package routers
 
 import (
-	"rsssub/global"
-	"rsssub/mydb"
+	"github.com/reber0/RssSub/global"
+	"github.com/reber0/RssSub/mydb"
 )
 
 // 根据 UserID 获取用户名、角色

@@ -9,10 +9,10 @@ package schedule
 import (
 	"fmt"
 	"regexp"
-	"rsssub/global"
-	"rsssub/mydb"
 	"strings"
 
+	"github.com/reber0/RssSub/global"
+	"github.com/reber0/RssSub/mydb"
 	"github.com/reber0/go-common/parse"
 	"github.com/reber0/go-common/utils"
 )

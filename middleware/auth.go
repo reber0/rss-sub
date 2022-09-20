@@ -2,16 +2,16 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-01-07 10:01:01
- * @LastEditTime: 2022-02-14 10:00:40
+ * @LastEditTime: 2022-09-20 10:38:37
  */
 package middleware
 
 import (
 	"net/http"
-	"rsssub/global"
-	"rsssub/mydb"
 
 	"github.com/gin-gonic/gin"
+	"github.com/reber0/RssSub/global"
+	"github.com/reber0/RssSub/mydb"
 )
 
 // 定义 JWTAuth 中间件，进行登录校验

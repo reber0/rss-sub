@@ -2,19 +2,19 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-01-04 15:14:59
- * @LastEditTime: 2022-07-04 17:50:46
+ * @LastEditTime: 2022-09-20 10:17:25
  */
 package routers
 
 import (
-	"rsssub/global"
-	"rsssub/middleware"
-	"rsssub/mydb"
 	"strconv"
 	"strings"
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
+	"github.com/reber0/RssSub/global"
+	"github.com/reber0/RssSub/middleware"
+	"github.com/reber0/RssSub/mydb"
 	"github.com/reber0/go-common/utils"
 )
 

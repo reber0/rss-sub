@@ -2,21 +2,21 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-01-10 13:35:18
- * @LastEditTime: 2022-06-02 00:01:23
+ * @LastEditTime: 2022-09-20 10:39:03
  */
 package routers
 
 import (
 	"fmt"
-	"rsssub/global"
-	"rsssub/middleware"
-	"rsssub/mydb"
 	"strconv"
 	"strings"
 	"time"
 
 	"github.com/bitly/go-simplejson"
 	"github.com/gin-gonic/gin"
+	"github.com/reber0/RssSub/global"
+	"github.com/reber0/RssSub/middleware"
+	"github.com/reber0/RssSub/mydb"
 )
 
 var menu_root = `[{

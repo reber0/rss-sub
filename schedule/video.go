@@ -2,19 +2,19 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-01-04 21:12:34
- * @LastEditTime: 2022-06-02 18:07:10
+ * @LastEditTime: 2022-09-20 10:39:28
  */
 package schedule
 
 import (
 	"fmt"
 	"regexp"
-	"rsssub/global"
-	"rsssub/mydb"
 	"strings"
 
 	"github.com/PuerkitoBio/goquery"
 	"github.com/bitly/go-simplejson"
+	"github.com/reber0/RssSub/global"
+	"github.com/reber0/RssSub/mydb"
 	"github.com/reber0/go-common/parse"
 	"github.com/reber0/go-common/utils"
 	"github.com/tidwall/gjson"

@@ -2,19 +2,19 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-01-04 20:54:15
- * @LastEditTime: 2022-09-20 09:56:23
+ * @LastEditTime: 2022-09-20 10:39:19
  */
 package routers
 
 import (
 	"fmt"
 	"regexp"
-	"rsssub/global"
-	"rsssub/middleware"
-	"rsssub/mydb"
 	"strings"
 
 	"github.com/gin-gonic/gin"
+	"github.com/reber0/RssSub/global"
+	"github.com/reber0/RssSub/middleware"
+	"github.com/reber0/RssSub/mydb"
 	"github.com/reber0/go-common/utils"
 	"github.com/tidwall/gjson"
 )

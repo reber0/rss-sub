@@ -7,8 +7,8 @@
 package schedule
 
 import (
-	"rsssub/global"
-	"rsssub/mydb"
+	"github.com/reber0/RssSub/global"
+	"github.com/reber0/RssSub/mydb"
 )
 
 // 记录后台计划任务、程序错误信息等

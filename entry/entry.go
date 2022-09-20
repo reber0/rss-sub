@@ -2,18 +2,18 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-01-18 09:23:30
- * @LastEditTime: 2022-09-20 10:01:29
+ * @LastEditTime: 2022-09-20 10:38:27
  */
 package entry
 
 import (
 	"crypto/tls"
 	"os"
-	"rsssub/global"
-	"rsssub/mydb"
 	"time"
 
 	"github.com/go-resty/resty/v2"
+	"github.com/reber0/RssSub/global"
+	"github.com/reber0/RssSub/mydb"
 	"github.com/reber0/go-common/mylog"
 	"github.com/reber0/go-common/utils"
 )
