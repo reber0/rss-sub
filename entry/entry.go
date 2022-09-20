@@ -12,10 +12,10 @@ import (
 	"time"
 
 	"github.com/go-resty/resty/v2"
-	"github.com/reber0/RssSub/global"
-	"github.com/reber0/RssSub/mydb"
 	"github.com/reber0/go-common/mylog"
 	"github.com/reber0/go-common/utils"
+	"github.com/reber0/rss-sub/global"
+	"github.com/reber0/rss-sub/mydb"
 )
 
 func AppInit() {

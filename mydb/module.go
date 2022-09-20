@@ -7,7 +7,7 @@
 package mydb
 
 import (
-	"github.com/reber0/RssSub/global"
+	"github.com/reber0/rss-sub/global"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 )
@@ -52,11 +52,11 @@ func DbInit() {
 	})
 
 	// Config 表添加数据
-	Db.Create(&Config{Key: "sitename", Value: "github.com/reber0/RssSub"})
+	Db.Create(&Config{Key: "sitename", Value: "github.com/reber0/rss-sub"})
 	Db.Create(&Config{Key: "domain", Value: "http://127.0.0.1:8083/"})
 	Db.Create(&Config{Key: "upload_max_size", Value: "1024"})
-	Db.Create(&Config{Key: "title", Value: "github.com/reber0/RssSub"})
-	Db.Create(&Config{Key: "keyword", Value: "github.com/reber0/RssSub, 博客, 番剧"})
+	Db.Create(&Config{Key: "title", Value: "github.com/reber0/rss-sub"})
+	Db.Create(&Config{Key: "keyword", Value: "github.com/reber0/rss-sub, 博客, 番剧"})
 	Db.Create(&Config{Key: "descript", Value: "主要是用来生成 RSS 订阅，可以获取博客的新文章(定期正则爬取)，可以获取 B 站、A 站、AGE.tv 的番剧更新情况。"})
 	Db.Create(&Config{Key: "copyright", Value: "Copyright © 2020-2022 Reber. All Rights Reserved."})
 

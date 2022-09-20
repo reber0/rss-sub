@@ -1,4 +1,4 @@
-module github.com/reber0/RssSub
+module github.com/reber0/rss-sub
 
 go 1.18
 

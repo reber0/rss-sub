@@ -12,10 +12,10 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
-	"github.com/reber0/RssSub/global"
-	"github.com/reber0/RssSub/middleware"
-	"github.com/reber0/RssSub/mydb"
 	"github.com/reber0/go-common/utils"
+	"github.com/reber0/rss-sub/global"
+	"github.com/reber0/rss-sub/middleware"
+	"github.com/reber0/rss-sub/mydb"
 )
 
 // 设置相关路由(网站/邮箱/个人资料/密码)

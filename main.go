@@ -13,10 +13,10 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/reber0/RssSub/entry"
-	"github.com/reber0/RssSub/global"
-	"github.com/reber0/RssSub/routers"
-	"github.com/reber0/RssSub/schedule"
+	"github.com/reber0/rss-sub/entry"
+	"github.com/reber0/rss-sub/global"
+	"github.com/reber0/rss-sub/routers"
+	"github.com/reber0/rss-sub/schedule"
 
 	_ "embed"
 )

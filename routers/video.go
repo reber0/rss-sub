@@ -12,10 +12,10 @@ import (
 	"strings"
 
 	"github.com/gin-gonic/gin"
-	"github.com/reber0/RssSub/global"
-	"github.com/reber0/RssSub/middleware"
-	"github.com/reber0/RssSub/mydb"
 	"github.com/reber0/go-common/utils"
+	"github.com/reber0/rss-sub/global"
+	"github.com/reber0/rss-sub/middleware"
+	"github.com/reber0/rss-sub/mydb"
 	"github.com/tidwall/gjson"
 )
 

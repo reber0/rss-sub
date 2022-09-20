@@ -31,8 +31,8 @@ func CreateToken(uid string) (string, error) {
 	claims := CustomClaims{
 		UID: uid,
 		StandardClaims: jwt.StandardClaims{
-			ExpiresAt: expireTime,                 // token 过期时间
-			Issuer:    "github.com/reber0/RssSub", // token 发行人
+			ExpiresAt: expireTime,                  // token 过期时间
+			Issuer:    "github.com/reber0/rss-sub", // token 发行人
 		},
 	}
 

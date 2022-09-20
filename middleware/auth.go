@@ -10,8 +10,8 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/reber0/RssSub/global"
-	"github.com/reber0/RssSub/mydb"
+	"github.com/reber0/rss-sub/global"
+	"github.com/reber0/rss-sub/mydb"
 )
 
 // 定义 JWTAuth 中间件，进行登录校验
