@@ -2,7 +2,7 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-01-04 20:54:15
- * @LastEditTime: 2022-07-06 16:47:12
+ * @LastEditTime: 2022-09-20 09:47:18
  */
 package routers
 
@@ -125,7 +125,7 @@ func videoSiteList(c *gin.Context) {
 		if status != "" {
 			tx = tx.Where("video.status=?", status)
 		}
-		tx = tx.Order("video.id desc").Count(&count).Limit(postJson.PageSize).Offset((postJson.PageIndex - 1) * postJson.PageSize).Find(&datas)
+		tx = tx.Order("video.status desc").Order("video.id desc").Count(&count).Limit(postJson.PageSize).Offset((postJson.PageIndex - 1) * postJson.PageSize).Find(&datas)
 		if tx.Error != nil {
 			global.Log.Error(tx.Error.Error())
 			c.JSON(500, gin.H{
