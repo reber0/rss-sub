@@ -268,7 +268,7 @@ func getInfo(c *gin.Context) {
 		return
 	}
 
-	data.CreatedAt = utils.Unix2String(data.CreatedAt)
+	data.CreatedAt = utils.Unix2Str(data.CreatedAt)
 
 	c.JSON(200, gin.H{
 		"code": 0,

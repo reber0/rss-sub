@@ -143,7 +143,7 @@ func videoSiteList(c *gin.Context) {
 				datas[index].Uname = ""
 			}
 			datas[index].Rss = strings.TrimRight(domain, "/") + data.Rss
-			datas[index].CreatedAt = utils.Unix2String(data.CreatedAt)
+			datas[index].CreatedAt = utils.Unix2Str(data.CreatedAt)
 		}
 
 		c.JSON(200, gin.H{

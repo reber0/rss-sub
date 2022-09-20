@@ -2,7 +2,7 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-01-18 09:23:30
- * @LastEditTime: 2022-09-09 10:45:00
+ * @LastEditTime: 2022-09-20 10:01:29
  */
 package entry
 
@@ -20,7 +20,7 @@ import (
 
 func AppInit() {
 	global.RootPath, _ = os.Getwd()
-	global.Log = mylog.NewLogger()
+	global.Log = mylog.New().IsToFile(true).Logger()
 
 	if !utils.IsFileExist(global.RootPath + "/data/data.db") {
 		mydb.DbInit()

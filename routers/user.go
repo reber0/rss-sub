@@ -151,7 +151,7 @@ func userList(c *gin.Context) {
 		tx = tx.Limit(postJson.PageSize).Offset((postJson.PageIndex - 1) * postJson.PageSize).Find(&datas)
 
 		for index, data := range datas {
-			datas[index].CreatedAt = utils.Unix2String(data.CreatedAt)
+			datas[index].CreatedAt = utils.Unix2Str(data.CreatedAt)
 		}
 
 		c.JSON(200, gin.H{
