@@ -303,8 +303,10 @@ layui.define(function(exports){
                     break;
                 case 'delete':
                     layer.confirm('确定删除 '+data.name+'?', {icon: 3, shadeClose: true}, function(index){
+                        var target_id_list = [];
+                        target_id_list.push(data.id);
                         data = {
-                            "id": data.id,
+                            "target_id_list": target_id_list,
                         }
                         admin.req({
                             url: '/api/video/delete',

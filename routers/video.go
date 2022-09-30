@@ -2,7 +2,7 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-01-04 20:54:15
- * @LastEditTime: 2022-09-20 10:39:19
+ * @LastEditTime: 2022-09-30 23:07:09
  */
 package routers
 
@@ -194,7 +194,7 @@ func videoSiteUpdate(c *gin.Context) {
 
 func videoSiteDelete(c *gin.Context) {
 	type PostData struct {
-		ID int `form:"id" json:"id"`
+		DeleteIDList []int `form:"target_id_list" json:"target_id_list"`
 	}
 
 	postJson := PostData{}
@@ -208,25 +208,28 @@ func videoSiteDelete(c *gin.Context) {
 		userId := c.GetString("uid")
 		_, role := GetUserMsg(userId)
 
-		id := postJson.ID
+		deleteIDList := postJson.DeleteIDList
 
-		result := global.Db.Where("(uid=? or ?='root') and id=?", userId, role, id).Delete(&mydb.Video{})
-		if result.Error != nil {
-			global.Log.Error(result.Error.Error())
-			c.JSON(500, gin.H{
-				"code": 500,
-				"msg":  "删除失败",
-			})
-			return
-		}
-		result = global.Db.Where("category='video' and ref_id=?", id).Delete(&mydb.Data{})
-		if result.Error != nil {
-			global.Log.Error(result.Error.Error())
-			c.JSON(500, gin.H{
-				"code": 500,
-				"msg":  "删除失败",
-			})
-			return
+		for _, deleteID := range deleteIDList {
+			result := global.Db.Where("(uid=? or ?='root') and id=?", userId, role, deleteID).Delete(&mydb.Video{})
+			if result.Error != nil {
+				global.Log.Error(result.Error.Error())
+				c.JSON(500, gin.H{
+					"code": 500,
+					"msg":  "删除失败",
+				})
+				return
+			} else {
+				result = global.Db.Where("category='video' and ref_id=?", deleteID).Delete(&mydb.Data{})
+				if result.Error != nil {
+					global.Log.Error(result.Error.Error())
+					c.JSON(500, gin.H{
+						"code": 500,
+						"msg":  "删除失败",
+					})
+					return
+				}
+			}
 		}
 
 		c.JSON(200, gin.H{
