@@ -2,7 +2,7 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-01-04 21:12:25
- * @LastEditTime: 2022-06-30 00:43:06
+ * @LastEditTime: 2022-10-17 12:57:48
  */
 package schedule
 
@@ -34,7 +34,7 @@ func checkArticle() {
 			global.Log.Error(result.Error.Error())
 		}
 
-		global.Log.Info(fmt.Sprintf("schedule article check ==> %s\n", name))
+		global.Log.Info(fmt.Sprintf("schedule article check ==> %s", name))
 		articleURLSlice := getArticleURL(site_id)
 		newArticleMsgList, err := getNewArticleMsg(link, regex, articleURLSlice)
 		if err != nil {
