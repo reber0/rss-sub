@@ -2,7 +2,7 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-01-04 20:54:15
- * @LastEditTime: 2022-09-30 23:07:09
+ * @LastEditTime: 2022-10-17 12:30:46
  */
 package routers
 
@@ -84,10 +84,11 @@ func videoSiteAdd(c *gin.Context) {
 
 func videoSiteList(c *gin.Context) {
 	type PostData struct {
-		PageIndex int    `form:"page" json:"page"`
-		PageSize  int    `form:"limit" json:"limit"`
-		KeyWord   string `from:"keyword" json:"keyword"`
-		Status    string `form:"status" json:"status"`
+		PageIndex    int    `form:"page" json:"page"`
+		PageSize     int    `form:"limit" json:"limit"`
+		KeyWord      string `from:"keyword" json:"keyword"`
+		Status       string `form:"status" json:"status"`
+		ExportIdList []int  `form:"export_id_list" json:"export_id_list"`
 	}
 
 	type RespData struct {
@@ -113,19 +114,26 @@ func videoSiteList(c *gin.Context) {
 
 		keyword := postJson.KeyWord
 		status := postJson.Status
+		exportIdList := postJson.ExportIdList
 
 		var count int64
 		var datas []RespData
 		tx := global.Db.Model(&mydb.Video{}).Joins("JOIN user ON user.uid = video.uid")
 		tx = tx.Select("video.id,user.uname,video.name,video.link,video.status,video.rss,video.created_at")
 		tx = tx.Where("video.uid=? or ?='root'", userId, role)
+
+		if exportIdList != nil {
+			tx.Where("id in ?", exportIdList)
+		}
 		if keyword != "" {
 			tx = tx.Where("video.name like ?", "%"+keyword+"%")
 		}
 		if status != "" {
 			tx = tx.Where("video.status=?", status)
 		}
-		tx = tx.Order("video.id desc").Count(&count).Limit(postJson.PageSize).Offset((postJson.PageIndex - 1) * postJson.PageSize).Find(&datas)
+
+		tx = tx.Order("video.id desc").Count(&count)
+		tx = tx.Limit(postJson.PageSize).Offset((postJson.PageIndex - 1) * postJson.PageSize).Find(&datas)
 		if tx.Error != nil {
 			global.Log.Error(tx.Error.Error())
 			c.JSON(500, gin.H{
@@ -293,11 +301,11 @@ func getName(targetURL string) string {
 		if len(m) > 0 {
 			name = m[1]
 		}
-	} else if strings.HasPrefix(targetURL, "https://www.agemys.cc/") {
+	} else if strings.HasPrefix(targetURL, "https://www.ysjdm.net/") {
 		resp, _ := global.Client.R().Get(targetURL)
 		html := utils.EncodeToUTF8(resp)
 
-		reg := regexp.MustCompile(`detail_imform_name">(.*?)<`)
+		reg := regexp.MustCompile(`h2 class="title">\s+(.*?)\s+</h2>`)
 		m := reg.FindStringSubmatch(html)
 		if len(m) > 0 {
 			name = m[1]
@@ -313,5 +321,5 @@ func getName(targetURL string) string {
 		}
 	}
 
-	return name
+	return strings.TrimSpace(name)
 }

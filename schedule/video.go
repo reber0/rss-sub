@@ -2,7 +2,7 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-01-04 21:12:34
- * @LastEditTime: 2022-09-20 10:39:28
+ * @LastEditTime: 2022-10-17 12:25:36
  */
 package schedule
 
@@ -36,7 +36,7 @@ func checkVideo() {
 			global.Log.Error(result.Error.Error())
 		}
 
-		global.Log.Info(fmt.Sprintf("schedule video check ==> %s\n", name))
+		global.Log.Info(fmt.Sprintf("schedule video check ==> %s", name))
 		videoURLSlice := getVideoURL(site_id)
 		newVideoMsgList, status, err := getNewVideoMsg(link, videoURLSlice)
 		if err != nil {
@@ -114,8 +114,8 @@ func getNewVideoMsg(link string, videoURLSlice []string) ([][]string, string, er
 		href_text_list, status, err = acfunUp(link)
 	} else if strings.HasPrefix(link, "https://www.acfun.cn/bangumi") {
 		href_text_list, status, err = acfunBangumi(link)
-	} else if strings.HasPrefix(link, "https://www.agemys.cc/") {
-		href_text_list, status, err = age(link)
+	} else if strings.HasPrefix(link, "https://www.ysjdm.net/") {
+		href_text_list, status, err = ysjdm(link)
 	} else if strings.HasPrefix(link, "http://www.yinghuacd.com/") {
 		href_text_list, status, err = yinghuacd(link)
 	}
@@ -295,7 +295,7 @@ func acfunBangumi(link string) ([][]string, string, error) {
 	return newVideoMsgList, status, nil
 }
 
-func age(link string) ([][]string, string, error) {
+func ysjdm(link string) ([][]string, string, error) {
 	var status string
 	var newVideoMsgList [][]string
 
@@ -310,18 +310,16 @@ func age(link string) ([][]string, string, error) {
 			global.Log.Error(err.Error())
 		}
 
-		dom.Find(`div[style="display:block"]>ul>li>a`).Each(func(i int, node *goquery.Selection) {
+		dom.Find(`ul[class="content_playlist clearfix"]>li>a`).Each(func(i int, node *goquery.Selection) {
 			url, _ := node.Attr("href")
 			title := node.Text()
-			if !strings.Contains(strings.ToLower(title), "pv") && !strings.Contains(strings.ToLower(title), "无字") {
-				newVideoMsgList = append(newVideoMsgList, []string{title, url})
-			}
+			newVideoMsgList = append(newVideoMsgList, []string{title, url})
 		})
 
-		reg := regexp.MustCompile(`(?sm)播放状态.*?value">(.*?)</span>`)
+		reg := regexp.MustCompile(`data_style">(.*?)</span>`)
 		m := reg.FindStringSubmatch(html)
 		status = m[1]
-		if status == "完结" {
+		if status == "已完结" {
 			status = "已完结"
 		} else {
 			status = "连载中"
