@@ -2,7 +2,7 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-01-04 21:12:34
- * @LastEditTime: 2022-10-17 12:25:36
+ * @LastEditTime: 2022-10-17 13:16:27
  */
 package schedule
 
@@ -313,7 +313,9 @@ func ysjdm(link string) ([][]string, string, error) {
 		dom.Find(`ul[class="content_playlist clearfix"]>li>a`).Each(func(i int, node *goquery.Selection) {
 			url, _ := node.Attr("href")
 			title := node.Text()
-			newVideoMsgList = append(newVideoMsgList, []string{title, url})
+			if !strings.Contains(strings.ToLower(title), "pv") {
+				newVideoMsgList = append(newVideoMsgList, []string{title, url})
+			}
 		})
 
 		reg := regexp.MustCompile(`data_style">(.*?)</span>`)
