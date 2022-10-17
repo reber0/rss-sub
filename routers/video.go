@@ -2,7 +2,7 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-01-04 20:54:15
- * @LastEditTime: 2022-10-17 12:30:46
+ * @LastEditTime: 2022-10-17 13:38:42
  */
 package routers
 
@@ -123,7 +123,7 @@ func videoSiteList(c *gin.Context) {
 		tx = tx.Where("video.uid=? or ?='root'", userId, role)
 
 		if exportIdList != nil {
-			tx.Where("id in ?", exportIdList)
+			tx.Where("video.id in ?", exportIdList)
 		}
 		if keyword != "" {
 			tx = tx.Where("video.name like ?", "%"+keyword+"%")
