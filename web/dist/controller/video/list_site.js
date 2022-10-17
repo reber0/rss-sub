@@ -131,15 +131,15 @@ layui.define(function(exports){
                     var data = checkStatus.data;
                     if(data.length == 0) return layer.msg('未选中行', {time: 1000});
 
-                    var target_id_list = [];
+                    var export_id_list = [];
                     data.forEach(function(x, i){
-                        target_id_list.push(x.id);
+                        export_id_list.push(x.id);
                     });
 
                     data = {
                         page: 1,
-                        limit: target_id_list.length,
-                        target_id_list: target_id_list
+                        limit: export_id_list.length,
+                        export_id_list: export_id_list
                     }
     
                     admin.req({
