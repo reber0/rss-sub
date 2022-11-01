@@ -2,7 +2,7 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-01-04 15:14:04
- * @LastEditTime: 2022-09-20 10:38:20
+ * @LastEditTime: 2022-11-01 15:29:14
  */
 package main
 
@@ -57,8 +57,9 @@ func main() {
 	start, _ := fs.Sub(web, "web/start")
 	r.GET("/", gin.WrapH(http.FileServer(http.FS(start))))
 
-	global.Log.Info("startup service: 0.0.0.0:8082")
-	if err := r.Run("0.0.0.0:8082"); err != nil {
-		fmt.Printf("startup service failed, err:%v\n", err)
+	listener := fmt.Sprintf("%s:%d", global.ListenIP, global.ListenPort)
+	global.Log.Info("startup service: " + listener)
+	if err := r.Run(listener); err != nil {
+		fmt.Printf("%v\n", err)
 	}
 }
