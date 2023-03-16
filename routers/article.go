@@ -2,7 +2,7 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-01-04 20:52:53
- * @LastEditTime: 2022-09-20 10:16:50
+ * @LastEditTime: 2023-03-16 20:58:39
  */
 package routers
 
@@ -17,25 +17,28 @@ import (
 	"github.com/reber0/rss-sub/global"
 	"github.com/reber0/rss-sub/middleware"
 	"github.com/reber0/rss-sub/mydb"
+	"github.com/tidwall/gjson"
 )
 
 // Article Site 相关路由
 func ArticleRouter(r *gin.Engine) {
 	articleGroup := r.Group("/api/article").Use(middleware.JWTAuth(), middleware.Action())
 	{
-		articleGroup.POST("/check", articleCheckRegex)
+		articleGroup.POST("/site_check", articleSiteCheck)
+		articleGroup.POST("/wechat_check", articleWeChatCheck)
 		articleGroup.POST("/list", articleSiteList)
-		articleGroup.POST("/add", articleSiteAdd)
+		articleGroup.POST("/site_add", articleSiteAdd)
+		articleGroup.POST("/wechat_add", articleWeChatAdd)
 		articleGroup.POST("/update", articleSiteUpdate)
 		articleGroup.POST("/delete", articleSiteDelete)
 		articleGroup.POST("/search", articleSiteSearch)
 	}
 }
 
-func articleCheckRegex(c *gin.Context) {
+func articleSiteCheck(c *gin.Context) {
 	type PostData struct {
 		Link  string `form:"link" json:"link"`
-		Regex string `form:"regex" json:"regex"`
+		Match string `form:"match" json:"match"`
 	}
 
 	postJson := PostData{}
@@ -47,12 +50,13 @@ func articleCheckRegex(c *gin.Context) {
 		})
 	} else {
 		base_url := parse.NewParseURL(postJson.Link).BaseURL()
+
 		resp, err := global.Client.R().Get(postJson.Link)
 		if resp != nil {
 			html := utils.EncodeToUTF8(resp)
 
 			article_tag := make([]map[string]string, 0, 100)
-			reg := regexp.MustCompile(`(?sm)` + postJson.Regex)
+			reg := regexp.MustCompile(`(?sm)` + postJson.Match)
 			result := reg.FindAllStringSubmatch(html, -1)
 			for _, href_text := range result {
 				a_href := strings.TrimSpace(href_text[1])
@@ -78,11 +82,69 @@ func articleCheckRegex(c *gin.Context) {
 	}
 }
 
+func articleWeChatCheck(c *gin.Context) {
+	type PostData struct {
+		Link string `form:"link" json:"link"`
+	}
+
+	postJson := PostData{}
+	if err := c.BindJSON(&postJson); err != nil {
+		global.Log.Error(err.Error())
+		c.JSON(400, gin.H{
+			"code": 400,
+			"msg":  "检查失败",
+		})
+	} else {
+		resp, err := global.Client.R().Get(postJson.Link)
+		if resp != nil {
+			html := utils.EncodeToUTF8(resp)
+			reg1 := regexp.MustCompile(`data-album_id="(.*?)"`)
+			result1 := reg1.FindStringSubmatch(html)
+			album_id := result1[1]
+
+			url := fmt.Sprintf("https://mp.weixin.qq.com/mp/appmsgalbum?action=getalbum&album_id=%s&count=10&is_reverse=0&f=json", album_id)
+			resp, err := global.Client.R().Get(url)
+			if resp != nil {
+				html := utils.EncodeToUTF8(resp)
+
+				article_tag := make([]map[string]string, 0, 100)
+				article_list := gjson.Get(html, "getalbum_resp.article_list").Array()
+				for _, article := range article_list {
+					a_href := article.Get("url").String()
+					a_href = strings.Split(a_href, "&chksm")[0]
+					a_text := article.Get("title").String()
+					article_tag = append(article_tag, map[string]string{"title": a_text, "url": a_href})
+				}
+
+				c.JSON(200, gin.H{
+					"code": 0,
+					"data": article_tag[0:5],
+				})
+			}
+			if err != nil {
+				global.Log.Error(err.Error())
+				c.JSON(500, gin.H{
+					"code": 500,
+					"msg":  "error",
+				})
+			}
+		}
+		if err != nil {
+			global.Log.Error(err.Error())
+			c.JSON(500, gin.H{
+				"code": 500,
+				"msg":  "error",
+			})
+		}
+	}
+}
+
 func articleSiteAdd(c *gin.Context) {
 	type PostData struct {
 		Name  string `form:"name" json:"name"`
 		Link  string `form:"link" json:"link"`
-		Regex string `form:"regex" json:"regex"`
+		Match string `form:"match" json:"match"`
+		Type  string `form:"type" json:"type"`
 	}
 
 	postJson := PostData{}
@@ -98,7 +160,7 @@ func articleSiteAdd(c *gin.Context) {
 		var domain string
 		global.Db.Model(&mydb.Config{}).Select("value").Where("key='domain'").First(&domain)
 
-		site := mydb.Article{UID: userId, Name: postJson.Name, Link: postJson.Link, Regex: postJson.Regex}
+		site := mydb.Article{UID: userId, Name: postJson.Name, Link: postJson.Link, Type: "regex", Match: postJson.Match}
 		result := global.Db.Create(&site)
 		if result.Error != nil {
 			global.Log.Error(result.Error.Error())
@@ -129,6 +191,71 @@ func articleSiteAdd(c *gin.Context) {
 	}
 }
 
+func articleWeChatAdd(c *gin.Context) {
+	type PostData struct {
+		Name string `form:"name" json:"name"`
+		Link string `form:"link" json:"link"`
+	}
+
+	postJson := PostData{}
+	if err := c.BindJSON(&postJson); err != nil {
+		global.Log.Error(err.Error())
+		c.JSON(400, gin.H{
+			"code": 400,
+			"msg":  "检查失败",
+		})
+	} else {
+		userId := c.GetString("uid")
+
+		var domain string
+		global.Db.Model(&mydb.Config{}).Select("value").Where("key='domain'").First(&domain)
+
+		resp, err := global.Client.R().Get(postJson.Link)
+		if resp != nil {
+			html := utils.EncodeToUTF8(resp)
+			reg := regexp.MustCompile(`data-album_id="(.*?)"`)
+			res := reg.FindStringSubmatch(html)
+			album_id := res[1]
+
+			site := mydb.Article{UID: userId, Name: postJson.Name, Link: postJson.Link, Type: "wechat", Match: album_id}
+			result := global.Db.Create(&site)
+			if result.Error != nil {
+				global.Log.Error(result.Error.Error())
+				c.JSON(500, gin.H{
+					"code": 500,
+					"msg":  "添加失败",
+				})
+				return
+			}
+			refId := site.ID
+
+			rssPath := fmt.Sprintf("/api/data/rss/%s/article/%d", userId, refId)
+			result = global.Db.Model(&mydb.Article{}).Where("id=?", refId).Update("rss", rssPath)
+			if result.Error != nil {
+				global.Log.Error(result.Error.Error())
+				c.JSON(500, gin.H{
+					"code": 500,
+					"msg":  "添加失败",
+				})
+				return
+			}
+
+			rss := fmt.Sprintf("%s/api/data/rss/%s/article/%d", strings.TrimRight(domain, "/"), userId, refId)
+			c.JSON(200, gin.H{
+				"code": 0,
+				"msg":  fmt.Sprintf("得到 rss 链接: <br>%s", rss),
+			})
+		}
+		if err != nil {
+			global.Log.Error(err.Error())
+			c.JSON(500, gin.H{
+				"code": 500,
+				"msg":  "error",
+			})
+		}
+	}
+}
+
 func articleSiteList(c *gin.Context) {
 	type PostData struct {
 		PageIndex int `form:"page" json:"page"`
@@ -140,7 +267,7 @@ func articleSiteList(c *gin.Context) {
 		Uname     string `json:"uname,omitempty" gorm:"column:uname; type:varchar(50); comment:用户名"`
 		Name      string `json:"name" gorm:"column:name; type:varchar(100); not null; comment:博客名字"`
 		Link      string `json:"link" gorm:"column:link; type:varchar(100); not null; comment:文章网站的网址"`
-		Regex     string `json:"regex" gorm:"column:regex; type:text; not null; comment:正则"`
+		Match     string `json:"match" gorm:"column:match; type:text; not null; comment:匹配的值"`
 		Rss       string `json:"rss" gorm:"column:rss; type:varchar(100); comment:RSS 地址"`
 		CreatedAt string `json:"created_at" gorm:"column:created_at; type:varchar(100); comment:添加时间"`
 	}
@@ -158,7 +285,7 @@ func articleSiteList(c *gin.Context) {
 
 		var count int64
 		var datas []RespData
-		result := global.Db.Model(&mydb.Article{}).Joins("JOIN user ON user.uid = article.uid").Select("article.id,user.uname,article.name,article.link,article.regex,article.rss,article.created_at").Where(
+		result := global.Db.Model(&mydb.Article{}).Joins("JOIN user ON user.uid = article.uid").Select("article.id,user.uname,article.name,article.link,article.match,article.rss,article.created_at").Where(
 			"article.uid=? or ?='root'", userId, role).Order("article.id desc").Count(&count).Limit(postJson.PageSize).Offset((postJson.PageIndex - 1) * postJson.PageSize).Find(&datas)
 		if result.Error != nil {
 			global.Log.Error(result.Error.Error())
@@ -176,7 +303,7 @@ func articleSiteList(c *gin.Context) {
 			if role == "user" {
 				datas[index].Uname = ""
 			}
-			datas[index].Regex = utils.HtmlEntityEncode(data.Regex)
+			datas[index].Match = utils.HtmlEntityEncode(data.Match)
 			datas[index].Rss = strings.TrimRight(domain, "/") + data.Rss
 			datas[index].CreatedAt = utils.Unix2Str(data.CreatedAt)
 		}
@@ -194,7 +321,7 @@ func articleSiteUpdate(c *gin.Context) {
 		ID    int    `form:"id" json:"id"`
 		Name  string `form:"name" json:"name"`
 		Link  string `form:"link" json:"link"`
-		Regex string `form:"regex" json:"regex"`
+		Match string `form:"match" json:"match"`
 	}
 
 	postJson := PostData{}
@@ -208,7 +335,7 @@ func articleSiteUpdate(c *gin.Context) {
 		userId := c.GetString("uid")
 		_, role := GetUserMsg(userId)
 
-		updateData := mydb.Article{Name: postJson.Name, Link: postJson.Link, Regex: postJson.Regex}
+		updateData := mydb.Article{Name: postJson.Name, Link: postJson.Link, Match: postJson.Match}
 		result := global.Db.Model(&mydb.Article{}).Where(
 			"(uid=? or ?='root') and id=?", userId, role, postJson.ID).Updates(updateData)
 		if result.Error != nil {
@@ -284,7 +411,7 @@ func articleSiteSearch(c *gin.Context) {
 		Uname     string `json:"uname,omitempty" gorm:"column:uname; type:varchar(50); comment:用户名"`
 		Name      string `json:"name" gorm:"column:name; type:varchar(100); not null; comment:博客名字"`
 		Link      string `json:"link" gorm:"column:link; type:varchar(100); not null; comment:文章网站的网址"`
-		Regex     string `json:"regex" gorm:"column:regex; type:text; not null; comment:正则"`
+		Regex     string `json:"match" gorm:"column:match; type:text; not null; comment:正则"`
 		Rss       string `json:"rss" gorm:"column:rss; type:varchar(100); comment:RSS 地址"`
 		CreatedAt string `json:"created_at" gorm:"column:created_at; type:varchar(100); comment:添加时间"`
 	}
@@ -304,7 +431,7 @@ func articleSiteSearch(c *gin.Context) {
 
 		var count int64
 		var datas []RespData
-		result := global.Db.Model(&mydb.Article{}).Select("id", "name", "link", "regex", "rss", "created_at").Where(
+		result := global.Db.Model(&mydb.Article{}).Select("id", "name", "link", "match", "rss", "created_at").Where(
 			"(uid=? or ?='root') and name like ?", userId, role, keyword).Order("id desc").Count(&count).Limit(postJson.PageSize).Offset((postJson.PageIndex - 1) * postJson.PageSize).Find(&datas)
 		if result.Error != nil {
 			global.Log.Error(result.Error.Error())

@@ -2,7 +2,7 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-01-04 21:19:24
- * @LastEditTime: 2022-02-11 17:55:34
+ * @LastEditTime: 2023-03-16 20:25:39
  */
 package mydb
 
@@ -49,7 +49,8 @@ type Article struct {
 	UID       string `gorm:"column:uid; size:32; not null; comment:用户唯一 id(uuid)"`
 	Name      string `gorm:"column:name; type:varchar(100); not null; comment:博客名字"`
 	Link      string `gorm:"column:link; type:varchar(100); not null; comment:文章网站的网址"`
-	Regex     string `gorm:"column:regex; type:text; not null; comment:正则"`
+	Type      string `gorm:"column:type; type:varchar(100); not null; comment:文章网站的类型"`
+	Match     string `gorm:"column:match; type:text; not null; comment:匹配的值"`
 	Rss       string `gorm:"column:rss; type:varchar(100); comment:RSS 地址"`
 	CreatedAt int    `gorm:"autoCreateTime; column:created_at; comment:添加时间"`
 }

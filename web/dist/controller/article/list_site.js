@@ -58,7 +58,7 @@ layui.define(function(exports){
                 {field: 'id', title: 'ID', width:60, sort: true, fixed: 'left', align:'center'},
                 {field: 'name', title: 'Name', width:'15%', fixed: 'left'},
                 {field: 'link', title: 'Link'},
-                {field: 'regex', title: 'Regex', hide: true},
+                {field: 'match', title: 'Match', hide: true},
                 {field: 'rss', title: 'Rss', minWidth:520},
                 {field: 'operate', title: 'Operate', width:166, fixed: 'right', align:'center', toolbar: '#article-table-bar'}
             ]],
@@ -124,7 +124,7 @@ layui.define(function(exports){
                                     {x: "ID", y: data.id},
                                     {x: "Title", y: data.name},
                                     {x: "Link", y: data.link},
-                                    {x: "Regex", y: data.regex},
+                                    {x: "Match", y: data.match},
                                     {x: "Rss", y: data.rss},
                                     {x: "Add Time", y: data.created_at},
                                 ],
@@ -153,7 +153,7 @@ layui.define(function(exports){
                                 "id": data.id,
                                 "name": data.name,
                                 "link": data.link,
-                                "regex": data.regex,
+                                "match": data.match,
                                 "rss": data.rss,
                                 "created_at": data.created_at
                             });
@@ -185,7 +185,7 @@ layui.define(function(exports){
                                         "uname":formData.uname,
                                         "name": formData.name,
                                         "link": formData.link,
-                                        "regex": formData.regex,
+                                        "match": formData.match,
                                         "site_type": formData.site_type,
                                         "rss": formData.rss
                                     });

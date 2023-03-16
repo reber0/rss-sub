@@ -2,7 +2,7 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-04-30 11:12:17
- * @LastEditTime: 2022-05-16 09:47:56
+ * @LastEditTime: 2023-03-16 20:28:37
  */
 
 layui.define(function(exports){
@@ -65,7 +65,7 @@ layui.define(function(exports){
                 {field: 'uname', title: 'UserName', width:115, sort: true, fixed: 'left'},
                 {field: 'name', title: 'Name', width:'15%'},
                 {field: 'link', title: 'Link'},
-                {field: 'regex', title: 'Regex', hide: true},
+                {field: 'match', title: 'Match', hide: true},
                 {field: 'rss', title: 'Rss', minWidth:520},
                 {field: 'operate', title: 'Operate', width:166, fixed: 'right', align:'center', toolbar: '#article-table-bar'}
             ]],
@@ -131,7 +131,7 @@ layui.define(function(exports){
                                     {x: "ID", y: data.id},
                                     {x: "Title", y: data.name},
                                     {x: "Link", y: data.link},
-                                    {x: "Regex", y: data.regex},
+                                    {x: "Match", y: data.match},
                                     {x: "Rss", y: data.rss},
                                     {x: "Add Time", y: data.created_at},
                                 ],
@@ -160,7 +160,7 @@ layui.define(function(exports){
                                 "id": data.id,
                                 "name": data.name,
                                 "link": data.link,
-                                "regex": data.regex,
+                                "match": data.match,
                                 "rss": data.rss,
                                 "created_at": data.created_at
                             });
@@ -192,7 +192,7 @@ layui.define(function(exports){
                                         "uname":formData.uname,
                                         "name": formData.name,
                                         "link": formData.link,
-                                        "regex": formData.regex,
+                                        "match": formData.match,
                                         "site_type": formData.site_type,
                                         "rss": formData.rss
                                     });
