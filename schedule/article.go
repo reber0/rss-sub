@@ -2,7 +2,7 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-01-04 21:12:25
- * @LastEditTime: 2023-03-16 21:12:43
+ * @LastEditTime: 2022-10-17 12:57:48
  */
 package schedule
 
@@ -15,7 +15,6 @@ import (
 	"github.com/reber0/go-common/utils"
 	"github.com/reber0/rss-sub/global"
 	"github.com/reber0/rss-sub/mydb"
-	"github.com/tidwall/gjson"
 )
 
 func checkArticle() {
@@ -27,8 +26,7 @@ func checkArticle() {
 		user_id := siteMsg.UID
 		name := siteMsg.Name
 		link := siteMsg.Link
-		_type := siteMsg.Type
-		match := siteMsg.Match
+		regex := siteMsg.Regex
 
 		var username string
 		result := global.Db.Model(&mydb.User{}).Select("uname").Where("uid=?", user_id).First(&username)
@@ -37,16 +35,8 @@ func checkArticle() {
 		}
 
 		global.Log.Info(fmt.Sprintf("schedule article check ==> %s", name))
-
 		articleURLSlice := getArticleURL(site_id)
-
-		var newArticleMsgList [][]string
-		var err error
-		if _type == "regex" {
-			newArticleMsgList, err = getNewSiteArticleMsg(link, match, articleURLSlice)
-		} else if _type == "wechat" {
-			newArticleMsgList, err = getNewWeChatArticleMsg(link, match, articleURLSlice)
-		}
+		newArticleMsgList, err := getNewArticleMsg(link, regex, articleURLSlice)
 		if err != nil {
 			loggerMsg(username, name+" 更新", err.Error())
 		} else {
@@ -95,7 +85,7 @@ func getArticleURL(articleID int) []string {
 }
 
 // 获取一个博客更新的文章信息
-func getNewSiteArticleMsg(link, match string, articleURLSlice []string) ([][]string, error) {
+func getNewArticleMsg(link, regex string, articleURLSlice []string) ([][]string, error) {
 	var newArticleMsgList [][]string
 
 	resp, err := global.Client.R().Get(link)
@@ -106,7 +96,7 @@ func getNewSiteArticleMsg(link, match string, articleURLSlice []string) ([][]str
 		html := utils.EncodeToUTF8(resp)
 		baseURL := parse.NewParseURL(link).BaseURL()
 
-		reg := regexp.MustCompile(`(?sm)` + match)
+		reg := regexp.MustCompile(`(?sm)` + regex)
 		href_text_list := reg.FindAllStringSubmatch(html, -1)
 		for _, href_text := range href_text_list {
 			a_href := strings.TrimSpace(href_text[1])
@@ -120,38 +110,6 @@ func getNewSiteArticleMsg(link, match string, articleURLSlice []string) ([][]str
 				newArticleMsgList = append(newArticleMsgList, []string{a_text, a_href})
 			}
 		}
-
-		newArticleMsgList = utils.SliceReverse(newArticleMsgList)
-	}
-
-	return newArticleMsgList, nil
-}
-
-// 获取一个公众号更新的文章信息
-func getNewWeChatArticleMsg(link, match string, articleURLSlice []string) ([][]string, error) {
-	var newArticleMsgList [][]string
-
-	link = fmt.Sprintf("https://mp.weixin.qq.com/mp/appmsgalbum?action=getalbum&album_id=%s&count=10&is_reverse=0&f=json", match)
-
-	resp, err := global.Client.R().Get(link)
-	if err != nil {
-		global.Log.Error(err.Error())
-		return newArticleMsgList, err
-	} else {
-		html := utils.EncodeToUTF8(resp)
-
-		article_list := gjson.Get(html, "getalbum_resp.article_list").Array()
-		for _, article := range article_list {
-			a_href := article.Get("url").String()
-			a_href = strings.Split(a_href, "&chksm")[0]
-			a_text := article.Get("title").String()
-
-			// 暂存新文章
-			if !utils.InSlice(a_href, articleURLSlice) {
-				newArticleMsgList = append(newArticleMsgList, []string{a_text, a_href})
-			}
-		}
-
 		newArticleMsgList = utils.SliceReverse(newArticleMsgList)
 	}
 

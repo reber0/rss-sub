@@ -2,7 +2,7 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-04-30 12:31:31
- * @LastEditTime: 2023-03-16 20:26:37
+ * @LastEditTime: 2022-07-22 09:10:17
 -->
 
 <title>简单用法 - 数据表格</title>
@@ -44,90 +44,42 @@
     <div class="layui-row">
         <div class="layui-col-md12">
             <div class="layui-card">
+                <div class="layui-card-header">添加 Blog</div>
                 <div class="layui-card-body">
-                    <div class="layui-tab layui-tab-card">
-                        <ul class="layui-tab-title">
-                            <li class="layui-this">添加 Blog</li>
-                            <li>添加公众号</li>
-                        </ul>
-                        <div class="layui-tab-content">
-                            <div class="layui-tab-item layui-show"> <!-- tab2的内容-->
-                                <div class="layui-row layui-col-space30">
-                                    <div class="layui-col-md5">
-                                        <form class="layui-form" lay-filter="blog-form">
-                                            <div class="layui-form-item layui-row">
-                                                <label class="layui-form-label layui-col-md2">Title</label>
-                                                <div class="layui-input-inline layui-col-md10">
-                                                    <input type="text" name="name" placeholder="Reber's Blog" class="layui-input">
-                                                </div>
-                                            </div>
-                                            <div class="layui-form-item layui-row">
-                                                <label class="layui-form-label layui-col-md2">Link</label>
-                                                <div class="layui-input-inline layui-col-md10">
-                                                    <input type="text" name="link" placeholder="http://wyb0.com/posts/" class="layui-input" lay-verify="required|url">
-                                                </div>
-                                            </div>
-                                            <div class="layui-form-item layui-form-text layui-row">
-                                                <label class="layui-form-label layui-col-md2">Match</label>
-                                                <div class="layui-input-inline layui-col-md10">
-                                                    <textarea name="match" placeholder='<li>\s+<div.*?>\s+<a href="(.*?)">(.*?)</a>' class="layui-textarea" lay-verify="required"></textarea>
-                                                </div>
-                                            </div>
-                                            <div class="layui-form-item layui-form-text layui-row" style="display:none">
-                                                <input type="text" name="type" value="blog">
-                                            </div>
-                                            <div class="layui-form-item layui-row">
-                                                <label class="layui-form-label layui-col-md2"></label>
-                                                <div class="layui-input-inline layui-col-md10 layui-col-md-offset2">
-                                                    <button type="reset" class="layui-btn layui-btn-primary layui-btn-sm">重置</button>
-                                                    <button type="button" class="layui-btn layui-btn-sm" lay-submit lay-filter="rss-check">检测</button>
-                                                    <button type="button" class="layui-btn layui-btn-sm" lay-submit lay-filter="rss-submit">提交</button>
-                                                </div>
-                                            </div>
-                                        </form>
-                                    </div>
-                                    <div class="layui-col-md6">
-                                        <div class="layui-row">
-                                            <table id="blog-msg-view"></table>
-                                        </div>
+                    <div class="layui-row layui-col-space30">
+                        <div class="layui-col-md5">
+                            <form class="layui-form" lay-filter="blog-form">
+                                <div class="layui-form-item layui-row">
+                                    <label class="layui-form-label layui-col-md2">Title</label>
+                                    <div class="layui-input-inline layui-col-md10">
+                                        <input type="text" name="name" placeholder="Reber's Blog" class="layui-input">
                                     </div>
                                 </div>
-                            </div>
-                            <div class="layui-tab-item"> <!-- tab2的内容-->
-                                <div class="layui-row layui-col-space30">
-                                    <div class="layui-col-md5">
-                                        <form class="layui-form" lay-filter="blog-form">
-                                            <div class="layui-form-item layui-row">
-                                                <label class="layui-form-label layui-col-md2">Title</label>
-                                                <div class="layui-input-inline layui-col-md10">
-                                                    <input type="text" name="name" placeholder="三六零CERT" class="layui-input">
-                                                </div>
-                                            </div>
-                                            <div class="layui-form-item layui-row">
-                                                <label class="layui-form-label layui-col-md2">Link</label>
-                                                <div class="layui-input-inline layui-col-md10">
-                                                    <input type="text" name="link" placeholder="https://mp.weixin.qq.com/s/FrG6dSb1g9Mlskjz9EqYoA" class="layui-input" lay-verify="required|url">
-                                                </div>
-                                            </div>
-                                            <div class="layui-form-item layui-form-text layui-row" style="display:none">
-                                                <input type="text" name="type" value="wechat">
-                                            </div>
-                                            <div class="layui-form-item layui-row">
-                                                <label class="layui-form-label layui-col-md2"></label>
-                                                <div class="layui-input-inline layui-col-md10 layui-col-md-offset2">
-                                                    <button type="reset" class="layui-btn layui-btn-primary layui-btn-sm">重置</button>
-                                                    <button type="button" class="layui-btn layui-btn-sm" lay-submit lay-filter="rss-check">检测</button>
-                                                    <button type="button" class="layui-btn layui-btn-sm" lay-submit lay-filter="rss-submit">提交</button>
-                                                </div>
-                                            </div>
-                                        </form>
-                                    </div>
-                                    <div class="layui-col-md6">
-                                        <div class="layui-row">
-                                            <table id="wechat-msg-view"></table>
-                                        </div>
+                                <div class="layui-form-item layui-row">
+                                    <label class="layui-form-label layui-col-md2">Link</label>
+                                    <div class="layui-input-inline layui-col-md10">
+                                        <input type="text" name="link" placeholder="http://wyb0.com/posts/" class="layui-input" lay-verify="required|url">
                                     </div>
                                 </div>
+                                <div class="layui-form-item layui-form-text layui-row">
+                                    <label class="layui-form-label layui-col-md2">Regex</label>
+                                    <div class="layui-input-inline layui-col-md10">
+                                        <textarea name="regex" placeholder='<li>\s+<div.*?>\s+<a href="(.*?)">(.*?)</a>' class="layui-textarea" lay-verify="required"></textarea>
+                                    </div>
+                                </div>
+                                <div class="layui-form-item layui-row">
+                                    <label class="layui-form-label layui-col-md2"></label>
+                                    <div class="layui-input-inline layui-col-md10 layui-col-md-offset2">
+                                        <button type="reset" class="layui-btn layui-btn-primary layui-btn-sm">重置</button>
+                                        <button type="button" class="layui-btn layui-btn-sm" lay-submit lay-filter="rss-check">检测</button>
+                                        <button type="button" class="layui-btn layui-btn-sm" lay-submit lay-filter="rss-submit">提交</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="layui-col-md6">
+                            <div class="layui-row">
+                                <table id="blog-msg-view"></table>
                             </div>
                         </div>
                     </div>
