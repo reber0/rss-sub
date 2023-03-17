@@ -2,7 +2,7 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-01-04 20:53:25
- * @LastEditTime: 2022-09-20 10:38:56
+ * @LastEditTime: 2023-03-17 13:23:35
  */
 package routers
 
@@ -404,7 +404,7 @@ func getRss(c *gin.Context) {
 			global.Log.Error(result.Error.Error())
 			c.JSON(500, gin.H{
 				"code": 500,
-				"msg":  "删除失败",
+				"msg":  "查询失败",
 			})
 			return
 		}
@@ -414,7 +414,7 @@ func getRss(c *gin.Context) {
 			global.Log.Error(result.Error.Error())
 			c.JSON(500, gin.H{
 				"code": 500,
-				"msg":  "删除失败",
+				"msg":  "查询失败",
 			})
 			return
 		}
@@ -425,7 +425,7 @@ func getRss(c *gin.Context) {
 			global.Log.Error(result.Error.Error())
 			c.JSON(500, gin.H{
 				"code": 500,
-				"msg":  "删除失败",
+				"msg":  "查询失败",
 			})
 			return
 		}
@@ -435,7 +435,7 @@ func getRss(c *gin.Context) {
 			global.Log.Error(result.Error.Error())
 			c.JSON(500, gin.H{
 				"code": 500,
-				"msg":  "删除失败",
+				"msg":  "查询失败",
 			})
 			return
 		}
