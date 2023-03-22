@@ -2,7 +2,7 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-01-06 14:59:35
- * @LastEditTime: 2022-04-30 09:50:21
+ * @LastEditTime: 2023-03-22 18:45:26
  */
 package middleware
 
@@ -26,7 +26,7 @@ type CustomClaims struct {
 
 // token 生成
 func CreateToken(uid string) (string, error) {
-	expireTime := time.Now().Add(6 * time.Hour).Unix() // 设置 token 有效时间
+	expireTime := time.Now().Add(7 * 24 * time.Hour).Unix() // 设置 token 有效时间为 7 天
 
 	claims := CustomClaims{
 		UID: uid,
