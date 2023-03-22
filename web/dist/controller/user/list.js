@@ -342,7 +342,7 @@ layui.define(function(exports){
                     });
                     break;
                 case 'delete':
-                    layer.confirm('确定删除 '+data.username+'?', {icon: 3, shadeClose: true}, function(index){
+                    layer.confirm('确定删除 '+data.uname+'?', {icon: 3, shadeClose: true}, function(index){
                         var id_list = [];
                         id_list.push(data.id);
                         data = {
