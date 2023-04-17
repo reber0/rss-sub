@@ -2,7 +2,7 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-01-04 21:12:34
- * @LastEditTime: 2023-01-30 15:47:50
+ * @LastEditTime: 2023-04-17 13:41:46
  */
 package schedule
 
@@ -118,6 +118,8 @@ func getNewVideoMsg(link string, videoURLSlice []string) ([][]string, string, er
 		href_text_list, status, err = ysjdm(link)
 	} else if strings.HasPrefix(link, "http://www.yinghuacd.com/") {
 		href_text_list, status, err = yinghuacd(link)
+	} else if strings.HasPrefix(link, "https://www.agemys.net/") {
+		href_text_list, status, err = age(link)
 	}
 	if err != nil {
 		return newVideoMsgList, status, err
@@ -364,6 +366,42 @@ func yinghuacd(link string) ([][]string, string, error) {
 		} else {
 			status = "连载中"
 			newVideoMsgList = utils.SliceReverse(newVideoMsgList)
+		}
+	}
+
+	return newVideoMsgList, status, nil
+}
+
+func age(link string) ([][]string, string, error) {
+	var status string
+	var newVideoMsgList [][]string
+
+	resp, err := global.Client.R().Get(link)
+	if err != nil {
+		global.Log.Error(err.Error())
+		return newVideoMsgList, "连载中", err
+	} else {
+		html := utils.EncodeToUTF8(resp)
+		dom, err := goquery.NewDocumentFromReader(strings.NewReader(html))
+		if err != nil {
+			global.Log.Error(err.Error())
+		}
+
+		dom.Find(`div[style="display:block"]>ul>li>a`).Each(func(i int, node *goquery.Selection) {
+			url, _ := node.Attr("href")
+			title := node.Text()
+			if !strings.Contains(strings.ToLower(title), "pv") && !strings.Contains(strings.ToLower(title), "无字") {
+				newVideoMsgList = append(newVideoMsgList, []string{title, url})
+			}
+		})
+
+		reg := regexp.MustCompile(`(?sm)播放状态.*?value">(.*?)</span>`)
+		m := reg.FindStringSubmatch(html)
+		status = m[1]
+		if status == "完结" {
+			status = "已完结"
+		} else {
+			status = "连载中"
 		}
 	}
 

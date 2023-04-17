@@ -2,7 +2,7 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-01-04 20:54:15
- * @LastEditTime: 2022-10-17 13:38:42
+ * @LastEditTime: 2023-04-17 13:36:42
  */
 package routers
 
@@ -315,6 +315,15 @@ func getName(targetURL string) string {
 		html := utils.EncodeToUTF8(resp)
 
 		reg := regexp.MustCompile(`<h1>(.*?)</h1>`)
+		m := reg.FindStringSubmatch(html)
+		if len(m) > 0 {
+			name = m[1]
+		}
+	} else if strings.HasPrefix(targetURL, "https://www.agemys.net/") {
+		resp, _ := global.Client.R().Get(targetURL)
+		html := utils.EncodeToUTF8(resp)
+
+		reg := regexp.MustCompile(`detail_imform_name">(.*?)</h4`)
 		m := reg.FindStringSubmatch(html)
 		if len(m) > 0 {
 			name = m[1]
