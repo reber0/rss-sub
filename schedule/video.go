@@ -2,7 +2,7 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-01-04 21:12:34
- * @LastEditTime: 2023-04-17 13:41:46
+ * @LastEditTime: 2023-04-20 12:51:57
  */
 package schedule
 
@@ -118,7 +118,7 @@ func getNewVideoMsg(link string, videoURLSlice []string) ([][]string, string, er
 		href_text_list, status, err = ysjdm(link)
 	} else if strings.HasPrefix(link, "http://www.yinghuacd.com/") {
 		href_text_list, status, err = yinghuacd(link)
-	} else if strings.HasPrefix(link, "https://www.agemys.net/") {
+	} else if strings.HasPrefix(link, "https://www.agemys.vip/") {
 		href_text_list, status, err = age(link)
 	}
 	if err != nil {
