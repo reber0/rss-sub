@@ -2,7 +2,7 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-01-10 13:35:18
- * @LastEditTime: 2023-04-21 14:33:18
+ * @LastEditTime: 2023-04-21 14:49:07
  */
 package routers
 
@@ -24,7 +24,7 @@ var menu_root = `[{
     "icon": "layui-icon-home",
     "jump": "/"
 }, {
-    "title": "Article",
+    "title": "文章",
     "icon": "layui-icon-read",
     "list": [{
         "name": "article_site_add",
@@ -40,7 +40,7 @@ var menu_root = `[{
         "jump": "article/data/list"
     }]
 }, {
-    "title": "Video",
+    "title": "视频",
     "icon": "layui-icon-video",
     "list": [{
         "name": "video_site_manage",
@@ -94,7 +94,7 @@ var menu_user = `[{
     "icon": "layui-icon-home",
     "jump": "/"
 }, {
-    "title": "Article",
+    "title": "文章",
     "icon": "layui-icon-read",
     "list": [{
         "name": "article_site_add",
@@ -110,7 +110,7 @@ var menu_user = `[{
         "jump": "article/data/list"
     }]
 }, {
-    "title": "Video",
+    "title": "视频",
     "icon": "layui-icon-video",
     "list": [{
         "name": "video_site_list",
