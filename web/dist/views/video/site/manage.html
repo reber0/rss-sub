@@ -1,9 +1,9 @@
 <!--
  * @Author: reber
  * @Mail: reber0ask@qq.com
- * @Date: 2021-01-04 10:27:38
- * @LastEditTime: 2022-07-06 16:56:02
- -->
+ * @Date: 2022-04-30 10:27:55
+ * @LastEditTime: 2023-04-21 14:39:48
+-->
 
 <title>Video</title>
 
@@ -17,7 +17,6 @@
 
 <style>
     .search-form .layui-form-item {margin-bottom: 5px;}
-    .search-form .layui-form-select input {width:90px}
     .search-form input {width:150px}
 </style>
 
@@ -32,14 +31,6 @@
                             Name&nbsp;
                             <div class="layui-inline">
                                 <input class="layui-input" name="keyword" autocomplete="off" placeholder="根据 Name 搜索">
-                            </div>
-                            Status&nbsp;
-                            <div class="layui-inline">
-                                <select name="status" lay-filter="status-select" lay-search>
-                                    <option value=""></option>
-                                    <option value="连载中" selected>连载中</option>
-                                    <option value="已完结">已完结</option>
-                                </select>
                             </div>
                             <div class="layui-inline">
                                 <button class="layui-btn" lay-submit lay-filter="search-form">
@@ -118,5 +109,5 @@
 
 
 <script>
-    layui.use('video/list_site', layui.factory('video/list_site'));
+    layui.use('video/site/manage', layui.factory('video/site/manage'));
 </script>

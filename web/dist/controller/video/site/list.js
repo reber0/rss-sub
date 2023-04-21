@@ -1,11 +1,10 @@
 
 layui.define(function(exports){
 
-    layui.use(['table', 'form', 'admin', 'util'], function(){
+    layui.use(['table', 'form', 'admin'], function(){
         var table = layui.table;
         var form = layui.form;
         var admin = layui.admin;
-        var util = layui.util;
         var $ = layui.$;
 
         // table.render、table.reload 请求不走 admin.req，没法捕获 error， 在 401 时不会提示登录失效
@@ -23,44 +22,65 @@ layui.define(function(exports){
         // 渲染 form 表单，不然搜索处的 select 不显示
         form.render();
 
-        // 监听搜索
+        //监听搜索
         form.on('submit(search-form)', function(data){
             var formData = data.field;
 
             //执行重载
             tableIns.reload({
                 method: "post",
-                url: "/api/article/search",
+                url: "/api/video/list",
                 page: {
                     curr: 1 //重新从第 1 页开始
                 },
                 where: {
-                    keyword: formData.keyword
+                    keyword: formData.keyword,
+                    status: formData.status
+                }
+            });
+        });
+        //监听搜索的 select
+        form.on('select(status-select)', function(data){
+            var status = data.value;
+            var keyword = $("input[name='keyword']").val();
+
+            //执行重载
+            tableIns.reload({
+                page: {
+                    curr: 1 //重新从第 1 页开始
+                }
+                ,where: {
+                    keyword: keyword,
+                    status: status,
                 }
             });
         });
 
         //生成表格
         var tableIns = table.render({
-            elem: '#article-table',
-            id: 'article-table-id',
+            elem: '#site-table',
+            id: 'site-table-id',
             // height: 500,
             // width: 1000,
-            url: '/api/article/list',
+            url: '/api/video/list',
             method: 'post',
-            dataType: "json",
+            dataType: "json", //期望后端返回json
             headers: {Token: layui.data('layuiAdmin').Token},
             contentType: 'application/json',
             page: true, //分页
             limit: 10,
-            toolbar: '#article-table-toolbar', //头部盒子
+            where: {
+                status: '连载中'
+            },
+            toolbar: '#site-table-toolbar', //头部盒子
             cols: [[
+                {checkbox: true, fixed: true},
                 {field: 'id', title: 'ID', width:60, sort: true, fixed: 'left', align:'center'},
-                {field: 'name', title: 'Name', width:'15%', fixed: 'left'},
-                {field: 'link', title: 'Link'},
-                {field: 'regex', title: 'Regex', hide: true},
-                {field: 'rss', title: 'Rss', minWidth:520},
-                {field: 'operate', title: 'Operate', width:166, fixed: 'right', align:'center', toolbar: '#article-table-bar'}
+                {field: 'name', title: 'Name', width:'23%', sort: true, fixed: 'left'},
+                {field: 'link', title: 'Link', hide: true},
+                {field: 'status', title: 'Status', width:90, sort: true},
+                {field: 'rss', title: 'Rss'},
+                {field: 'operate', title: 'Operate', width:166, fixed: 'right', align:'center', toolbar: '#site-table-bar'},
             ]],
             done : function () {
                 $('.layui-table').css("width","100%");
@@ -68,7 +88,7 @@ layui.define(function(exports){
         });
 
         //头工具栏事件监听
-        table.on('toolbar(article-table)', function(obj){
+        table.on('toolbar(site-table)', function(obj){
             switch(obj.event){
                 case 'refresh':
                     tableIns.reload();
@@ -78,16 +98,13 @@ layui.define(function(exports){
                     //     }
                     // });
                     break;
-                case 'export-all':
-                    var all_count = tableIns.config.page.count;
-                    if (all_count>0) {
-                        var data = {
-                            page: 1,
-                            limit: all_count
-                        };
-    
+                case 'add':
+                    layer.prompt({title:"输入链接", formType: 2, area:["400px",'40px'], shadeClose: true}, function(text, index){
+                        data = {"link": text}
+
+                        var loading = layer.load(2);
                         admin.req({
-                            url: '/api/article/list',
+                            url: '/api/video/add',
                             type: 'post',
                             dataType: "json", //期望后端返回json
                             contentType: "application/json", //发送的数据的类型
@@ -95,18 +112,104 @@ layui.define(function(exports){
                             timeout: 20000
                         }).success(function (result) {
                             if (result.code == 0){
-                                table.exportFile(tableIns.config.id, result.data, 'csv');
+                                tableIns.reload({
+                                    page: {curr: 1}
+                                });
+                                layer.msg(result.msg, {icon: 1, time: 1000});
+                            } else {
+                                layer.msg(result.msg, {icon: 2, time: 1000});
+                            }
+                        }).always(function (){
+                            layer.close(loading);
+                        });
+                        layer.close(index);
+                    });
+                    break;
+                case 'export-select':
+                    site_table_id = tableIns.config.id; // site-table-id
+                    var checkStatus = table.checkStatus(site_table_id);
+                    var data = checkStatus.data;
+                    if(data.length == 0) return layer.msg('未选中行', {time: 1000});
+
+                    var export_id_list = [];
+                    data.forEach(function(x, i){
+                        export_id_list.push(x.id);
+                    });
+
+                    data = {
+                        page: 1,
+                        limit: export_id_list.length,
+                        export_id_list: export_id_list
+                    }
+    
+                    admin.req({
+                        url: '/api/video/list',
+                        type: 'post',
+                        dataType: "json", //期望后端返回json
+                        contentType: "application/json", //发送的数据的类型
+                        data: JSON.stringify(data),
+                        timeout: 20000
+                    }).success(function(result){
+                        if (result.code == 0){
+                            table.exportFile(tableIns.config.id, result.data, 'csv');
+                        }
+                    });
+ 
+                    break;
+                case 'export-all':
+                    all_count = tableIns.config.page.count;
+                    data = {
+                        page: 1,
+                        limit: all_count
+                    },
+                    admin.req({
+                        url: '/api/video/list',
+                        type: 'post',
+                        dataType: "json", //期望后端返回json
+                        contentType: "application/json", //发送的数据的类型
+                        data: JSON.stringify(data),
+                        timeout: 20000
+                    }).success(function (result) {
+                        if (result.code == 0){
+                            table.exportFile(tableIns.config.id, result.data, 'csv');
+                        }
+                    });
+                    break;
+                case 'delete-select':
+                    // 通过 table 的唯一 id 获取选中的复选框的内容
+                    site_table_id = tableIns.config.id; // site-table-id
+                    var checkStatus = table.checkStatus(site_table_id);
+                    var data = checkStatus.data;
+                    if(data.length == 0) return layer.msg('未选中行', {time: 1000});
+
+                    var target_id_list = [];
+                    data.forEach(function(x, i){
+                        target_id_list.push(x.id);
+                    });
+                    layer.confirm('确定删除 '+target_id_list.length+'条数据?', {icon: 3, shadeClose: true}, function(index){
+                        admin.req({
+                            url: '/api/video/delete',
+                            type: 'post',
+                            dataType: "json", //期望后端返回json
+                            contentType: "application/json", //发送的数据的类型
+                            data: JSON.stringify({"target_id_list": target_id_list}),
+                            timeout: 20000
+                        }).success(function (result) {
+                            if (result.code == 0){
+                                tableIns.reload();
+                                layer.msg(result.msg, {icon: 1, time: 1000});
+                            } else {
+                                layer.msg(result.msg, {icon: 1, time: 1000});
                             }
                         });
-                    } else {
-                        layer.msg("当前无数据可导出", {icon: 2, time: 1000});
-                    }
+                        layer.close(index);
+                    });
                     break;
             }
         });
 
         //行工具栏事件监听
-        table.on('tool(article-table)', function(obj){
+        table.on('tool(site-table)', function(obj){
             var data = obj.data;
             switch(obj.event){
                 case 'detail':
@@ -115,16 +218,16 @@ layui.define(function(exports){
                         area : ["590px", '350px'],
                         shadeClose: true, // 是否点击遮罩关闭：默认：false
                         title: '查看 '+data.name,
-                        content: '<div class="article-detail"></div>',
+                        content: '<div class="site-detail"></div>',
                         success: function(layero, index){
                             table.render({
-                                elem: layero.find('.article-detail'),
+                                elem: layero.find('.site-detail'),
                                 width: 550,
                                 data: [
                                     {x: "ID", y: data.id},
-                                    {x: "Title", y: data.name},
+                                    {x: "Name", y: data.name},
                                     {x: "Link", y: data.link},
-                                    {x: "Regex", y: data.regex},
+                                    {x: "Status", y: data.status},
                                     {x: "Rss", y: data.rss},
                                     {x: "Add Time", y: data.created_at},
                                 ],
@@ -142,20 +245,20 @@ layui.define(function(exports){
                 case 'edit':
                     admin.popup({
                         type: 1,
-                        area : ["600px", '465px'],
+                        title: '数据编辑',
+                        area : ["620px", '470px'],
                         shadeClose: true, // 是否点击遮罩关闭：默认：false
-                        title: '编辑 '+data.name,
-                        content: $('.edit-form'),
                         scrollbar: false,
+                        content: $('.edit-form'),
                         btn: ['保存', '取消'], // 按钮：按钮1的回调是yes（也可以是btn1），而从按钮2开始，则回调为btn2: function(){}，以此类推
                         success: function(layero, index){
                             form.val('edit-form', {
                                 "id": data.id,
                                 "name": data.name,
                                 "link": data.link,
-                                "regex": data.regex,
+                                "status": data.status,
                                 "rss": data.rss,
-                                "created_at": data.created_at
+                                "created_at": data.created_at,
                             });
 
                             // 解决 layui 的遮罩层使用出现遮罩层覆盖弹窗情况
@@ -166,13 +269,14 @@ layui.define(function(exports){
                             layero.find('.layui-layer-content').css('padding-bottom', '0px');
                             layero.find('.layui-form-label').width(61);
                             layero.find('.layui-input').width(450);
+                            layero.find('.layui-form-select input').width(190-42);
                             layero.find('.edit-form').removeClass('layui-hide');
                         },
                         yes: function(index, layero){ //更新 table 的一行
                             var formData = form.val("edit-form");
                             formData.id = parseInt(formData.id);
                             admin.req({
-                                url: '/api/article/update',
+                                url: '/api/video/update',
                                 type: 'post',
                                 dataType: "json", //期望后端返回json
                                 contentType: "application/json", //发送的数据的类型
@@ -182,30 +286,30 @@ layui.define(function(exports){
                                 if (result.code == 0){
                                     obj.update({
                                         "id": formData.id,
-                                        "uname":formData.uname,
                                         "name": formData.name,
                                         "link": formData.link,
-                                        "regex": formData.regex,
-                                        "site_type": formData.site_type,
-                                        "rss": formData.rss
+                                        "status": formData.status,
+                                        "rss": formData.rss,
+                                        "created_at": formData.created_at,
                                     });
                                     layer.msg(result.msg, {icon: 1, time: 1000});
                                 } else {
                                     layer.msg(result.msg, {icon: 2, time: 1000});
                                 }
-                            }).always(function (result) {
-                                layer.close(index);
                             });
+                            layer.close(index);
                         }
                     });
                     break;
                 case 'delete':
                     layer.confirm('确定删除 '+data.name+'?', {icon: 3, shadeClose: true}, function(index){
+                        var target_id_list = [];
+                        target_id_list.push(data.id);
                         data = {
-                            "id": data.id,
+                            "target_id_list": target_id_list,
                         }
                         admin.req({
-                            url: '/api/article/delete',
+                            url: '/api/video/delete',
                             type: 'post',
                             dataType: "json", //期望后端返回json
                             contentType: "application/json", //发送的数据的类型
@@ -218,14 +322,13 @@ layui.define(function(exports){
                             } else {
                                 layer.msg(result.msg, {icon: 2, time: 1000});
                             }
-                        }).always(function () {
-                            layer.close(index);
                         });
+                        layer.close(index);
                     });
                     break;
             };
         });
     });
 
-    exports('article/list_site', {});
+    exports('video/site/list', {});
 });

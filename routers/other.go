@@ -2,7 +2,7 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-01-10 13:35:18
- * @LastEditTime: 2022-09-20 10:39:03
+ * @LastEditTime: 2023-04-21 14:33:18
  */
 package routers
 
@@ -27,29 +27,29 @@ var menu_root = `[{
     "title": "Article",
     "icon": "layui-icon-read",
     "list": [{
-        "name": "article_add_site",
+        "name": "article_site_add",
         "title": "添加 Site",
-        "jump": "article/add_site"
+        "jump": "article/site/add"
     }, {
-        "name": "article_list_site",
+        "name": "article_site_manage",
         "title": "管理 Site",
-        "jump": "article/manage_list_site"
+        "jump": "article/site/manage"
     }, {
-        "name": "article_list_article",
+        "name": "article_data_list",
         "title": "管理 Article",
-        "jump": "article/list_article"
+        "jump": "article/data/list"
     }]
 }, {
     "title": "Video",
     "icon": "layui-icon-video",
     "list": [{
-        "name": "video_list_site",
+        "name": "video_site_manage",
         "title": "管理 Site",
-        "jump": "video/manage_list_site"
+        "jump": "video/site/manage"
     }, {
-        "name": "video_list_video",
+        "name": "video_data_list",
         "title": "管理 Video",
-        "jump": "video/list_video"
+        "jump": "video/data/list"
     }]
 }, {
     "name": "user",
@@ -58,7 +58,7 @@ var menu_root = `[{
     "list": [{
         "name": "user",
         "title": "用户管理",
-        "jump": "user/list_user"
+        "jump": "user/list"
     }]
 }, {
     "name": "set",
@@ -97,29 +97,29 @@ var menu_user = `[{
     "title": "Article",
     "icon": "layui-icon-read",
     "list": [{
-        "name": "article_add_site",
+        "name": "article_site_add",
         "title": "添加 Site",
-        "jump": "article/add_site"
+        "jump": "article/site/add"
     }, {
-        "name": "article_list_site",
+        "name": "article_site_list",
         "title": "管理 Site",
-        "jump": "article/list_site"
+        "jump": "article/site/list"
     }, {
-        "name": "article_list_article",
+        "name": "article_data_list",
         "title": "管理 Article",
-        "jump": "article/list_article"
+        "jump": "article/data/list"
     }]
 }, {
     "title": "Video",
     "icon": "layui-icon-video",
     "list": [{
-        "name": "video_list_site",
+        "name": "video_site_list",
         "title": "管理 Site",
-        "jump": "video/list_site"
+        "jump": "video/site/list"
     }, {
-        "name": "video_list_video",
+        "name": "video_data_list",
         "title": "管理 Video",
-        "jump": "video/list_video"
+        "jump": "video/data/list"
     }]
 }, {
     "name": "set",

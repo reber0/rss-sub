@@ -2,7 +2,7 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-04-30 11:32:10
- * @LastEditTime: 2022-04-30 11:33:41
+ * @LastEditTime: 2023-04-21 14:43:15
  */
 
 layui.define(function(exports){
@@ -312,5 +312,5 @@ layui.define(function(exports){
         });
     });
 
-    exports('video/manage_list_site', {});
+    exports('video/site/manage', {});
 });
