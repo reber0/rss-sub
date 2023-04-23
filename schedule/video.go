@@ -2,7 +2,7 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-01-04 21:12:34
- * @LastEditTime: 2023-04-20 12:51:57
+ * @LastEditTime: 2023-04-23 12:07:22
  */
 package schedule
 
@@ -390,7 +390,7 @@ func age(link string) ([][]string, string, error) {
 		dom.Find(`div[style="display:block"]>ul>li>a`).Each(func(i int, node *goquery.Selection) {
 			url, _ := node.Attr("href")
 			title := node.Text()
-			if !strings.Contains(strings.ToLower(title), "pv") && !strings.Contains(strings.ToLower(title), "无字") {
+			if !strings.Contains(strings.ToLower(title), "pv") && !strings.Contains(strings.ToLower(title), "无字") && !strings.Contains(strings.ToLower(title), "英字") {
 				newVideoMsgList = append(newVideoMsgList, []string{title, url})
 			}
 		})
