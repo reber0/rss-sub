@@ -2,7 +2,7 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-01-04 20:53:42
- * @LastEditTime: 2022-09-20 10:17:17
+ * @LastEditTime: 2023-05-16 16:45:39
  */
 package routers
 
@@ -16,17 +16,17 @@ import (
 
 // 设置相关路由(网站/邮箱/个人资料/密码)
 func SetRouter(r *gin.Engine) {
-	setGroup := r.Group("/api/set").Use(middleware.JWTAuth())
-	{
-		setGroup.POST("/user/info", getInfo)
-		setGroup.POST("/user/info_update", middleware.Action(), updateInfo)
-		setGroup.POST("/user/pwd_update", middleware.Action(), updatePwd)
+	setGroup := r.Group("/api/set")
 
-		setGroup.POST("/system/website", middleware.RootAuth(), getWebSite)
-		setGroup.POST("/system/website_update", middleware.RootAuth(), middleware.Action(), updateWebSite)
-		setGroup.POST("/system/email", middleware.RootAuth(), getEmail)
-		setGroup.POST("/system/email_update", middleware.RootAuth(), middleware.Action(), updateEmail)
-	}
+	setGroup.Use(middleware.JWTAuth())
+	setGroup.POST("/user/info", getInfo)
+	setGroup.POST("/user/info_update", middleware.Action(), updateInfo)
+	setGroup.POST("/user/pwd_update", middleware.Action(), updatePwd)
+
+	setGroup.POST("/system/website", middleware.RootAuth(), getWebSite)
+	setGroup.POST("/system/website_update", middleware.RootAuth(), middleware.Action(), updateWebSite)
+	setGroup.POST("/system/email", middleware.RootAuth(), getEmail)
+	setGroup.POST("/system/email_update", middleware.RootAuth(), middleware.Action(), updateEmail)
 }
 
 func getWebSite(c *gin.Context) {

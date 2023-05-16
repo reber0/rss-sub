@@ -2,7 +2,7 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-01-04 20:53:25
- * @LastEditTime: 2023-03-17 13:23:35
+ * @LastEditTime: 2023-05-16 16:44:05
  */
 package routers
 
@@ -19,16 +19,16 @@ import (
 // Data 相关路由
 func DataRouter(r *gin.Engine) {
 	dataGroup := r.Group("/api/data")
-	{
-		dataGroup.POST("/article/list", middleware.JWTAuth(), middleware.Action(), dataArticleList)
-		dataGroup.POST("/article/update", middleware.JWTAuth(), middleware.Action(), dataArticleUpdate)
-		dataGroup.POST("/article/delete", middleware.JWTAuth(), middleware.Action(), dataArticleDelete)
-		dataGroup.POST("/video/list", middleware.JWTAuth(), middleware.Action(), dataVideoList)
-		dataGroup.POST("/video/update", middleware.JWTAuth(), middleware.Action(), dataVideoUpdate)
-		dataGroup.POST("/video/delete", middleware.JWTAuth(), middleware.Action(), dataVideoDelete)
 
-		dataGroup.GET("/rss/:uid/:category/:ref_id", getRss)
-	}
+	dataGroup.GET("/rss/:uid/:category/:ref_id", getRss) // getRss 路由在中间件之前，不经过中间件处理
+
+	dataGroup.Use(middleware.JWTAuth(), middleware.Action()) // 在路由组中应用中间件
+	dataGroup.POST("/article/list", dataArticleList)
+	dataGroup.POST("/article/update", dataArticleUpdate)
+	dataGroup.POST("/article/delete", dataArticleDelete)
+	dataGroup.POST("/video/list", dataVideoList)
+	dataGroup.POST("/video/update", dataVideoUpdate)
+	dataGroup.POST("/video/delete", dataVideoDelete)
 }
 
 func dataArticleList(c *gin.Context) {

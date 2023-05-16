@@ -2,7 +2,7 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-01-04 20:53:07
- * @LastEditTime: 2022-09-20 10:17:06
+ * @LastEditTime: 2023-05-16 16:44:32
  */
 package routers
 
@@ -17,17 +17,17 @@ import (
 
 // Message 相关路由
 func MessageRouter(r *gin.Engine) {
-	msgGroup := r.Group("/api/message").Use(middleware.JWTAuth())
-	{
-		msgGroup.POST("/tabs", msgTabs)
-		msgGroup.POST("/count", msgCount)
-		msgGroup.POST("/user_list", msgUserList)
-		msgGroup.POST("/api_list", msgApiList)
-		msgGroup.POST("/update", msgUpdate)
-		msgGroup.POST("/read_all", msgReadAll)
-		msgGroup.POST("/delete", msgDelete)
-		msgGroup.POST("/delete_all", msgDeleteAll)
-	}
+	msgGroup := r.Group("/api/message")
+
+	msgGroup.Use(middleware.JWTAuth())
+	msgGroup.POST("/tabs", msgTabs)
+	msgGroup.POST("/count", msgCount)
+	msgGroup.POST("/user_list", msgUserList)
+	msgGroup.POST("/api_list", msgApiList)
+	msgGroup.POST("/update", msgUpdate)
+	msgGroup.POST("/read_all", msgReadAll)
+	msgGroup.POST("/delete", msgDelete)
+	msgGroup.POST("/delete_all", msgDeleteAll)
 }
 
 // 显示消息的 tab

@@ -2,7 +2,7 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-01-10 13:35:18
- * @LastEditTime: 2023-04-21 14:49:07
+ * @LastEditTime: 2023-05-16 16:44:56
  */
 package routers
 
@@ -142,10 +142,9 @@ var menu_user = `[{
 // 其他路由(copyright/menu)
 func OtherRouter(r *gin.Engine) {
 	setGroup := r.Group("/api/other")
-	{
-		setGroup.POST("/copyright", copyright)
-		setGroup.POST("/menu", middleware.JWTAuth(), menu)
-	}
+
+	setGroup.POST("/copyright", copyright)
+	setGroup.POST("/menu", middleware.JWTAuth(), menu)
 }
 
 // copyright

@@ -2,7 +2,7 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-01-04 20:52:53
- * @LastEditTime: 2022-09-20 10:16:50
+ * @LastEditTime: 2023-05-16 16:43:38
  */
 package routers
 
@@ -21,15 +21,16 @@ import (
 
 // Article Site 相关路由
 func ArticleRouter(r *gin.Engine) {
-	articleGroup := r.Group("/api/article").Use(middleware.JWTAuth(), middleware.Action())
-	{
-		articleGroup.POST("/check", articleCheckRegex)
-		articleGroup.POST("/list", articleSiteList)
-		articleGroup.POST("/add", articleSiteAdd)
-		articleGroup.POST("/update", articleSiteUpdate)
-		articleGroup.POST("/delete", articleSiteDelete)
-		articleGroup.POST("/search", articleSiteSearch)
-	}
+	articleGroup := r.Group("/api/article")
+
+	articleGroup.Use(middleware.JWTAuth(), middleware.Action())
+	articleGroup.POST("/check", articleCheckRegex)
+	articleGroup.POST("/list", articleSiteList)
+	articleGroup.POST("/add", articleSiteAdd)
+	articleGroup.POST("/update", articleSiteUpdate)
+	articleGroup.POST("/delete", articleSiteDelete)
+	articleGroup.POST("/search", articleSiteSearch)
+
 }
 
 func articleCheckRegex(c *gin.Context) {

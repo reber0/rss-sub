@@ -2,7 +2,7 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-01-04 20:53:53
- * @LastEditTime: 2022-09-20 10:39:11
+ * @LastEditTime: 2023-05-16 16:46:11
  */
 package routers
 
@@ -20,10 +20,10 @@ import (
 
 // 设置相关路由(网站/邮箱/个人资料/密码)
 func UploadRouter(r *gin.Engine) {
-	setGroup := r.Group("/api/upload").Use(middleware.JWTAuth(), middleware.Action())
-	{
-		setGroup.POST("/avatar", upAvatar)
-	}
+	setGroup := r.Group("/api/upload")
+
+	setGroup.Use(middleware.JWTAuth(), middleware.Action())
+	setGroup.POST("/avatar", upAvatar)
 }
 
 func upAvatar(c *gin.Context) {

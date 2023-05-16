@@ -2,7 +2,7 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-01-04 20:54:15
- * @LastEditTime: 2023-04-20 12:51:41
+ * @LastEditTime: 2023-05-16 16:51:02
  */
 package routers
 
@@ -21,13 +21,13 @@ import (
 
 // Video Site 相关路由
 func VideoRouter(r *gin.Engine) {
-	videoGroup := r.Group("/api/video").Use(middleware.JWTAuth(), middleware.Action())
-	{
-		videoGroup.POST("/add", videoSiteAdd)
-		videoGroup.POST("/list", videoSiteList)
-		videoGroup.POST("/update", videoSiteUpdate)
-		videoGroup.POST("/delete", videoSiteDelete)
-	}
+	videoGroup := r.Group("/api/video")
+
+	videoGroup.Use(middleware.JWTAuth(), middleware.Action())
+	videoGroup.POST("/add", videoSiteAdd)
+	videoGroup.POST("/list", videoSiteList)
+	videoGroup.POST("/update", videoSiteUpdate)
+	videoGroup.POST("/delete", videoSiteDelete)
 }
 
 func videoSiteAdd(c *gin.Context) {

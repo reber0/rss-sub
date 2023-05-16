@@ -2,7 +2,7 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-01-04 15:14:59
- * @LastEditTime: 2022-09-20 10:17:25
+ * @LastEditTime: 2023-05-16 16:47:57
  */
 package routers
 
@@ -21,15 +21,16 @@ import (
 // User 相关路由
 func UserRouter(r *gin.Engine) {
 	userGroup := r.Group("/api/user")
-	{
-		userGroup.POST("/logout", logout)
-		userGroup.POST("/login", login)
-		userGroup.POST("/avatar", middleware.JWTAuth(), userAvatar)
-		userGroup.POST("/list", middleware.JWTAuth(), middleware.Action(), middleware.RootAuth(), userList)
-		userGroup.POST("/add", middleware.JWTAuth(), middleware.Action(), middleware.RootAuth(), userAdd)
-		userGroup.POST("/update", middleware.JWTAuth(), middleware.Action(), middleware.RootAuth(), userUpdate)
-		userGroup.POST("/delete", middleware.JWTAuth(), middleware.Action(), middleware.RootAuth(), userDelete)
-	}
+
+	userGroup.POST("/logout", logout)
+	userGroup.POST("/login", login)
+	userGroup.POST("/avatar", middleware.JWTAuth(), userAvatar)
+
+	userGroup.Use(middleware.JWTAuth(), middleware.Action(), middleware.RootAuth())
+	userGroup.POST("/list", userList)
+	userGroup.POST("/add", userAdd)
+	userGroup.POST("/update", userUpdate)
+	userGroup.POST("/delete", userDelete)
 }
 
 func login(c *gin.Context) {
