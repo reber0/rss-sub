@@ -35,8 +35,8 @@ func ArticleRouter(r *gin.Engine) {
 
 func articleCheckRegex(c *gin.Context) {
 	type PostData struct {
-		Link  string `form:"link" json:"link"`
-		Regex string `form:"regex" json:"regex"`
+		Link  string `json:"link"`
+		Regex string `json:"regex"`
 	}
 
 	postJson := PostData{}
@@ -81,9 +81,9 @@ func articleCheckRegex(c *gin.Context) {
 
 func articleSiteAdd(c *gin.Context) {
 	type PostData struct {
-		Name  string `form:"name" json:"name"`
-		Link  string `form:"link" json:"link"`
-		Regex string `form:"regex" json:"regex"`
+		Name  string `json:"name"`
+		Link  string `json:"link"`
+		Regex string `json:"regex"`
 	}
 
 	postJson := PostData{}
@@ -132,8 +132,8 @@ func articleSiteAdd(c *gin.Context) {
 
 func articleSiteList(c *gin.Context) {
 	type PostData struct {
-		PageIndex int `form:"page" json:"page"`
-		PageSize  int `form:"limit" json:"limit"`
+		PageIndex int `json:"page"`
+		PageSize  int `json:"limit"`
 	}
 
 	type RespData struct {
@@ -192,10 +192,10 @@ func articleSiteList(c *gin.Context) {
 
 func articleSiteUpdate(c *gin.Context) {
 	type PostData struct {
-		ID    int    `form:"id" json:"id"`
-		Name  string `form:"name" json:"name"`
-		Link  string `form:"link" json:"link"`
-		Regex string `form:"regex" json:"regex"`
+		ID    int    `json:"id"`
+		Name  string `json:"name"`
+		Link  string `json:"link"`
+		Regex string `json:"regex"`
 	}
 
 	postJson := PostData{}
@@ -230,7 +230,7 @@ func articleSiteUpdate(c *gin.Context) {
 
 func articleSiteDelete(c *gin.Context) {
 	type PostData struct {
-		ID int `form:"id" json:"id"`
+		ID int `json:"id"`
 	}
 
 	postJson := PostData{}
@@ -274,9 +274,9 @@ func articleSiteDelete(c *gin.Context) {
 
 func articleSiteSearch(c *gin.Context) {
 	type PostData struct {
-		PageIndex int    `form:"page" json:"page"`
-		PageSize  int    `form:"limit" json:"limit"`
-		KeyWord   string `form:"keyword" json:"keyword"`
+		PageIndex int    `json:"page"`
+		PageSize  int    `json:"limit"`
+		KeyWord   string `json:"keyword"`
 	}
 
 	type RespData struct {

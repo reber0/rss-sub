@@ -32,7 +32,7 @@ func VideoRouter(r *gin.Engine) {
 
 func videoSiteAdd(c *gin.Context) {
 	type PostData struct {
-		Link string `form:"link" json:"link"`
+		Link string `json:"link"`
 	}
 
 	postJson := PostData{}
@@ -84,11 +84,11 @@ func videoSiteAdd(c *gin.Context) {
 
 func videoSiteList(c *gin.Context) {
 	type PostData struct {
-		PageIndex    int    `form:"page" json:"page"`
-		PageSize     int    `form:"limit" json:"limit"`
+		PageIndex    int    `json:"page"`
+		PageSize     int    `json:"limit"`
 		KeyWord      string `from:"keyword" json:"keyword"`
-		Status       string `form:"status" json:"status"`
-		ExportIdList []int  `form:"export_id_list" json:"export_id_list"`
+		Status       string `json:"status"`
+		ExportIdList []int  `json:"export_id_list"`
 	}
 
 	type RespData struct {
@@ -164,10 +164,10 @@ func videoSiteList(c *gin.Context) {
 
 func videoSiteUpdate(c *gin.Context) {
 	type PostData struct {
-		ID     int    `form:"id" json:"id"`
-		Name   string `form:"name" json:"name"`
-		Link   string `form:"link" json:"link"`
-		Status string `form:"status" json:"status"`
+		ID     int    `json:"id"`
+		Name   string `json:"name"`
+		Link   string `json:"link"`
+		Status string `json:"status"`
 	}
 
 	postJson := PostData{}
@@ -202,7 +202,7 @@ func videoSiteUpdate(c *gin.Context) {
 
 func videoSiteDelete(c *gin.Context) {
 	type PostData struct {
-		DeleteIDList []int `form:"target_id_list" json:"target_id_list"`
+		DeleteIDList []int `json:"target_id_list"`
 	}
 
 	postJson := PostData{}

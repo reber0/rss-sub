@@ -57,13 +57,13 @@ func getWebSite(c *gin.Context) {
 
 func updateWebSite(c *gin.Context) {
 	type PostData struct {
-		SiteName      string `form:"sitename" json:"sitename"`
-		Domain        string `form:"domain" json:"domain"`
-		UploadMaxSize string `form:"upload_max_size" json:"upload_max_size"`
-		Title         string `form:"title" json:"title"`
-		KeyWord       string `form:"keyword" json:"keyword"`
-		Descript      string `form:"descript" json:"descript"`
-		Copyright     string `form:"copyright" json:"copyright"`
+		SiteName      string `json:"sitename"`
+		Domain        string `json:"domain"`
+		UploadMaxSize string `json:"upload_max_size"`
+		Title         string `json:"title"`
+		KeyWord       string `json:"keyword"`
+		Descript      string `json:"descript"`
+		Copyright     string `json:"copyright"`
 	}
 
 	postJson := PostData{}
@@ -177,11 +177,11 @@ func getEmail(c *gin.Context) {
 
 func updateEmail(c *gin.Context) {
 	type PostData struct {
-		SendEmail    string `form:"send_email" json:"send_email"`
-		SendEmailPwd string `form:"send_email_pwd" json:"send_email_pwd"`
-		SendNickName string `form:"send_nickname" json:"send_nickname"`
-		SmtpPort     string `form:"smtp_port" json:"smtp_port"`
-		SmtpServer   string `form:"smtp_server" json:"smtp_server"`
+		SendEmail    string `json:"send_email"`
+		SendEmailPwd string `json:"send_email_pwd"`
+		SendNickName string `json:"send_nickname"`
+		SmtpPort     string `json:"smtp_port"`
+		SmtpServer   string `json:"smtp_server"`
 	}
 
 	postJson := PostData{}
@@ -277,8 +277,8 @@ func getInfo(c *gin.Context) {
 
 func updateInfo(c *gin.Context) {
 	type PostData struct {
-		Uname string `form:"uname" json:"uname"`
-		Email string `form:"email" json:"email"`
+		Uname string `json:"uname"`
+		Email string `json:"email"`
 	}
 
 	postJson := mydb.User{}
@@ -311,8 +311,8 @@ func updateInfo(c *gin.Context) {
 
 func updatePwd(c *gin.Context) {
 	type PostData struct {
-		OldPwd string `form:"old_pwd" json:"old_pwd"`
-		NewPwd string `form:"password" json:"password"`
+		OldPwd string `json:"old_pwd"`
+		NewPwd string `json:"password"`
 	}
 
 	postJson := PostData{}

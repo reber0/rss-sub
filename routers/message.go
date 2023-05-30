@@ -73,8 +73,8 @@ func msgCount(c *gin.Context) {
 // 列用户未读消息，主要是更新的消息
 func msgUserList(c *gin.Context) {
 	type PostData struct {
-		PageIndex int `form:"page" json:"page"`
-		PageSize  int `form:"limit" json:"limit"`
+		PageIndex int `json:"page"`
+		PageSize  int `json:"limit"`
 	}
 
 	type RespData struct {
@@ -138,8 +138,8 @@ func msgUserList(c *gin.Context) {
 // 列系统相关未读消息，主要是 api 访问记录消息
 func msgApiList(c *gin.Context) {
 	type PostData struct {
-		PageIndex int `form:"page" json:"page"`
-		PageSize  int `form:"limit" json:"limit"`
+		PageIndex int `json:"page"`
+		PageSize  int `json:"limit"`
 	}
 
 	type RespData struct {
@@ -203,8 +203,8 @@ func msgApiList(c *gin.Context) {
 // 更新一条或几条消息状态
 func msgUpdate(c *gin.Context) {
 	type PostData struct {
-		UpdateIDList []int  `form:"id_list" json:"id_list"`
-		Status       string `form:"status" json:"status"`
+		UpdateIDList []int  `json:"id_list"`
+		Status       string `json:"status"`
 	}
 
 	postJson := PostData{}
@@ -242,7 +242,7 @@ func msgUpdate(c *gin.Context) {
 // 更新所有消息状态为已读
 func msgReadAll(c *gin.Context) {
 	type PostData struct {
-		MsgType string `form:"msgtype" json:"msgtype"`
+		MsgType string `json:"msgtype"`
 	}
 
 	postJson := PostData{}
@@ -285,8 +285,8 @@ func msgReadAll(c *gin.Context) {
 // 删一条或几条消息
 func msgDelete(c *gin.Context) {
 	type PostData struct {
-		DeleteAll    bool  `form:"delete_all" json:"delete_all"`
-		DeleteIDList []int `form:"id_list" json:"id_list"`
+		DeleteAll    bool  `json:"delete_all"`
+		DeleteIDList []int `json:"id_list"`
 	}
 
 	postJson := PostData{}
@@ -323,7 +323,7 @@ func msgDelete(c *gin.Context) {
 // 删除所有消息
 func msgDeleteAll(c *gin.Context) {
 	type PostData struct {
-		MsgType string `form:"msgtype" json:"msgtype"`
+		MsgType string `json:"msgtype"`
 	}
 
 	postJson := PostData{}

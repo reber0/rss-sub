@@ -33,11 +33,11 @@ func DataRouter(r *gin.Engine) {
 
 func dataArticleList(c *gin.Context) {
 	type PostData struct {
-		PageIndex int    `form:"page" json:"page"`
-		PageSize  int    `form:"limit" json:"limit"`
-		KeyWord   string `form:"keyword" json:"keyword"`
-		Title     string `form:"title" json:"title"`
-		Status    string `form:"status" json:"status"`
+		PageIndex int    `json:"page"`
+		PageSize  int    `json:"limit"`
+		KeyWord   string `json:"keyword"`
+		Title     string `json:"title"`
+		Status    string `json:"status"`
 	}
 
 	type RespData struct {
@@ -104,8 +104,8 @@ func dataArticleList(c *gin.Context) {
 
 func dataArticleUpdate(c *gin.Context) {
 	type PostData struct {
-		UpdateIDList []int  `form:"id_list" json:"id_list"`
-		Status       string `form:"status" json:"status"`
+		UpdateIDList []int  `json:"id_list"`
+		Status       string `json:"status"`
 	}
 
 	postJson := PostData{}
@@ -154,7 +154,7 @@ func dataArticleUpdate(c *gin.Context) {
 
 func dataArticleDelete(c *gin.Context) {
 	type PostData struct {
-		ID int `form:"id" json:"id"`
+		ID int `json:"id"`
 	}
 
 	postJson := PostData{}
@@ -202,10 +202,10 @@ func dataArticleDelete(c *gin.Context) {
 
 func dataVideoList(c *gin.Context) {
 	type PostData struct {
-		PageIndex int    `form:"page" json:"page"`
-		PageSize  int    `form:"limit" json:"limit"`
-		KeyWord   string `form:"keyword" json:"keyword"`
-		Status    string `form:"status" json:"status"`
+		PageIndex int    `json:"page"`
+		PageSize  int    `json:"limit"`
+		KeyWord   string `json:"keyword"`
+		Status    string `json:"status"`
 	}
 
 	type RespData struct {
@@ -268,8 +268,8 @@ func dataVideoList(c *gin.Context) {
 
 func dataVideoUpdate(c *gin.Context) {
 	type PostData struct {
-		UpdateIDList []int  `form:"id_list" json:"id_list"`
-		Status       string `form:"status" json:"status"`
+		UpdateIDList []int  `json:"id_list"`
+		Status       string `json:"status"`
 	}
 
 	postJson := PostData{}
@@ -318,7 +318,7 @@ func dataVideoUpdate(c *gin.Context) {
 
 func dataVideoDelete(c *gin.Context) {
 	type PostData struct {
-		ID int `form:"id" json:"id"`
+		ID int `json:"id"`
 	}
 
 	postJson := PostData{}

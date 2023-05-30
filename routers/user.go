@@ -36,8 +36,8 @@ func UserRouter(r *gin.Engine) {
 func login(c *gin.Context) {
 	type User struct {
 		// 客户端传入 {"username": "xxx", "password":"123456"}
-		UserName string `form:"username" json:"username"`
-		PassWord string `form:"password" json:"password"`
+		UserName string `json:"username"`
+		PassWord string `json:"password"`
 	}
 
 	json := User{}
@@ -103,12 +103,12 @@ func userAvatar(c *gin.Context) {
 
 func userList(c *gin.Context) {
 	type PostData struct {
-		PageIndex    int    `form:"page" json:"page"`
-		PageSize     int    `form:"limit" json:"limit"`
-		UserName     string `form:"username" json:"username"`
-		Email        string `form:"email" json:"email"`
-		Role         string `form:"role" json:"role"`
-		ExportIdList []int  `form:"export_id_list" json:"export_id_list"`
+		PageIndex    int    `json:"page"`
+		PageSize     int    `json:"limit"`
+		UserName     string `json:"username"`
+		Email        string `json:"email"`
+		Role         string `json:"role"`
+		ExportIdList []int  `json:"export_id_list"`
 	}
 
 	type RespData struct {
@@ -165,10 +165,10 @@ func userList(c *gin.Context) {
 
 func userAdd(c *gin.Context) {
 	type PostData struct {
-		UName    string `form:"uname" json:"uname"`
-		PassWord string `form:"password" json:"password"`
-		Role     string `form:"role" json:"role"`
-		Email    string `form:"email" json:"email"`
+		UName    string `json:"uname"`
+		PassWord string `json:"password"`
+		Role     string `json:"role"`
+		Email    string `json:"email"`
 	}
 
 	postJson := PostData{}
@@ -206,11 +206,11 @@ func userAdd(c *gin.Context) {
 
 func userUpdate(c *gin.Context) {
 	type PostData struct {
-		ID       int    `form:"id" json:"id"`
-		Uname    string `form:"uname" json:"uname"`
-		Password string `form:"password" json:"password"`
-		Email    string `form:"email" json:"email"`
-		Role     string `form:"role" json:"role"`
+		ID       int    `json:"id"`
+		Uname    string `json:"uname"`
+		Password string `json:"password"`
+		Email    string `json:"email"`
+		Role     string `json:"role"`
 	}
 
 	var postJson PostData
@@ -250,7 +250,7 @@ func userUpdate(c *gin.Context) {
 
 func userDelete(c *gin.Context) {
 	type PostData struct {
-		DeleteIDList []int `form:"id_list" json:"id_list"`
+		DeleteIDList []int `json:"id_list"`
 	}
 
 	postJson := PostData{}
