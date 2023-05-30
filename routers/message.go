@@ -87,7 +87,7 @@ func msgUserList(c *gin.Context) {
 	}
 
 	postJson := PostData{}
-	if err := c.BindJSON(&postJson); err != nil {
+	if err := c.ShouldBindJSON(&postJson); err != nil {
 		global.Log.Error(err.Error())
 		c.JSON(400, gin.H{
 			"code": 400,
@@ -152,7 +152,7 @@ func msgApiList(c *gin.Context) {
 	}
 
 	postJson := PostData{}
-	if err := c.BindJSON(&postJson); err != nil {
+	if err := c.ShouldBindJSON(&postJson); err != nil {
 		global.Log.Error(err.Error())
 		c.JSON(400, gin.H{
 			"code": 400,
@@ -208,7 +208,7 @@ func msgUpdate(c *gin.Context) {
 	}
 
 	postJson := PostData{}
-	if err := c.BindJSON(&postJson); err != nil {
+	if err := c.ShouldBindJSON(&postJson); err != nil {
 		global.Log.Error(err.Error())
 		c.JSON(400, gin.H{
 			"code": 400,
@@ -246,7 +246,7 @@ func msgReadAll(c *gin.Context) {
 	}
 
 	postJson := PostData{}
-	if err := c.BindJSON(&postJson); err != nil {
+	if err := c.ShouldBindJSON(&postJson); err != nil {
 		global.Log.Error(err.Error())
 		c.JSON(400, gin.H{
 			"code": 400,
@@ -290,7 +290,7 @@ func msgDelete(c *gin.Context) {
 	}
 
 	postJson := PostData{}
-	if err := c.BindJSON(&postJson); err != nil {
+	if err := c.ShouldBindJSON(&postJson); err != nil {
 		global.Log.Error(err.Error())
 		c.JSON(400, gin.H{
 			"code": 400,
@@ -327,7 +327,7 @@ func msgDeleteAll(c *gin.Context) {
 	}
 
 	postJson := PostData{}
-	if err := c.BindJSON(&postJson); err != nil {
+	if err := c.ShouldBindJSON(&postJson); err != nil {
 		global.Log.Error(err.Error())
 		c.JSON(400, gin.H{
 			"code": 400,

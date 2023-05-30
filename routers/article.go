@@ -40,7 +40,7 @@ func articleCheckRegex(c *gin.Context) {
 	}
 
 	postJson := PostData{}
-	if err := c.BindJSON(&postJson); err != nil {
+	if err := c.ShouldBindJSON(&postJson); err != nil {
 		global.Log.Error(err.Error())
 		c.JSON(400, gin.H{
 			"code": 400,
@@ -87,7 +87,7 @@ func articleSiteAdd(c *gin.Context) {
 	}
 
 	postJson := PostData{}
-	if err := c.BindJSON(&postJson); err != nil {
+	if err := c.ShouldBindJSON(&postJson); err != nil {
 		global.Log.Error(err.Error())
 		c.JSON(400, gin.H{
 			"code": 400,
@@ -147,7 +147,7 @@ func articleSiteList(c *gin.Context) {
 	}
 
 	postJson := PostData{}
-	if err := c.BindJSON(&postJson); err != nil {
+	if err := c.ShouldBindJSON(&postJson); err != nil {
 		global.Log.Error(err.Error())
 		c.JSON(400, gin.H{
 			"code": 400,
@@ -199,7 +199,7 @@ func articleSiteUpdate(c *gin.Context) {
 	}
 
 	postJson := PostData{}
-	if err := c.BindJSON(&postJson); err != nil {
+	if err := c.ShouldBindJSON(&postJson); err != nil {
 		global.Log.Error(err.Error())
 		c.JSON(400, gin.H{
 			"code": 400,
@@ -234,7 +234,7 @@ func articleSiteDelete(c *gin.Context) {
 	}
 
 	postJson := PostData{}
-	if err := c.BindJSON(&postJson); err != nil {
+	if err := c.ShouldBindJSON(&postJson); err != nil {
 		global.Log.Error(err.Error())
 		c.JSON(400, gin.H{
 			"code": 400,
@@ -291,7 +291,7 @@ func articleSiteSearch(c *gin.Context) {
 	}
 
 	postJson := PostData{}
-	if err := c.BindJSON(&postJson); err != nil {
+	if err := c.ShouldBindJSON(&postJson); err != nil {
 		global.Log.Error(err.Error())
 		c.JSON(400, gin.H{
 			"code": 400,

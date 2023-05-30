@@ -67,7 +67,7 @@ func updateWebSite(c *gin.Context) {
 	}
 
 	postJson := PostData{}
-	if err := c.BindJSON(&postJson); err != nil {
+	if err := c.ShouldBindJSON(&postJson); err != nil {
 		global.Log.Error(err.Error())
 		c.JSON(400, gin.H{
 			"code": 400,
@@ -185,7 +185,7 @@ func updateEmail(c *gin.Context) {
 	}
 
 	postJson := PostData{}
-	if err := c.BindJSON(&postJson); err != nil {
+	if err := c.ShouldBindJSON(&postJson); err != nil {
 		global.Log.Error(err.Error())
 		c.JSON(400, gin.H{
 			"code": 400,
@@ -282,7 +282,7 @@ func updateInfo(c *gin.Context) {
 	}
 
 	postJson := mydb.User{}
-	if err := c.BindJSON(&postJson); err != nil {
+	if err := c.ShouldBindJSON(&postJson); err != nil {
 		global.Log.Error(err.Error())
 		c.JSON(400, gin.H{
 			"code": 400,
@@ -316,7 +316,7 @@ func updatePwd(c *gin.Context) {
 	}
 
 	postJson := PostData{}
-	if err := c.BindJSON(&postJson); err != nil {
+	if err := c.ShouldBindJSON(&postJson); err != nil {
 		global.Log.Error(err.Error())
 		c.JSON(400, gin.H{
 			"code": 400,
