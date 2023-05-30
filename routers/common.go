@@ -14,18 +14,18 @@ import (
 // 根据 UserID 获取用户名、角色
 func GetUserMsg(uid string) (uname, role string) {
 	var data mydb.User
-	result := global.Db.Model(&mydb.User{}).Select("uname, role").Where("uid = ?", uid).First(&data)
-	if result.Error != nil {
-		global.Log.Error(result.Error.Error())
+	tx := global.Db.Model(&mydb.User{}).Select("uname, role").Where("uid = ?", uid).First(&data)
+	if tx.Error != nil {
+		global.Log.Error(tx.Error.Error())
 	}
 	return data.Uname, data.Role
 }
 
 // 根据 UserID 获取用户头像名
 func GetAvatar(uid string) (avatar string) {
-	result := global.Db.Model(&mydb.User{}).Select("avatar").Where("uid = ?", uid).First(&avatar)
-	if result.Error != nil {
-		global.Log.Error(result.Error.Error())
+	tx := global.Db.Model(&mydb.User{}).Select("avatar").Where("uid = ?", uid).First(&avatar)
+	if tx.Error != nil {
+		global.Log.Error(tx.Error.Error())
 	}
 	return avatar
 }

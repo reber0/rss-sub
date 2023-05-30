@@ -52,9 +52,9 @@ func videoSiteAdd(c *gin.Context) {
 		global.Db.Model(&mydb.Config{}).Select("value").Where("key='domain'").First(&domain)
 
 		site := mydb.Video{UID: userId, Name: name, Link: link, Status: "连载中"}
-		result := global.Db.Create(&site)
-		if result.Error != nil {
-			global.Log.Error(result.Error.Error())
+		tx := global.Db.Create(&site)
+		if tx.Error != nil {
+			global.Log.Error(tx.Error.Error())
 			c.JSON(500, gin.H{
 				"code": 500,
 				"msg":  "添加失败",
@@ -64,9 +64,9 @@ func videoSiteAdd(c *gin.Context) {
 		refId := site.ID
 
 		rssPath := fmt.Sprintf("/api/data/rss/%s/video/%d", userId, refId)
-		result = global.Db.Model(&mydb.Video{}).Where("id=?", refId).Update("rss", rssPath)
-		if result.Error != nil {
-			global.Log.Error(result.Error.Error())
+		tx = global.Db.Model(&mydb.Video{}).Where("id=?", refId).Update("rss", rssPath)
+		if tx.Error != nil {
+			global.Log.Error(tx.Error.Error())
 			c.JSON(500, gin.H{
 				"code": 500,
 				"msg":  "添加失败",
@@ -182,10 +182,10 @@ func videoSiteUpdate(c *gin.Context) {
 		_, role := GetUserMsg(userId)
 
 		updateData := mydb.Video{Name: postJson.Name, Link: postJson.Link, Status: postJson.Status}
-		result := global.Db.Model(&mydb.Video{}).Where(
+		tx := global.Db.Model(&mydb.Video{}).Where(
 			"(uid=? or ?='root') and id=?", userId, role, postJson.ID).Updates(updateData)
-		if result.Error != nil {
-			global.Log.Error(result.Error.Error())
+		if tx.Error != nil {
+			global.Log.Error(tx.Error.Error())
 			c.JSON(500, gin.H{
 				"code": 500,
 				"msg":  "更新失败",
@@ -219,18 +219,18 @@ func videoSiteDelete(c *gin.Context) {
 		deleteIDList := postJson.DeleteIDList
 
 		for _, deleteID := range deleteIDList {
-			result := global.Db.Where("(uid=? or ?='root') and id=?", userId, role, deleteID).Delete(&mydb.Video{})
-			if result.Error != nil {
-				global.Log.Error(result.Error.Error())
+			tx := global.Db.Where("(uid=? or ?='root') and id=?", userId, role, deleteID).Delete(&mydb.Video{})
+			if tx.Error != nil {
+				global.Log.Error(tx.Error.Error())
 				c.JSON(500, gin.H{
 					"code": 500,
 					"msg":  "删除失败",
 				})
 				return
 			} else {
-				result = global.Db.Where("category='video' and ref_id=?", deleteID).Delete(&mydb.Data{})
-				if result.Error != nil {
-					global.Log.Error(result.Error.Error())
+				tx = global.Db.Where("category='video' and ref_id=?", deleteID).Delete(&mydb.Data{})
+				if tx.Error != nil {
+					global.Log.Error(tx.Error.Error())
 					c.JSON(500, gin.H{
 						"code": 500,
 						"msg":  "删除失败",

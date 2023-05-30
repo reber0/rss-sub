@@ -2,7 +2,7 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-01-04 20:53:07
- * @LastEditTime: 2023-05-16 16:44:32
+ * @LastEditTime: 2023-05-30 16:08:51
  */
 package routers
 
@@ -99,10 +99,10 @@ func msgUserList(c *gin.Context) {
 
 		var count int64
 		var datas []RespData
-		result := global.Db.Model(&mydb.Message{}).Where(
+		tx := global.Db.Model(&mydb.Message{}).Where(
 			"(uname=? or ?='root') and action like '%更新%'", uname, role).Count(&count).Order("id desc").Count(&count).Limit(postJson.PageSize).Offset((postJson.PageIndex - 1) * postJson.PageSize).Find(&datas)
-		if result.Error != nil {
-			global.Log.Error(result.Error.Error())
+		if tx.Error != nil {
+			global.Log.Error(tx.Error.Error())
 			c.JSON(500, gin.H{
 				"code": 500,
 				"msg":  "查询失败",
@@ -111,10 +111,10 @@ func msgUserList(c *gin.Context) {
 		}
 
 		var unread_count int64
-		result = global.Db.Model(&mydb.Message{}).Where(
+		tx = global.Db.Model(&mydb.Message{}).Where(
 			"(uname=? or ?='root') and action like '%更新%' and status='unread'", uname, role).Count(&unread_count)
-		if result.Error != nil {
-			global.Log.Error(result.Error.Error())
+		if tx.Error != nil {
+			global.Log.Error(tx.Error.Error())
 			c.JSON(500, gin.H{
 				"code": 500,
 				"msg":  "查询失败",
@@ -164,10 +164,10 @@ func msgApiList(c *gin.Context) {
 
 		var count int64
 		var datas []RespData
-		result := global.Db.Model(&mydb.Message{}).Where(
+		tx := global.Db.Model(&mydb.Message{}).Where(
 			"(uname=? or ?='root') and action like '/api/%'", uname, role).Count(&count).Order("id desc").Count(&count).Limit(postJson.PageSize).Offset((postJson.PageIndex - 1) * postJson.PageSize).Find(&datas)
-		if result.Error != nil {
-			global.Log.Error(result.Error.Error())
+		if tx.Error != nil {
+			global.Log.Error(tx.Error.Error())
 			c.JSON(500, gin.H{
 				"code": 500,
 				"msg":  "查询失败",
@@ -176,10 +176,10 @@ func msgApiList(c *gin.Context) {
 		}
 
 		var unread_count int64
-		result = global.Db.Model(&mydb.Message{}).Where(
+		tx = global.Db.Model(&mydb.Message{}).Where(
 			"(uname=? or ?='root') and action like '/api/%' and status='unread'", uname, role).Count(&unread_count)
-		if result.Error != nil {
-			global.Log.Error(result.Error.Error())
+		if tx.Error != nil {
+			global.Log.Error(tx.Error.Error())
 			c.JSON(500, gin.H{
 				"code": 500,
 				"msg":  "查询失败",
@@ -221,10 +221,10 @@ func msgUpdate(c *gin.Context) {
 		updateIDList := postJson.UpdateIDList
 		status := postJson.Status
 
-		result := global.Db.Model(&mydb.Message{}).Where(
+		tx := global.Db.Model(&mydb.Message{}).Where(
 			"(uname=? or ?='root') and id in ?", uname, role, updateIDList).Update("status", status)
-		if result.Error != nil {
-			global.Log.Error(result.Error.Error())
+		if tx.Error != nil {
+			global.Log.Error(tx.Error.Error())
 			c.JSON(500, gin.H{
 				"code": 500,
 				"msg":  "更新失败",
@@ -258,16 +258,16 @@ func msgReadAll(c *gin.Context) {
 
 		msgtype := postJson.MsgType
 
-		var result *gorm.DB
+		var tx *gorm.DB
 		if msgtype == "api" {
-			result = global.Db.Model(&mydb.Message{}).Where(
+			tx = global.Db.Model(&mydb.Message{}).Where(
 				"(uname=? or ?='root') and action like '/api/%'", uname, role).Update("status", "read")
 		} else if msgtype == "user" {
-			result = global.Db.Model(&mydb.Message{}).Where(
+			tx = global.Db.Model(&mydb.Message{}).Where(
 				"(uname=? or ?='root') and action like '%更新%'", uname, role).Update("status", "read")
 		}
-		if result.Error != nil {
-			global.Log.Error(result.Error.Error())
+		if tx.Error != nil {
+			global.Log.Error(tx.Error.Error())
 			c.JSON(500, gin.H{
 				"code": 500,
 				"msg":  "更新失败",
@@ -302,10 +302,10 @@ func msgDelete(c *gin.Context) {
 
 		deleteIDList := postJson.DeleteIDList
 
-		result := global.Db.Where(
+		tx := global.Db.Where(
 			"(uname=? or ?='root') and id in ?", uname, role, deleteIDList).Delete(&mydb.Message{})
-		if result.Error != nil {
-			global.Log.Error(result.Error.Error())
+		if tx.Error != nil {
+			global.Log.Error(tx.Error.Error())
 			c.JSON(500, gin.H{
 				"code": 500,
 				"msg":  "删除失败",
@@ -339,16 +339,16 @@ func msgDeleteAll(c *gin.Context) {
 
 		msgtype := postJson.MsgType
 
-		var result *gorm.DB
+		var tx *gorm.DB
 		if msgtype == "api" {
-			result = global.Db.Where(
+			tx = global.Db.Where(
 				"(uname=? or ?='root') and action like '/api/%'", uname, role).Delete(&mydb.Message{})
 		} else if msgtype == "user" {
-			result = global.Db.Where(
+			tx = global.Db.Where(
 				"(uname=? or ?='root') and action like '%更新%'", uname, role).Delete(&mydb.Message{})
 		}
-		if result.Error != nil {
-			global.Log.Error(result.Error.Error())
+		if tx.Error != nil {
+			global.Log.Error(tx.Error.Error())
 			c.JSON(500, gin.H{
 				"code": 500,
 				"msg":  "更新失败",

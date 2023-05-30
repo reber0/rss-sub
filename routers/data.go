@@ -123,10 +123,10 @@ func dataArticleUpdate(c *gin.Context) {
 		status := postJson.Status
 
 		var count int64
-		result := global.Db.Model(&mydb.Data{}).Joins("JOIN article ON data.ref_id = article.id").Where(
+		tx := global.Db.Model(&mydb.Data{}).Joins("JOIN article ON data.ref_id = article.id").Where(
 			"(article.uid=? or ?='root') and data.id in ?", userId, role, updateIDList).Count(&count)
-		if result.Error != nil {
-			global.Log.Error(result.Error.Error())
+		if tx.Error != nil {
+			global.Log.Error(tx.Error.Error())
 			c.JSON(500, gin.H{
 				"code": 500,
 				"msg":  "更新失败",
@@ -134,9 +134,9 @@ func dataArticleUpdate(c *gin.Context) {
 			return
 		}
 		if count == int64(len(updateIDList)) {
-			result := global.Db.Model(&mydb.Data{}).Where("id in ?", updateIDList).Update("status", status)
-			if result.Error != nil {
-				global.Log.Error(result.Error.Error())
+			tx := global.Db.Model(&mydb.Data{}).Where("id in ?", updateIDList).Update("status", status)
+			if tx.Error != nil {
+				global.Log.Error(tx.Error.Error())
 				c.JSON(500, gin.H{
 					"code": 500,
 					"msg":  "更新失败",
@@ -171,10 +171,10 @@ func dataArticleDelete(c *gin.Context) {
 		id := postJson.ID
 
 		var count int64
-		result := global.Db.Model(&mydb.Data{}).Joins("JOIN article ON data.ref_id = article.id").Where(
+		tx := global.Db.Model(&mydb.Data{}).Joins("JOIN article ON data.ref_id = article.id").Where(
 			"(article.uid=? or ?='root') and data.category='article' and data.id=?", userId, role, id).Count(&count)
-		if result.Error != nil {
-			global.Log.Error(result.Error.Error())
+		if tx.Error != nil {
+			global.Log.Error(tx.Error.Error())
 			c.JSON(500, gin.H{
 				"code": 500,
 				"msg":  "删除失败",
@@ -182,9 +182,9 @@ func dataArticleDelete(c *gin.Context) {
 			return
 		}
 		if count == 1 {
-			result := global.Db.Where("category='article' and id=?", id).Delete(&mydb.Data{})
-			if result.Error != nil {
-				global.Log.Error(result.Error.Error())
+			tx := global.Db.Where("category='article' and id=?", id).Delete(&mydb.Data{})
+			if tx.Error != nil {
+				global.Log.Error(tx.Error.Error())
 				c.JSON(500, gin.H{
 					"code": 500,
 					"msg":  "删除失败",
@@ -287,10 +287,10 @@ func dataVideoUpdate(c *gin.Context) {
 		status := postJson.Status
 
 		var count int64
-		result := global.Db.Model(&mydb.Data{}).Joins("JOIN video ON data.ref_id = video.id").Where(
+		tx := global.Db.Model(&mydb.Data{}).Joins("JOIN video ON data.ref_id = video.id").Where(
 			"(video.uid=? or ?='root') and data.id in ?", userId, role, updateIDList).Count(&count)
-		if result.Error != nil {
-			global.Log.Error(result.Error.Error())
+		if tx.Error != nil {
+			global.Log.Error(tx.Error.Error())
 			c.JSON(500, gin.H{
 				"code": 500,
 				"msg":  "更新失败",
@@ -298,9 +298,9 @@ func dataVideoUpdate(c *gin.Context) {
 			return
 		}
 		if count == int64(len(updateIDList)) {
-			result := global.Db.Model(&mydb.Data{}).Where("id in ?", updateIDList).Update("status", status)
-			if result.Error != nil {
-				global.Log.Error(result.Error.Error())
+			tx := global.Db.Model(&mydb.Data{}).Where("id in ?", updateIDList).Update("status", status)
+			if tx.Error != nil {
+				global.Log.Error(tx.Error.Error())
 				c.JSON(500, gin.H{
 					"code": 500,
 					"msg":  "更新失败",
@@ -335,10 +335,10 @@ func dataVideoDelete(c *gin.Context) {
 		id := postJson.ID
 
 		var count int64
-		result := global.Db.Model(&mydb.Data{}).Joins("JOIN video ON data.ref_id = video.id").Where(
+		tx := global.Db.Model(&mydb.Data{}).Joins("JOIN video ON data.ref_id = video.id").Where(
 			"(video.uid=? or ?='root') and data.category='video' and data.id=?", userId, role, id).Count(&count)
-		if result.Error != nil {
-			global.Log.Error(result.Error.Error())
+		if tx.Error != nil {
+			global.Log.Error(tx.Error.Error())
 			c.JSON(500, gin.H{
 				"code": 500,
 				"msg":  "删除失败",
@@ -346,9 +346,9 @@ func dataVideoDelete(c *gin.Context) {
 			return
 		}
 		if count == 1 {
-			result := global.Db.Where("category='video' and id=?", id).Delete(&mydb.Data{})
-			if result.Error != nil {
-				global.Log.Error(result.Error.Error())
+			tx := global.Db.Where("category='video' and id=?", id).Delete(&mydb.Data{})
+			if tx.Error != nil {
+				global.Log.Error(tx.Error.Error())
 				c.JSON(500, gin.H{
 					"code": 500,
 					"msg":  "删除失败",
@@ -398,20 +398,20 @@ func getRss(c *gin.Context) {
 	var site_msg SiteMsg
 	var datas []mydb.Data
 	if category == "article" {
-		result := global.Db.Model(&mydb.Article{}).Where(
+		tx := global.Db.Model(&mydb.Article{}).Where(
 			"uid=? and id=?", uid, ref_id).First(&site_msg)
-		if result.Error != nil {
-			global.Log.Error(result.Error.Error())
+		if tx.Error != nil {
+			global.Log.Error(tx.Error.Error())
 			c.JSON(500, gin.H{
 				"code": 500,
 				"msg":  "查询失败",
 			})
 			return
 		}
-		result = global.Db.Model(&mydb.Data{}).Joins("JOIN article ON data.ref_id = article.id").Where(
+		tx = global.Db.Model(&mydb.Data{}).Joins("JOIN article ON data.ref_id = article.id").Where(
 			"article.uid=? and data.category='article' and data.ref_id=?", uid, ref_id).Order("data.id desc").Limit(30).Find(&datas)
-		if result.Error != nil {
-			global.Log.Error(result.Error.Error())
+		if tx.Error != nil {
+			global.Log.Error(tx.Error.Error())
 			c.JSON(500, gin.H{
 				"code": 500,
 				"msg":  "查询失败",
@@ -419,20 +419,20 @@ func getRss(c *gin.Context) {
 			return
 		}
 	} else if category == "video" {
-		result := global.Db.Model(&mydb.Video{}).Where(
+		tx := global.Db.Model(&mydb.Video{}).Where(
 			"uid=? and id=?", uid, ref_id).First(&site_msg)
-		if result.Error != nil {
-			global.Log.Error(result.Error.Error())
+		if tx.Error != nil {
+			global.Log.Error(tx.Error.Error())
 			c.JSON(500, gin.H{
 				"code": 500,
 				"msg":  "查询失败",
 			})
 			return
 		}
-		result = global.Db.Model(&mydb.Data{}).Joins("JOIN video ON data.ref_id = video.id").Where(
+		tx = global.Db.Model(&mydb.Data{}).Joins("JOIN video ON data.ref_id = video.id").Where(
 			"video.uid=? and data.category='video' and data.ref_id=?", uid, ref_id).Order("data.id desc").Limit(30).Find(&datas)
-		if result.Error != nil {
-			global.Log.Error(result.Error.Error())
+		if tx.Error != nil {
+			global.Log.Error(tx.Error.Error())
 			c.JSON(500, gin.H{
 				"code": 500,
 				"msg":  "查询失败",

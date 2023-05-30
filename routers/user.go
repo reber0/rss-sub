@@ -48,8 +48,8 @@ func login(c *gin.Context) {
 	md5_pwd := utils.Md5(json.PassWord)
 
 	data := mydb.User{}
-	result := global.Db.Where("uname = ?", json.UserName).First(&data)
-	if result.Error != nil {
+	tx := global.Db.Where("uname = ?", json.UserName).First(&data)
+	if tx.Error != nil {
 		loggerMsg("system", "/api/user/login", json.UserName+"登录失败")
 		c.JSON(401, gin.H{ // 未查到用户名，返回用户名或密码错误
 			"code": 401,
@@ -187,9 +187,9 @@ func userAdd(c *gin.Context) {
 		avatar := strconv.Itoa(utils.RandomInt(1, 9)) + ".png"
 
 		u := mydb.User{UID: user_id, Uname: uname, PassWord: password, Role: role, Email: email, Avatar: avatar}
-		result := global.Db.Create(&u)
-		if result.Error != nil {
-			global.Log.Error(result.Error.Error())
+		tx := global.Db.Create(&u)
+		if tx.Error != nil {
+			global.Log.Error(tx.Error.Error())
 			c.JSON(500, gin.H{
 				"code": 500,
 				"msg":  "添加失败",
@@ -231,9 +231,9 @@ func userUpdate(c *gin.Context) {
 		if password != "" {
 			updateData["password"] = password
 		}
-		result := global.Db.Model(&mydb.User{}).Where("id=?", postJson.ID).Updates(updateData)
-		if result.Error != nil {
-			global.Log.Error(result.Error.Error())
+		tx := global.Db.Model(&mydb.User{}).Where("id=?", postJson.ID).Updates(updateData)
+		if tx.Error != nil {
+			global.Log.Error(tx.Error.Error())
 			c.JSON(500, gin.H{
 				"code": 500,
 				"msg":  "更新失败",
@@ -275,9 +275,9 @@ func userDelete(c *gin.Context) {
 
 		for _, deleteID := range deleteIDList {
 			var deleteUserID string
-			result := global.Db.Model(mydb.User{}).Select("uid").Where("id=?", deleteID).First(&deleteUserID)
-			if result.Error != nil {
-				global.Log.Error(result.Error.Error())
+			tx := global.Db.Model(mydb.User{}).Select("uid").Where("id=?", deleteID).First(&deleteUserID)
+			if tx.Error != nil {
+				global.Log.Error(tx.Error.Error())
 				c.JSON(500, gin.H{
 					"code": 500,
 					"msg":  "删除失败",
@@ -285,9 +285,9 @@ func userDelete(c *gin.Context) {
 				return
 			} else {
 				// 删除用户
-				result := global.Db.Where("uid=?", deleteUserID).Delete(&mydb.User{})
-				if result.Error != nil {
-					global.Log.Error(result.Error.Error())
+				tx := global.Db.Where("uid=?", deleteUserID).Delete(&mydb.User{})
+				if tx.Error != nil {
+					global.Log.Error(tx.Error.Error())
 					c.JSON(500, gin.H{
 						"code": 500,
 						"msg":  "删除失败",
@@ -297,18 +297,18 @@ func userDelete(c *gin.Context) {
 
 				// 删除用户 Article 相关数据
 				var articleIDList []int // 获取 articleIDList 为了在 data 表中删除数据
-				result = global.Db.Model(&mydb.Article{}).Select("id").Where("uid=?", deleteUserID).Find(&articleIDList)
-				if result.Error != nil {
-					global.Log.Error(result.Error.Error())
+				tx = global.Db.Model(&mydb.Article{}).Select("id").Where("uid=?", deleteUserID).Find(&articleIDList)
+				if tx.Error != nil {
+					global.Log.Error(tx.Error.Error())
 					c.JSON(500, gin.H{
 						"code": 500,
 						"msg":  "删除失败",
 					})
 					return
 				}
-				result = global.Db.Where("uid=?", deleteUserID).Delete(&mydb.Article{})
-				if result.Error != nil {
-					global.Log.Error(result.Error.Error())
+				tx = global.Db.Where("uid=?", deleteUserID).Delete(&mydb.Article{})
+				if tx.Error != nil {
+					global.Log.Error(tx.Error.Error())
 					c.JSON(500, gin.H{
 						"code": 500,
 						"msg":  "删除失败",
@@ -318,18 +318,18 @@ func userDelete(c *gin.Context) {
 
 				// 删除用户 Video 相关数据
 				var videoIDList []int // 获取 videoIDList 为了在 data 表中删除数据
-				result = global.Db.Model(&mydb.Video{}).Select("id").Where("uid=?", deleteUserID).Find(&videoIDList)
-				if result.Error != nil {
-					global.Log.Error(result.Error.Error())
+				tx = global.Db.Model(&mydb.Video{}).Select("id").Where("uid=?", deleteUserID).Find(&videoIDList)
+				if tx.Error != nil {
+					global.Log.Error(tx.Error.Error())
 					c.JSON(500, gin.H{
 						"code": 500,
 						"msg":  "删除失败",
 					})
 					return
 				}
-				result = global.Db.Where("uid=?", deleteUserID).Delete(&mydb.Video{})
-				if result.Error != nil {
-					global.Log.Error(result.Error.Error())
+				tx = global.Db.Where("uid=?", deleteUserID).Delete(&mydb.Video{})
+				if tx.Error != nil {
+					global.Log.Error(tx.Error.Error())
 					c.JSON(500, gin.H{
 						"code": 500,
 						"msg":  "删除失败",
@@ -338,18 +338,18 @@ func userDelete(c *gin.Context) {
 				}
 
 				// 删除用户 Data 相关数据
-				result = global.Db.Where("category=? and ref_id in ?", "article", articleIDList).Delete(&mydb.Data{})
-				if result.Error != nil {
-					global.Log.Error(result.Error.Error())
+				tx = global.Db.Where("category=? and ref_id in ?", "article", articleIDList).Delete(&mydb.Data{})
+				if tx.Error != nil {
+					global.Log.Error(tx.Error.Error())
 					c.JSON(500, gin.H{
 						"code": 500,
 						"msg":  "删除失败",
 					})
 					return
 				}
-				result = global.Db.Where("category=? and ref_id in ?", "video", videoIDList).Delete(&mydb.Data{})
-				if result.Error != nil {
-					global.Log.Error(result.Error.Error())
+				tx = global.Db.Where("category=? and ref_id in ?", "video", videoIDList).Delete(&mydb.Data{})
+				if tx.Error != nil {
+					global.Log.Error(tx.Error.Error())
 					c.JSON(500, gin.H{
 						"code": 500,
 						"msg":  "删除失败",

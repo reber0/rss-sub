@@ -2,7 +2,7 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-01-04 20:52:53
- * @LastEditTime: 2023-05-16 16:43:38
+ * @LastEditTime: 2023-05-30 16:09:19
  */
 package routers
 
@@ -54,8 +54,8 @@ func articleCheckRegex(c *gin.Context) {
 
 			article_tag := make([]map[string]string, 0, 100)
 			reg := regexp.MustCompile(`(?sm)` + postJson.Regex)
-			result := reg.FindAllStringSubmatch(html, -1)
-			for _, href_text := range result {
+			m := reg.FindAllStringSubmatch(html, -1)
+			for _, href_text := range m {
 				a_href := strings.TrimSpace(href_text[1])
 				if !strings.HasPrefix(a_href, "http") {
 					a_href = base_url + strings.TrimLeft(a_href, "/")
@@ -100,9 +100,9 @@ func articleSiteAdd(c *gin.Context) {
 		global.Db.Model(&mydb.Config{}).Select("value").Where("key='domain'").First(&domain)
 
 		site := mydb.Article{UID: userId, Name: postJson.Name, Link: postJson.Link, Regex: postJson.Regex}
-		result := global.Db.Create(&site)
-		if result.Error != nil {
-			global.Log.Error(result.Error.Error())
+		tx := global.Db.Create(&site)
+		if tx.Error != nil {
+			global.Log.Error(tx.Error.Error())
 			c.JSON(500, gin.H{
 				"code": 500,
 				"msg":  "添加失败",
@@ -112,9 +112,9 @@ func articleSiteAdd(c *gin.Context) {
 		refId := site.ID
 
 		rssPath := fmt.Sprintf("/api/data/rss/%s/article/%d", userId, refId)
-		result = global.Db.Model(&mydb.Article{}).Where("id=?", refId).Update("rss", rssPath)
-		if result.Error != nil {
-			global.Log.Error(result.Error.Error())
+		tx = global.Db.Model(&mydb.Article{}).Where("id=?", refId).Update("rss", rssPath)
+		if tx.Error != nil {
+			global.Log.Error(tx.Error.Error())
 			c.JSON(500, gin.H{
 				"code": 500,
 				"msg":  "添加失败",
@@ -159,10 +159,10 @@ func articleSiteList(c *gin.Context) {
 
 		var count int64
 		var datas []RespData
-		result := global.Db.Model(&mydb.Article{}).Joins("JOIN user ON user.uid = article.uid").Select("article.id,user.uname,article.name,article.link,article.regex,article.rss,article.created_at").Where(
+		tx := global.Db.Model(&mydb.Article{}).Joins("JOIN user ON user.uid = article.uid").Select("article.id,user.uname,article.name,article.link,article.regex,article.rss,article.created_at").Where(
 			"article.uid=? or ?='root'", userId, role).Order("article.id desc").Count(&count).Limit(postJson.PageSize).Offset((postJson.PageIndex - 1) * postJson.PageSize).Find(&datas)
-		if result.Error != nil {
-			global.Log.Error(result.Error.Error())
+		if tx.Error != nil {
+			global.Log.Error(tx.Error.Error())
 			c.JSON(500, gin.H{
 				"code": 500,
 				"msg":  "查询失败",
@@ -210,10 +210,10 @@ func articleSiteUpdate(c *gin.Context) {
 		_, role := GetUserMsg(userId)
 
 		updateData := mydb.Article{Name: postJson.Name, Link: postJson.Link, Regex: postJson.Regex}
-		result := global.Db.Model(&mydb.Article{}).Where(
+		tx := global.Db.Model(&mydb.Article{}).Where(
 			"(uid=? or ?='root') and id=?", userId, role, postJson.ID).Updates(updateData)
-		if result.Error != nil {
-			global.Log.Error(result.Error.Error())
+		if tx.Error != nil {
+			global.Log.Error(tx.Error.Error())
 			c.JSON(500, gin.H{
 				"code": 500,
 				"msg":  "更新失败",
@@ -246,18 +246,18 @@ func articleSiteDelete(c *gin.Context) {
 
 		id := postJson.ID
 
-		result := global.Db.Where("(uid=? or ?='root') and id=?", userId, role, id).Delete(&mydb.Article{})
-		if result.Error != nil {
-			global.Log.Error(result.Error.Error())
+		tx := global.Db.Where("(uid=? or ?='root') and id=?", userId, role, id).Delete(&mydb.Article{})
+		if tx.Error != nil {
+			global.Log.Error(tx.Error.Error())
 			c.JSON(500, gin.H{
 				"code": 500,
 				"msg":  "删除失败",
 			})
 			return
 		}
-		result = global.Db.Where("category='article' and ref_id=?", id).Delete(&mydb.Data{})
-		if result.Error != nil {
-			global.Log.Error(result.Error.Error())
+		tx = global.Db.Where("category='article' and ref_id=?", id).Delete(&mydb.Data{})
+		if tx.Error != nil {
+			global.Log.Error(tx.Error.Error())
 			c.JSON(500, gin.H{
 				"code": 500,
 				"msg":  "删除失败",
@@ -305,10 +305,10 @@ func articleSiteSearch(c *gin.Context) {
 
 		var count int64
 		var datas []RespData
-		result := global.Db.Model(&mydb.Article{}).Select("id", "name", "link", "regex", "rss", "created_at").Where(
+		tx := global.Db.Model(&mydb.Article{}).Select("id", "name", "link", "regex", "rss", "created_at").Where(
 			"(uid=? or ?='root') and name like ?", userId, role, keyword).Order("id desc").Count(&count).Limit(postJson.PageSize).Offset((postJson.PageIndex - 1) * postJson.PageSize).Find(&datas)
-		if result.Error != nil {
-			global.Log.Error(result.Error.Error())
+		if tx.Error != nil {
+			global.Log.Error(tx.Error.Error())
 			c.JSON(500, gin.H{
 				"code": 500,
 				"msg":  "查询失败",

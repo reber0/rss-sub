@@ -51,9 +51,9 @@ func upAvatar(c *gin.Context) {
 
 		// 判断上传图片是否过大
 		var UploadMaxSize int64
-		result := global.Db.Model(&mydb.Config{}).Select("value").Where("key='upload_max_size'").First(&UploadMaxSize)
-		if result.Error != nil {
-			global.Log.Error(result.Error.Error())
+		tx := global.Db.Model(&mydb.Config{}).Select("value").Where("key='upload_max_size'").First(&UploadMaxSize)
+		if tx.Error != nil {
+			global.Log.Error(tx.Error.Error())
 			c.JSON(200, gin.H{
 				"code": 1,
 				"msg":  "上传失败",
@@ -82,9 +82,9 @@ func upAvatar(c *gin.Context) {
 		}
 
 		// 更新 user 表中的 avatar
-		result = global.Db.Model(&mydb.User{}).Where("uid=?", userId).Update("avatar", avatar)
-		if result.Error != nil {
-			global.Log.Error(result.Error.Error())
+		tx = global.Db.Model(&mydb.User{}).Where("uid=?", userId).Update("avatar", avatar)
+		if tx.Error != nil {
+			global.Log.Error(tx.Error.Error())
 			c.JSON(200, gin.H{
 				"code": 1,
 				"msg":  "更新失败",

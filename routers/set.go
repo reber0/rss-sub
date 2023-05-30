@@ -31,9 +31,9 @@ func SetRouter(r *gin.Engine) {
 
 func getWebSite(c *gin.Context) {
 	var configs []mydb.Config
-	result := global.Db.Model(&mydb.Config{}).Find(&configs)
-	if result.Error != nil {
-		global.Log.Error(result.Error.Error())
+	tx := global.Db.Model(&mydb.Config{}).Find(&configs)
+	if tx.Error != nil {
+		global.Log.Error(tx.Error.Error())
 		c.JSON(500, gin.H{
 			"code": 500,
 			"msg":  "查询失败",
@@ -74,63 +74,63 @@ func updateWebSite(c *gin.Context) {
 			"msg":  "更新失败",
 		})
 	} else {
-		result := global.Db.Model(&mydb.Config{}).Where("key='sitename'").Update("value", postJson.SiteName)
-		if result.Error != nil {
-			global.Log.Error(result.Error.Error())
+		tx := global.Db.Model(&mydb.Config{}).Where("key='sitename'").Update("value", postJson.SiteName)
+		if tx.Error != nil {
+			global.Log.Error(tx.Error.Error())
 			c.JSON(500, gin.H{
 				"code": 500,
 				"msg":  "更新失败",
 			})
 			return
 		}
-		result = global.Db.Model(&mydb.Config{}).Where("key='domain'").Update("value", postJson.Domain)
-		if result.Error != nil {
-			global.Log.Error(result.Error.Error())
+		tx = global.Db.Model(&mydb.Config{}).Where("key='domain'").Update("value", postJson.Domain)
+		if tx.Error != nil {
+			global.Log.Error(tx.Error.Error())
 			c.JSON(500, gin.H{
 				"code": 500,
 				"msg":  "更新失败",
 			})
 			return
 		}
-		result = global.Db.Model(&mydb.Config{}).Where("key='upload_max_size'").Update("value", postJson.UploadMaxSize)
-		if result.Error != nil {
-			global.Log.Error(result.Error.Error())
+		tx = global.Db.Model(&mydb.Config{}).Where("key='upload_max_size'").Update("value", postJson.UploadMaxSize)
+		if tx.Error != nil {
+			global.Log.Error(tx.Error.Error())
 			c.JSON(500, gin.H{
 				"code": 500,
 				"msg":  "更新失败",
 			})
 			return
 		}
-		result = global.Db.Model(&mydb.Config{}).Where("key='title'").Update("value", postJson.Title)
-		if result.Error != nil {
-			global.Log.Error(result.Error.Error())
+		tx = global.Db.Model(&mydb.Config{}).Where("key='title'").Update("value", postJson.Title)
+		if tx.Error != nil {
+			global.Log.Error(tx.Error.Error())
 			c.JSON(500, gin.H{
 				"code": 500,
 				"msg":  "更新失败",
 			})
 			return
 		}
-		result = global.Db.Model(&mydb.Config{}).Where("key='keyword'").Update("value", postJson.KeyWord)
-		if result.Error != nil {
-			global.Log.Error(result.Error.Error())
+		tx = global.Db.Model(&mydb.Config{}).Where("key='keyword'").Update("value", postJson.KeyWord)
+		if tx.Error != nil {
+			global.Log.Error(tx.Error.Error())
 			c.JSON(500, gin.H{
 				"code": 500,
 				"msg":  "更新失败",
 			})
 			return
 		}
-		result = global.Db.Model(&mydb.Config{}).Where("key='descript'").Update("value", postJson.Descript)
-		if result.Error != nil {
-			global.Log.Error(result.Error.Error())
+		tx = global.Db.Model(&mydb.Config{}).Where("key='descript'").Update("value", postJson.Descript)
+		if tx.Error != nil {
+			global.Log.Error(tx.Error.Error())
 			c.JSON(500, gin.H{
 				"code": 500,
 				"msg":  "更新失败",
 			})
 			return
 		}
-		result = global.Db.Model(&mydb.Config{}).Where("key='copyright'").Update("value", postJson.Copyright)
-		if result.Error != nil {
-			global.Log.Error(result.Error.Error())
+		tx = global.Db.Model(&mydb.Config{}).Where("key='copyright'").Update("value", postJson.Copyright)
+		if tx.Error != nil {
+			global.Log.Error(tx.Error.Error())
 			c.JSON(500, gin.H{
 				"code": 500,
 				"msg":  "更新失败",
@@ -147,9 +147,9 @@ func updateWebSite(c *gin.Context) {
 
 func getEmail(c *gin.Context) {
 	var configs []mydb.Config
-	result := global.Db.Model(&mydb.Config{}).Find(&configs)
-	if result.Error != nil {
-		global.Log.Error(result.Error.Error())
+	tx := global.Db.Model(&mydb.Config{}).Find(&configs)
+	if tx.Error != nil {
+		global.Log.Error(tx.Error.Error())
 		c.JSON(500, gin.H{
 			"code": 500,
 			"msg":  "查询失败",
@@ -192,45 +192,45 @@ func updateEmail(c *gin.Context) {
 			"msg":  "更新失败",
 		})
 	} else {
-		result := global.Db.Model(&mydb.Config{}).Where("key='send_email'").Update("send_email", postJson.SendEmail)
-		if result.Error != nil {
-			global.Log.Error(result.Error.Error())
+		tx := global.Db.Model(&mydb.Config{}).Where("key='send_email'").Update("send_email", postJson.SendEmail)
+		if tx.Error != nil {
+			global.Log.Error(tx.Error.Error())
 			c.JSON(500, gin.H{
 				"code": 500,
 				"msg":  "更新失败",
 			})
 			return
 		}
-		result = global.Db.Model(&mydb.Config{}).Where("key='send_email_pwd'").Update("send_email_pwd", postJson.SendEmailPwd)
-		if result.Error != nil {
-			global.Log.Error(result.Error.Error())
+		tx = global.Db.Model(&mydb.Config{}).Where("key='send_email_pwd'").Update("send_email_pwd", postJson.SendEmailPwd)
+		if tx.Error != nil {
+			global.Log.Error(tx.Error.Error())
 			c.JSON(500, gin.H{
 				"code": 500,
 				"msg":  "更新失败",
 			})
 			return
 		}
-		result = global.Db.Model(&mydb.Config{}).Where("key='send_nickname'").Update("send_nickname", postJson.SendNickName)
-		if result.Error != nil {
-			global.Log.Error(result.Error.Error())
+		tx = global.Db.Model(&mydb.Config{}).Where("key='send_nickname'").Update("send_nickname", postJson.SendNickName)
+		if tx.Error != nil {
+			global.Log.Error(tx.Error.Error())
 			c.JSON(500, gin.H{
 				"code": 500,
 				"msg":  "更新失败",
 			})
 			return
 		}
-		result = global.Db.Model(&mydb.Config{}).Where("key='smtp_port'").Update("smtp_port", postJson.SmtpPort)
-		if result.Error != nil {
-			global.Log.Error(result.Error.Error())
+		tx = global.Db.Model(&mydb.Config{}).Where("key='smtp_port'").Update("smtp_port", postJson.SmtpPort)
+		if tx.Error != nil {
+			global.Log.Error(tx.Error.Error())
 			c.JSON(500, gin.H{
 				"code": 500,
 				"msg":  "更新失败",
 			})
 			return
 		}
-		result = global.Db.Model(&mydb.Config{}).Where("key='smtp_server'").Update("smtp_server", postJson.SmtpServer)
-		if result.Error != nil {
-			global.Log.Error(result.Error.Error())
+		tx = global.Db.Model(&mydb.Config{}).Where("key='smtp_server'").Update("smtp_server", postJson.SmtpServer)
+		if tx.Error != nil {
+			global.Log.Error(tx.Error.Error())
 			c.JSON(500, gin.H{
 				"code": 500,
 				"msg":  "更新失败",
@@ -257,9 +257,9 @@ func getInfo(c *gin.Context) {
 	userId := c.GetString("uid")
 
 	var data RespData
-	result := global.Db.Model(&mydb.User{}).Where("uid=?", userId).First(&data)
-	if result.Error != nil {
-		global.Log.Error(result.Error.Error())
+	tx := global.Db.Model(&mydb.User{}).Where("uid=?", userId).First(&data)
+	if tx.Error != nil {
+		global.Log.Error(tx.Error.Error())
 		c.JSON(500, gin.H{
 			"code": 500,
 			"msg":  "查询失败",
@@ -292,9 +292,9 @@ func updateInfo(c *gin.Context) {
 		uid := c.GetString("uid")
 
 		updateData := mydb.User{Uname: postJson.Uname, Email: postJson.Email}
-		result := global.Db.Model(&mydb.User{}).Where("uid=?", uid).Updates(updateData)
-		if result.Error != nil {
-			global.Log.Error(result.Error.Error())
+		tx := global.Db.Model(&mydb.User{}).Where("uid=?", uid).Updates(updateData)
+		if tx.Error != nil {
+			global.Log.Error(tx.Error.Error())
 			c.JSON(500, gin.H{
 				"code": 500,
 				"msg":  "更新失败",
@@ -329,9 +329,9 @@ func updatePwd(c *gin.Context) {
 		userId := c.GetString("uid")
 
 		var curr_pwd string
-		result := global.Db.Model(&mydb.User{}).Select("password").Where("uid=?", userId).First(&curr_pwd)
-		if result.Error != nil {
-			global.Log.Error(result.Error.Error())
+		tx := global.Db.Model(&mydb.User{}).Select("password").Where("uid=?", userId).First(&curr_pwd)
+		if tx.Error != nil {
+			global.Log.Error(tx.Error.Error())
 			c.JSON(500, gin.H{
 				"code": 1,
 				"msg":  "修改失败",
@@ -340,9 +340,9 @@ func updatePwd(c *gin.Context) {
 		}
 
 		if curr_pwd == old_pwd {
-			result = global.Db.Model(&mydb.User{}).Where("uid=?", userId).Update("password", new_pwd)
-			if result.Error != nil {
-				global.Log.Error(result.Error.Error())
+			tx = global.Db.Model(&mydb.User{}).Where("uid=?", userId).Update("password", new_pwd)
+			if tx.Error != nil {
+				global.Log.Error(tx.Error.Error())
 				c.JSON(500, gin.H{
 					"code": 500,
 					"msg":  "更新失败",
