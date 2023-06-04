@@ -56,10 +56,10 @@ layui.define(function(exports){
             toolbar: '#article-table-toolbar', //头部盒子
             cols: [[
                 {field: 'id', title: 'ID', width:60, sort: true, fixed: 'left', align:'center'},
-                {field: 'name', title: 'Name', width:'15%', fixed: 'left'},
+                {field: 'name', title: 'Name', width:'23%', sort: true, fixed: 'left'},
                 {field: 'link', title: 'Link'},
                 {field: 'regex', title: 'Regex', hide: true},
-                {field: 'rss', title: 'Rss', minWidth:520},
+                {field: 'rss', title: 'Rss', minWidth:520, hide: true},
                 {field: 'operate', title: 'Operate', width:166, fixed: 'right', align:'center', toolbar: '#article-table-bar'}
             ]],
             done : function () {

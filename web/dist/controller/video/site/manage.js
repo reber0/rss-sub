@@ -2,7 +2,7 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-04-30 11:32:10
- * @LastEditTime: 2023-04-21 14:43:15
+ * @LastEditTime: 2023-06-04 19:30:50
  */
 
 layui.define(function(exports){
@@ -61,9 +61,9 @@ layui.define(function(exports){
                 {field: 'id', title: 'ID', width:60, sort: true, fixed: 'left', align:'center'},
                 {field: 'uname', title: 'UserName', width:115, sort: true, fixed: 'left'},
                 {field: 'name', title: 'Name', width:'23%'},
-                {field: 'link', title: 'Link', hide: true},
+                {field: 'link', title: 'Link'},
                 {field: 'status', title: 'Status', width:90, sort: true},
-                {field: 'rss', title: 'Rss'},
+                {field: 'rss', title: 'Rss', hide: true},
                 {field: 'operate', title: 'Operate', width:166, fixed: 'right', align:'center', toolbar: '#site-table-bar'},
             ]],
             done : function () {

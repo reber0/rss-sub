@@ -2,7 +2,7 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-04-30 11:12:17
- * @LastEditTime: 2023-04-21 14:44:13
+ * @LastEditTime: 2023-06-04 19:34:43
  */
 
 layui.define(function(exports){
@@ -63,7 +63,7 @@ layui.define(function(exports){
             cols: [[
                 {field: 'id', title: 'ID', width:60, sort: true, fixed: 'left', align:'center'},
                 {field: 'uname', title: 'UserName', width:115, sort: true, fixed: 'left'},
-                {field: 'name', title: 'Name', width:'15%'},
+                {field: 'name', title: 'Name', width:'23%', sort: true, fixed: 'left'},
                 {field: 'link', title: 'Link'},
                 {field: 'regex', title: 'Regex', hide: true},
                 {field: 'rss', title: 'Rss', minWidth:520},
