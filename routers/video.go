@@ -2,7 +2,7 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-01-04 20:54:15
- * @LastEditTime: 2023-05-16 16:51:02
+ * @LastEditTime: 2023-06-04 14:02:33
  */
 package routers
 
@@ -254,7 +254,7 @@ func getName(targetURL string) string {
 	user_info_api := "https://api.bilibili.com/x/space/acc/info?mid={}"        // 用户信息接口
 	bangumi_api := "https://api.bilibili.com/pgc/view/web/season?season_id={}" // 番剧接口
 
-	if strings.HasPrefix(targetURL, "https://space.bilibili.com/") {
+	if strings.Contains(targetURL, "space.bilibili.com") {
 		uSlice := strings.Split(strings.Trim(targetURL, "/"), "/")
 		mid := uSlice[len(uSlice)-1]
 
@@ -266,7 +266,7 @@ func getName(targetURL string) string {
 		if code == 0 {
 			name = gjson.Get(html, "data.name").String()
 		}
-	} else if strings.HasPrefix(targetURL, "https://www.bilibili.com/bangumi") {
+	} else if strings.Contains(targetURL, "www.bilibili.com/bangumi") {
 		resp, _ := global.Client.R().Get(targetURL)
 		html := utils.EncodeToUTF8(resp)
 
@@ -283,7 +283,7 @@ func getName(targetURL string) string {
 				name = gjson.Get(html, "result.season_title").String()
 			}
 		}
-	} else if strings.HasPrefix(targetURL, "https://www.acfun.cn/u") {
+	} else if strings.Contains(targetURL, "www.acfun.cn/u") {
 		resp, _ := global.Client.R().Get(targetURL)
 		html := utils.EncodeToUTF8(resp)
 
@@ -292,7 +292,7 @@ func getName(targetURL string) string {
 		if len(m) > 0 {
 			name = m[1]
 		}
-	} else if strings.HasPrefix(targetURL, "https://www.acfun.cn/bangumi") {
+	} else if strings.Contains(targetURL, "www.acfun.cn/bangumi") {
 		resp, _ := global.Client.R().Get(targetURL)
 		html := utils.EncodeToUTF8(resp)
 
@@ -301,16 +301,16 @@ func getName(targetURL string) string {
 		if len(m) > 0 {
 			name = m[1]
 		}
-	} else if strings.HasPrefix(targetURL, "https://www.ysjdm.net/") {
+	} else if strings.Contains(targetURL, "ysjdm.net") {
 		resp, _ := global.Client.R().Get(targetURL)
 		html := utils.EncodeToUTF8(resp)
 
-		reg := regexp.MustCompile(`h2 class="title">\s+(.*?)\s+</h2>`)
+		reg := regexp.MustCompile(`h2 class="title">\s+(.*?)\s+</h2`)
 		m := reg.FindStringSubmatch(html)
 		if len(m) > 0 {
 			name = m[1]
 		}
-	} else if strings.HasPrefix(targetURL, "http://www.yinghuacd.com/") {
+	} else if strings.Contains(targetURL, "www.yinghuacd.com") {
 		resp, _ := global.Client.R().Get(targetURL)
 		html := utils.EncodeToUTF8(resp)
 
@@ -319,7 +319,7 @@ func getName(targetURL string) string {
 		if len(m) > 0 {
 			name = m[1]
 		}
-	} else if strings.HasPrefix(targetURL, "https://www.agemys.vip/") {
+	} else if strings.Contains(targetURL, "www.agemys.vip") {
 		resp, _ := global.Client.R().Get(targetURL)
 		html := utils.EncodeToUTF8(resp)
 

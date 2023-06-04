@@ -2,7 +2,7 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-01-04 21:12:34
- * @LastEditTime: 2023-05-03 22:16:48
+ * @LastEditTime: 2023-06-04 14:02:54
  */
 package schedule
 
@@ -98,28 +98,28 @@ func getVideoURL(videoID int) []string {
 }
 
 // 获取一个番剧更新的信息
-func getNewVideoMsg(link string, videoURLSlice []string) ([][]string, string, error) {
+func getNewVideoMsg(targetURL string, videoURLSlice []string) ([][]string, string, error) {
 	var status string
 	var newVideoMsgList [][]string
 
-	baseURL := parse.NewParseURL(link).BaseURL()
+	baseURL := parse.NewParseURL(targetURL).BaseURL()
 
 	var err error
 	var href_text_list [][]string
-	if strings.HasPrefix(link, "https://space.bilibili.com/") {
-		href_text_list, status, err = bilibiliUp(link)
-	} else if strings.HasPrefix(link, "https://www.bilibili.com/bangumi") {
-		href_text_list, status, err = bilibiliBangumi(link)
-	} else if strings.HasPrefix(link, "https://www.acfun.cn/u") {
-		href_text_list, status, err = acfunUp(link)
-	} else if strings.HasPrefix(link, "https://www.acfun.cn/bangumi") {
-		href_text_list, status, err = acfunBangumi(link)
-	} else if strings.HasPrefix(link, "https://www.ysjdm.net/") {
-		href_text_list, status, err = ysjdm(link)
-	} else if strings.HasPrefix(link, "http://www.yinghuacd.com/") {
-		href_text_list, status, err = yinghuacd(link)
-	} else if strings.HasPrefix(link, "https://www.agemys.vip/") {
-		href_text_list, status, err = age(link)
+	if strings.Contains(targetURL, "space.bilibili.com") {
+		href_text_list, status, err = bilibiliUp(targetURL)
+	} else if strings.Contains(targetURL, "www.bilibili.com/bangumi") {
+		href_text_list, status, err = bilibiliBangumi(targetURL)
+	} else if strings.Contains(targetURL, "acfun.cn/u") {
+		href_text_list, status, err = acfunUp(targetURL)
+	} else if strings.Contains(targetURL, "acfun.cn/bangumi") {
+		href_text_list, status, err = acfunBangumi(targetURL)
+	} else if strings.Contains(targetURL, "ysjdm.net") {
+		href_text_list, status, err = ysjdm(targetURL)
+	} else if strings.Contains(targetURL, "www.yinghuacd.com") {
+		href_text_list, status, err = yinghuacd(targetURL)
+	} else if strings.Contains(targetURL, "www.agemys.vip") {
+		href_text_list, status, err = age(targetURL)
 	}
 	if err != nil {
 		return newVideoMsgList, status, err
@@ -142,14 +142,14 @@ func getNewVideoMsg(link string, videoURLSlice []string) ([][]string, string, er
 	return newVideoMsgList, status, nil
 }
 
-func bilibiliUp(link string) ([][]string, string, error) {
+func bilibiliUp(targetURL string) ([][]string, string, error) {
 	var newVideoMsgList [][]string
 
 	// up主视频接口
 	up_video_api := "https://api.bilibili.com/x/space/arc/search?mid={mid}&ps=30&tid=0&pn=1&keyword=&order=pubdate&jsonp=jsonp"
 
 	// 获取视频列表
-	_tmp := strings.Split(strings.Trim(link, "/"), "/")
+	_tmp := strings.Split(strings.Trim(targetURL, "/"), "/")
 	up_id := _tmp[len(_tmp)-1]
 	resp, err := global.Client.R().Get(strings.ReplaceAll(up_video_api, "{mid}", up_id))
 	if err != nil {
@@ -174,7 +174,7 @@ func bilibiliUp(link string) ([][]string, string, error) {
 	return newVideoMsgList, "连载中", nil
 }
 
-func bilibiliBangumi(link string) ([][]string, string, error) {
+func bilibiliBangumi(targetURL string) ([][]string, string, error) {
 	var status string
 	var newVideoMsgList [][]string
 
@@ -182,7 +182,7 @@ func bilibiliBangumi(link string) ([][]string, string, error) {
 	bangumi_api := "https://api.bilibili.com/pgc/view/web/season?season_id={season_id}"
 
 	// 获取视频列表
-	resp, err := global.Client.R().Get(link)
+	resp, err := global.Client.R().Get(targetURL)
 	if err != nil {
 		global.Log.Error(err.Error())
 		return newVideoMsgList, "连载中", err
@@ -229,10 +229,10 @@ func bilibiliBangumi(link string) ([][]string, string, error) {
 	return newVideoMsgList, status, nil
 }
 
-func acfunUp(link string) ([][]string, string, error) {
+func acfunUp(targetURL string) ([][]string, string, error) {
 	var newVideoMsgList [][]string
 
-	resp, err := global.Client.R().Get(link)
+	resp, err := global.Client.R().Get(targetURL)
 	if err != nil {
 		global.Log.Error(err.Error())
 		return newVideoMsgList, "连载中", err
@@ -256,11 +256,11 @@ func acfunUp(link string) ([][]string, string, error) {
 	return newVideoMsgList, "连载中", nil
 }
 
-func acfunBangumi(link string) ([][]string, string, error) {
+func acfunBangumi(targetURL string) ([][]string, string, error) {
 	var status string
 	var newVideoMsgList [][]string
 
-	resp, err := global.Client.R().Get(link)
+	resp, err := global.Client.R().Get(targetURL)
 	if err != nil {
 		global.Log.Error(err.Error())
 		return newVideoMsgList, "连载中", err
@@ -297,11 +297,11 @@ func acfunBangumi(link string) ([][]string, string, error) {
 	return newVideoMsgList, status, nil
 }
 
-func ysjdm(link string) ([][]string, string, error) {
+func ysjdm(targetURL string) ([][]string, string, error) {
 	var status string
 	var newVideoMsgList [][]string
 
-	resp, err := global.Client.R().Get(link)
+	resp, err := global.Client.R().Get(targetURL)
 	if err != nil {
 		global.Log.Error(err.Error())
 		return newVideoMsgList, "连载中", err
@@ -335,11 +335,11 @@ func ysjdm(link string) ([][]string, string, error) {
 	return newVideoMsgList, status, nil
 }
 
-func yinghuacd(link string) ([][]string, string, error) {
+func yinghuacd(targetURL string) ([][]string, string, error) {
 	var status string
 	var newVideoMsgList [][]string
 
-	resp, err := global.Client.R().Get(link)
+	resp, err := global.Client.R().Get(targetURL)
 	if err != nil {
 		global.Log.Error(err.Error())
 		return newVideoMsgList, "连载中", err
@@ -372,11 +372,11 @@ func yinghuacd(link string) ([][]string, string, error) {
 	return newVideoMsgList, status, nil
 }
 
-func age(link string) ([][]string, string, error) {
+func age(targetURL string) ([][]string, string, error) {
 	var status string
 	var newVideoMsgList [][]string
 
-	resp, err := global.Client.R().Get(link)
+	resp, err := global.Client.R().Get(targetURL)
 	if err != nil {
 		global.Log.Error(err.Error())
 		return newVideoMsgList, "连载中", err
