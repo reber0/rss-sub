@@ -127,7 +127,7 @@ layui.define(function(exports){
                 {field: 'id', title: 'ID', width:65, sort: true, fixed: 'left', align:'center'},
                 {field: 'name', title: 'Name', width:'23%', sort: true, fixed: 'left'},
                 {field: 'title', title: 'Title', templet:add_link},
-                {field: 'created_at', title: 'Created At', width:162},
+                {field: 'created_at', title: 'Created At', width:162, sort: true},
                 {field: 'status', title: 'Status', width:95, fixed: 'right', templet:get_status},
                 {field: 'operate', title: 'Operate', width:115, fixed: 'right', align:'center', toolbar: '#video-table-bar'}
             ]],
