@@ -1,3 +1,9 @@
+// Package
+// Author: reber
+// Mail: reber0ask@qq.com
+// Date: 2023-03-17 13:17:30
+// LastEditTime: 2023-06-20 21:12:32
+
 /*
  * @Author: reber
  * @Mail: reber0ask@qq.com
@@ -18,6 +24,7 @@ import (
 	"github.com/reber0/rss-sub/mydb"
 )
 
+// AppInit 初始化
 func AppInit() {
 	global.RootPath, _ = os.Getwd()
 	global.Log = mylog.New().IsShowCaller(true).IsToFile(true).Logger()
@@ -33,4 +40,5 @@ func AppInit() {
 	global.Client.SetTLSClientConfig(&tls.Config{InsecureSkipVerify: true})
 	global.Client.SetHeader("User-Agent", "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:78.0) Gecko/20100101 Firefox/78.0")
 	global.Client.SetHeader("Cookie", "buvid3=a") // b 站 api 获取需要带 cookie
+	// global.Client.SetProxy("http://127.0.0.1:7890")
 }

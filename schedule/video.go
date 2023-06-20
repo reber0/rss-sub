@@ -118,7 +118,7 @@ func getNewVideoMsg(targetURL string, videoURLSlice []string) ([][]string, strin
 		href_text_list, status, err = ysjdm(targetURL)
 	} else if strings.Contains(targetURL, "www.yinghuacd.com") {
 		href_text_list, status, err = yinghuacd(targetURL)
-	} else if strings.Contains(targetURL, "www.agemys.vip") {
+	} else if strings.Contains(targetURL, "agemys") {
 		href_text_list, status, err = age(targetURL)
 	}
 	if err != nil {

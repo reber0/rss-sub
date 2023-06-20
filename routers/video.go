@@ -319,7 +319,7 @@ func getName(targetURL string) string {
 		if len(m) > 0 {
 			name = m[1]
 		}
-	} else if strings.Contains(targetURL, "www.agemys.vip") {
+	} else if strings.Contains(targetURL, "agemys") {
 		resp, _ := global.Client.R().Get(targetURL)
 		html := utils.EncodeToUTF8(resp)
 
