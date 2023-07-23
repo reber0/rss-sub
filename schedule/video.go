@@ -2,7 +2,7 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-01-04 21:12:34
- * @LastEditTime: 2023-06-04 14:02:54
+ * @LastEditTime: 2023-07-24 08:45:48
  */
 package schedule
 
@@ -118,7 +118,7 @@ func getNewVideoMsg(targetURL string, videoURLSlice []string) ([][]string, strin
 		href_text_list, status, err = ysjdm(targetURL)
 	} else if strings.Contains(targetURL, "www.yinghuacd.com") {
 		href_text_list, status, err = yinghuacd(targetURL)
-	} else if strings.Contains(targetURL, "agedm") {
+	} else if strings.Contains(targetURL, "age") {
 		href_text_list, status, err = age(targetURL)
 	}
 	if err != nil {
@@ -387,7 +387,7 @@ func age(targetURL string) ([][]string, string, error) {
 			global.Log.Error(err.Error())
 		}
 
-		dom.Find(`div[style="display:block"]>ul>li>a`).Each(func(i int, node *goquery.Selection) {
+		dom.Find(`ul[class="video_detail_episode"]`).Eq(0).Find(`a`).Each(func(i int, node *goquery.Selection) {
 			url, _ := node.Attr("href")
 			title := node.Text()
 			if !strings.Contains(strings.ToLower(title), "pv") && !strings.Contains(strings.ToLower(title), "无字") && !strings.Contains(strings.ToLower(title), "英字") && !strings.Contains(strings.ToLower(title), "生肉") {
@@ -395,7 +395,7 @@ func age(targetURL string) ([][]string, string, error) {
 			}
 		})
 
-		reg := regexp.MustCompile(`(?sm)播放状态.*?value">(.*?)</span>`)
+		reg := regexp.MustCompile(`detail_imform_value">(.*?)</span>`)
 		m := reg.FindStringSubmatch(html)
 		status = m[1]
 		if status == "完结" {

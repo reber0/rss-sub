@@ -2,7 +2,7 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-01-04 20:54:15
- * @LastEditTime: 2023-06-04 14:02:33
+ * @LastEditTime: 2023-07-24 08:45:56
  */
 package routers
 
@@ -319,11 +319,11 @@ func getName(targetURL string) string {
 		if len(m) > 0 {
 			name = m[1]
 		}
-	} else if strings.Contains(targetURL, "agedm") {
+	} else if strings.Contains(targetURL, "age") {
 		resp, _ := global.Client.R().Get(targetURL)
 		html := utils.EncodeToUTF8(resp)
 
-		reg := regexp.MustCompile(`detail_imform_name">(.*?)</h4`)
+		reg := regexp.MustCompile(`video_detail_title">(.*?)</h2`)
 		m := reg.FindStringSubmatch(html)
 		if len(m) > 0 {
 			name = m[1]
