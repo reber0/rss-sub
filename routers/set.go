@@ -2,13 +2,13 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-01-04 20:53:42
- * @LastEditTime: 2023-05-16 16:45:39
+ * @LastEditTime: 2024-01-24 13:46:00
  */
 package routers
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/reber0/go-common/utils"
+	"github.com/reber0/goutils"
 	"github.com/reber0/rss-sub/global"
 	"github.com/reber0/rss-sub/middleware"
 	"github.com/reber0/rss-sub/mydb"
@@ -267,7 +267,7 @@ func getInfo(c *gin.Context) {
 		return
 	}
 
-	data.CreatedAt = utils.Unix2Str(data.CreatedAt)
+	data.CreatedAt, _ = goutils.Unix2Str(data.CreatedAt)
 
 	c.JSON(200, gin.H{
 		"code": 0,
@@ -323,8 +323,8 @@ func updatePwd(c *gin.Context) {
 			"msg":  "更新失败",
 		})
 	} else {
-		old_pwd := utils.Md5(postJson.OldPwd)
-		new_pwd := utils.Md5(postJson.NewPwd)
+		old_pwd := goutils.Md5([]byte(postJson.OldPwd))
+		new_pwd := goutils.Md5([]byte(postJson.NewPwd))
 
 		userId := c.GetString("uid")
 

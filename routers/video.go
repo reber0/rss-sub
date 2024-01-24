@@ -2,7 +2,7 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-01-04 20:54:15
- * @LastEditTime: 2023-07-24 08:45:56
+ * @LastEditTime: 2024-01-24 13:48:48
  */
 package routers
 
@@ -12,7 +12,7 @@ import (
 	"strings"
 
 	"github.com/gin-gonic/gin"
-	"github.com/reber0/go-common/utils"
+	"github.com/reber0/goutils"
 	"github.com/reber0/rss-sub/global"
 	"github.com/reber0/rss-sub/middleware"
 	"github.com/reber0/rss-sub/mydb"
@@ -151,7 +151,7 @@ func videoSiteList(c *gin.Context) {
 				datas[index].Uname = ""
 			}
 			datas[index].Rss = strings.TrimRight(domain, "/") + data.Rss
-			datas[index].CreatedAt = utils.Unix2Str(data.CreatedAt)
+			datas[index].CreatedAt, _ = goutils.Unix2Str(data.CreatedAt)
 		}
 
 		c.JSON(200, gin.H{
@@ -260,7 +260,7 @@ func getName(targetURL string) string {
 
 		url := strings.Replace(user_info_api, "{}", mid, 1)
 		resp, _ := global.Client.R().Get(url)
-		html := utils.EncodeToUTF8(resp)
+		html := goutils.EncodeToUTF8(resp)
 
 		code := gjson.Get(html, "code").Int()
 		if code == 0 {
@@ -268,7 +268,7 @@ func getName(targetURL string) string {
 		}
 	} else if strings.Contains(targetURL, "www.bilibili.com/bangumi") {
 		resp, _ := global.Client.R().Get(targetURL)
-		html := utils.EncodeToUTF8(resp)
+		html := goutils.EncodeToUTF8(resp)
 
 		reg := regexp.MustCompile(`season_id":(\d+),`)
 		m := reg.FindStringSubmatch(html)
@@ -276,7 +276,7 @@ func getName(targetURL string) string {
 			seasonId := m[1]
 			url := strings.Replace(bangumi_api, "{}", seasonId, 1)
 			resp, _ = global.Client.R().Get(url)
-			html := utils.EncodeToUTF8(resp)
+			html := goutils.EncodeToUTF8(resp)
 
 			code := gjson.Get(html, "code").Int()
 			if code == 0 {
@@ -285,7 +285,7 @@ func getName(targetURL string) string {
 		}
 	} else if strings.Contains(targetURL, "www.acfun.cn/u") {
 		resp, _ := global.Client.R().Get(targetURL)
-		html := utils.EncodeToUTF8(resp)
+		html := goutils.EncodeToUTF8(resp)
 
 		reg := regexp.MustCompile(`<span class="name" data-username=(.*?)>`)
 		m := reg.FindStringSubmatch(html)
@@ -294,7 +294,7 @@ func getName(targetURL string) string {
 		}
 	} else if strings.Contains(targetURL, "www.acfun.cn/bangumi") {
 		resp, _ := global.Client.R().Get(targetURL)
-		html := utils.EncodeToUTF8(resp)
+		html := goutils.EncodeToUTF8(resp)
 
 		reg := regexp.MustCompile(`bangumiTitle":"(.*?)",`)
 		m := reg.FindStringSubmatch(html)
@@ -303,7 +303,7 @@ func getName(targetURL string) string {
 		}
 	} else if strings.Contains(targetURL, "ysjdm.net") {
 		resp, _ := global.Client.R().Get(targetURL)
-		html := utils.EncodeToUTF8(resp)
+		html := goutils.EncodeToUTF8(resp)
 
 		reg := regexp.MustCompile(`h2 class="title">\s+(.*?)\s+</h2`)
 		m := reg.FindStringSubmatch(html)
@@ -312,7 +312,7 @@ func getName(targetURL string) string {
 		}
 	} else if strings.Contains(targetURL, "www.yinghuacd.com") {
 		resp, _ := global.Client.R().Get(targetURL)
-		html := utils.EncodeToUTF8(resp)
+		html := goutils.EncodeToUTF8(resp)
 
 		reg := regexp.MustCompile(`<h1>(.*?)</h1>`)
 		m := reg.FindStringSubmatch(html)
@@ -321,7 +321,7 @@ func getName(targetURL string) string {
 		}
 	} else if strings.Contains(targetURL, "age") {
 		resp, _ := global.Client.R().Get(targetURL)
-		html := utils.EncodeToUTF8(resp)
+		html := goutils.EncodeToUTF8(resp)
 
 		reg := regexp.MustCompile(`video_detail_title">(.*?)</h2`)
 		m := reg.FindStringSubmatch(html)

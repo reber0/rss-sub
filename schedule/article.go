@@ -2,7 +2,7 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-01-04 21:12:25
- * @LastEditTime: 2022-10-17 12:57:48
+ * @LastEditTime: 2024-01-24 13:50:33
  */
 package schedule
 
@@ -11,8 +11,7 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/reber0/go-common/parse"
-	"github.com/reber0/go-common/utils"
+	"github.com/reber0/goutils"
 	"github.com/reber0/rss-sub/global"
 	"github.com/reber0/rss-sub/mydb"
 )
@@ -51,7 +50,7 @@ func checkArticle() {
 
 					titleSlice = append(titleSlice, title)
 				}
-				loggerMsg(username, name+" 更新", utils.SliceToString(titleSlice))
+				loggerMsg(username, name+" 更新", strings.Join(titleSlice, ","))
 			}
 		}
 	}
@@ -93,8 +92,8 @@ func getNewArticleMsg(link, regex string, articleURLSlice []string) ([][]string,
 		global.Log.Error(err.Error())
 		return newArticleMsgList, err
 	} else {
-		html := utils.EncodeToUTF8(resp)
-		baseURL := parse.NewParseURL(link).BaseURL()
+		html := goutils.EncodeToUTF8(resp)
+		baseURL := goutils.NewURL(link).BaseURL()
 
 		reg := regexp.MustCompile(`(?sm)` + regex)
 		href_text_list := reg.FindAllStringSubmatch(html, -1)
@@ -106,11 +105,11 @@ func getNewArticleMsg(link, regex string, articleURLSlice []string) ([][]string,
 			a_text := strings.TrimSpace(href_text[2])
 
 			// 暂存新文章
-			if !utils.InSlice(a_href, articleURLSlice) {
+			if !goutils.IsInCol(a_href, articleURLSlice) {
 				newArticleMsgList = append(newArticleMsgList, []string{a_text, a_href})
 			}
 		}
-		newArticleMsgList = utils.SliceReverse(newArticleMsgList)
+		newArticleMsgList = goutils.SliceListReverse(newArticleMsgList)
 	}
 
 	return newArticleMsgList, nil

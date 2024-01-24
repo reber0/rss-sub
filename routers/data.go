@@ -2,7 +2,7 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-01-04 20:53:25
- * @LastEditTime: 2023-05-16 16:44:05
+ * @LastEditTime: 2024-01-24 13:44:11
  */
 package routers
 
@@ -10,7 +10,7 @@ import (
 	"encoding/xml"
 
 	"github.com/gin-gonic/gin"
-	"github.com/reber0/go-common/utils"
+	"github.com/reber0/goutils"
 	"github.com/reber0/rss-sub/global"
 	"github.com/reber0/rss-sub/middleware"
 	"github.com/reber0/rss-sub/mydb"
@@ -91,7 +91,7 @@ func dataArticleList(c *gin.Context) {
 		}
 
 		for index, data := range datas {
-			datas[index].CreatedAt = utils.Unix2Str(data.CreatedAt)
+			datas[index].CreatedAt, _ = goutils.Unix2Str(data.CreatedAt)
 		}
 
 		c.JSON(200, gin.H{
@@ -255,7 +255,7 @@ func dataVideoList(c *gin.Context) {
 		}
 
 		for index, data := range datas {
-			datas[index].CreatedAt = utils.Unix2Str(data.CreatedAt)
+			datas[index].CreatedAt, _ = goutils.Unix2Str(data.CreatedAt)
 		}
 
 		c.JSON(200, gin.H{
@@ -445,7 +445,7 @@ func getRss(c *gin.Context) {
 	for _, data := range datas {
 		title := data.Title
 		url := data.URL
-		date := utils.Unix2Str(data.CreatedAt)
+		date, _ := goutils.Unix2Str(data.CreatedAt)
 		description := data.Description
 
 		var item Item

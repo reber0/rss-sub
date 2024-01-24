@@ -2,7 +2,7 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-01-04 20:53:53
- * @LastEditTime: 2023-05-16 16:46:11
+ * @LastEditTime: 2024-01-24 13:46:35
  */
 package routers
 
@@ -12,7 +12,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
-	"github.com/reber0/go-common/utils"
+	"github.com/reber0/goutils"
 	"github.com/reber0/rss-sub/global"
 	"github.com/reber0/rss-sub/middleware"
 	"github.com/reber0/rss-sub/mydb"
@@ -41,7 +41,7 @@ func upAvatar(c *gin.Context) {
 		fileSize := file.Size / 1024
 
 		// 判断上传文件后缀是否非法
-		if !utils.InSlice(strings.Trim(fileExt, "."), []string{"png", "jpg", "jpeg"}) {
+		if !goutils.IsInCol(strings.Trim(fileExt, "."), []string{"png", "jpg", "jpeg"}) {
 			c.JSON(200, gin.H{
 				"code": 1,
 				"msg":  "文件非法",
@@ -70,7 +70,7 @@ func upAvatar(c *gin.Context) {
 		}
 
 		// 保存图片
-		avatar := utils.Md5(uuid.New().String()) + fileExt
+		avatar := goutils.Md5([]byte(uuid.New().String())) + fileExt
 		filename := global.RootPath + "/avatar/" + avatar
 		if err := c.SaveUploadedFile(file, filename); err != nil {
 			global.Log.Error(err.Error())

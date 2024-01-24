@@ -2,7 +2,7 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-01-04 20:52:53
- * @LastEditTime: 2023-05-30 16:09:19
+ * @LastEditTime: 2024-01-24 13:43:37
  */
 package routers
 
@@ -12,8 +12,7 @@ import (
 	"strings"
 
 	"github.com/gin-gonic/gin"
-	"github.com/reber0/go-common/parse"
-	"github.com/reber0/go-common/utils"
+	"github.com/reber0/goutils"
 	"github.com/reber0/rss-sub/global"
 	"github.com/reber0/rss-sub/middleware"
 	"github.com/reber0/rss-sub/mydb"
@@ -47,10 +46,10 @@ func articleCheckRegex(c *gin.Context) {
 			"msg":  "检查失败",
 		})
 	} else {
-		base_url := parse.NewParseURL(postJson.Link).BaseURL()
+		base_url := goutils.NewURL(postJson.Link).BaseURL()
 		resp, err := global.Client.R().Get(postJson.Link)
 		if resp != nil {
-			html := utils.EncodeToUTF8(resp)
+			html := goutils.EncodeToUTF8(resp)
 
 			article_tag := make([]map[string]string, 0, 100)
 			reg := regexp.MustCompile(`(?sm)` + postJson.Regex)
@@ -177,9 +176,9 @@ func articleSiteList(c *gin.Context) {
 			if role == "user" {
 				datas[index].Uname = ""
 			}
-			datas[index].Regex = utils.HtmlEntityEncode(data.Regex)
+			datas[index].Regex = goutils.HTMLEntityEncode(data.Regex)
 			datas[index].Rss = strings.TrimRight(domain, "/") + data.Rss
-			datas[index].CreatedAt = utils.Unix2Str(data.CreatedAt)
+			datas[index].CreatedAt, _ = goutils.Unix2Str(data.CreatedAt)
 		}
 
 		c.JSON(200, gin.H{
@@ -323,9 +322,9 @@ func articleSiteSearch(c *gin.Context) {
 			if role == "user" {
 				datas[index].Uname = ""
 			}
-			datas[index].Regex = utils.HtmlEntityEncode(data.Regex)
+			datas[index].Regex = goutils.HTMLEntityEncode(data.Regex)
 			datas[index].Rss = strings.TrimRight(domain, "/") + data.Rss
-			datas[index].CreatedAt = utils.Unix2Str(data.CreatedAt)
+			datas[index].CreatedAt, _ = goutils.Unix2Str(data.CreatedAt)
 		}
 
 		c.JSON(200, gin.H{

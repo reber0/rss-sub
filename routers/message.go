@@ -2,13 +2,13 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-01-04 20:53:07
- * @LastEditTime: 2023-05-30 16:08:51
+ * @LastEditTime: 2024-01-24 13:38:02
  */
 package routers
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/reber0/go-common/utils"
+	"github.com/reber0/goutils"
 	"github.com/reber0/rss-sub/global"
 	"github.com/reber0/rss-sub/middleware"
 	"github.com/reber0/rss-sub/mydb"
@@ -123,7 +123,7 @@ func msgUserList(c *gin.Context) {
 		}
 
 		for index, data := range datas {
-			datas[index].CreatedAt = utils.Unix2Str(data.CreatedAt)
+			datas[index].CreatedAt, _ = goutils.Unix2Str(data.CreatedAt)
 		}
 
 		c.JSON(200, gin.H{
@@ -188,7 +188,7 @@ func msgApiList(c *gin.Context) {
 		}
 
 		for index, data := range datas {
-			datas[index].CreatedAt = utils.Unix2Str(data.CreatedAt)
+			datas[index].CreatedAt, _ = goutils.Unix2Str(data.CreatedAt)
 		}
 
 		c.JSON(200, gin.H{

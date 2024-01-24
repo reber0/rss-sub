@@ -8,7 +8,7 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-01-18 09:23:30
- * @LastEditTime: 2023-03-26 16:09:50
+ * @LastEditTime: 2024-01-24 13:36:06
  */
 package entry
 
@@ -18,8 +18,7 @@ import (
 	"time"
 
 	"github.com/go-resty/resty/v2"
-	"github.com/reber0/go-common/mylog"
-	"github.com/reber0/go-common/utils"
+	"github.com/reber0/goutils"
 	"github.com/reber0/rss-sub/global"
 	"github.com/reber0/rss-sub/mydb"
 )
@@ -27,9 +26,9 @@ import (
 // AppInit 初始化
 func AppInit() {
 	global.RootPath, _ = os.Getwd()
-	global.Log = mylog.New().IsShowCaller(true).IsToFile(true).Logger()
+	global.Log = goutils.NewLog().IsShowCaller(true).IsToFile(true).L()
 
-	if !utils.IsFileExist(global.RootPath + "/data/data.db") {
+	if !goutils.PathExists(global.RootPath + "/data/data.db") {
 		mydb.DbInit()
 	}
 

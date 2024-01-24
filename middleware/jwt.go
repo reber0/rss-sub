@@ -2,7 +2,7 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-01-06 14:59:35
- * @LastEditTime: 2023-04-07 11:10:53
+ * @LastEditTime: 2024-01-24 13:42:32
  */
 package middleware
 
@@ -11,10 +11,10 @@ import (
 	"time"
 
 	"github.com/golang-jwt/jwt"
-	"github.com/reber0/go-common/utils"
+	"github.com/reber0/goutils"
 )
 
-var jwtSecret = []byte(utils.RandomString(8))
+var jwtSecret = []byte(goutils.RandomString(8))
 
 // var jwtSecret = []byte("12345678")
 

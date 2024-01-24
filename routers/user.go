@@ -2,7 +2,7 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-01-04 15:14:59
- * @LastEditTime: 2023-05-16 16:47:57
+ * @LastEditTime: 2024-01-24 13:47:47
  */
 package routers
 
@@ -12,7 +12,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
-	"github.com/reber0/go-common/utils"
+	"github.com/reber0/goutils"
 	"github.com/reber0/rss-sub/global"
 	"github.com/reber0/rss-sub/middleware"
 	"github.com/reber0/rss-sub/mydb"
@@ -45,7 +45,7 @@ func login(c *gin.Context) {
 	if err != nil {
 		c.JSON(500, gin.H{"err": err})
 	}
-	md5_pwd := utils.Md5(json.PassWord)
+	md5_pwd := goutils.Md5([]byte(json.PassWord))
 
 	data := mydb.User{}
 	tx := global.Db.Where("uname = ?", json.UserName).First(&data)
@@ -152,7 +152,7 @@ func userList(c *gin.Context) {
 		tx = tx.Limit(postJson.PageSize).Offset((postJson.PageIndex - 1) * postJson.PageSize).Find(&datas)
 
 		for index, data := range datas {
-			datas[index].CreatedAt = utils.Unix2Str(data.CreatedAt)
+			datas[index].CreatedAt, _ = goutils.Unix2Str(data.CreatedAt)
 		}
 
 		c.JSON(200, gin.H{
@@ -181,10 +181,10 @@ func userAdd(c *gin.Context) {
 	} else {
 		user_id := strings.ReplaceAll(uuid.New().String(), "-", "")
 		uname := postJson.UName
-		password := utils.Md5(postJson.PassWord)
+		password := goutils.Md5([]byte(postJson.PassWord))
 		role := postJson.Role
 		email := postJson.Email
-		avatar := strconv.Itoa(utils.RandomInt(1, 9)) + ".png"
+		avatar := strconv.Itoa(goutils.RandomInt(1, 9)) + ".png"
 
 		u := mydb.User{UID: user_id, Uname: uname, PassWord: password, Role: role, Email: email, Avatar: avatar}
 		tx := global.Db.Create(&u)
@@ -222,7 +222,7 @@ func userUpdate(c *gin.Context) {
 		})
 	} else {
 		uname := postJson.Uname
-		password := utils.Md5(postJson.Password)
+		password := goutils.Md5([]byte(postJson.Password))
 
 		updateData := make(map[string]interface{})
 		if uname != "" {
@@ -265,7 +265,7 @@ func userDelete(c *gin.Context) {
 
 		deleteIDList := postJson.DeleteIDList
 
-		if utils.InSlice(uid, postJson.DeleteIDList) {
+		if goutils.IsInCol(uid, postJson.DeleteIDList) {
 			c.JSON(500, gin.H{
 				"code": 500,
 				"msg":  "不能删除自己",
