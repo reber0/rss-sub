@@ -8,7 +8,7 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-01-18 09:23:30
- * @LastEditTime: 2024-01-24 13:36:06
+ * @LastEditTime: 2024-01-24 14:01:18
  */
 package entry
 
@@ -29,6 +29,15 @@ func AppInit() {
 	global.Log = goutils.NewLog().IsShowCaller(true).IsToFile(true).L()
 
 	if !goutils.PathExists(global.RootPath + "/data/data.db") {
+		os.Mkdir(global.RootPath+"/data", 0755)
+		os.Mkdir(global.RootPath+"/data/avatar", 0755)
+		// 创建数据库
+		file, err := os.Create(global.RootPath + "/data/data.db")
+		if err != nil {
+			global.Log.Error(err.Error())
+			return
+		}
+		file.Close()
 		mydb.DbInit()
 	}
 
