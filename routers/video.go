@@ -2,7 +2,7 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-01-04 20:54:15
- * @LastEditTime: 2024-01-24 13:48:48
+ * @LastEditTime: 2024-01-28 17:04:26
  */
 package routers
 
@@ -297,15 +297,6 @@ func getName(targetURL string) string {
 		html := goutils.EncodeToUTF8(resp)
 
 		reg := regexp.MustCompile(`bangumiTitle":"(.*?)",`)
-		m := reg.FindStringSubmatch(html)
-		if len(m) > 0 {
-			name = m[1]
-		}
-	} else if strings.Contains(targetURL, "ysjdm.net") {
-		resp, _ := global.Client.R().Get(targetURL)
-		html := goutils.EncodeToUTF8(resp)
-
-		reg := regexp.MustCompile(`h2 class="title">\s+(.*?)\s+</h2`)
 		m := reg.FindStringSubmatch(html)
 		if len(m) > 0 {
 			name = m[1]

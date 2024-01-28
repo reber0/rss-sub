@@ -2,7 +2,7 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-01-04 21:12:34
- * @LastEditTime: 2024-01-24 13:52:50
+ * @LastEditTime: 2024-01-28 17:04:11
  */
 package schedule
 
@@ -113,8 +113,6 @@ func getNewVideoMsg(targetURL string, videoURLSlice []string) ([][]string, strin
 		href_text_list, status, err = acfunUp(targetURL)
 	} else if strings.Contains(targetURL, "acfun.cn/bangumi") {
 		href_text_list, status, err = acfunBangumi(targetURL)
-	} else if strings.Contains(targetURL, "ysjdm.net") {
-		href_text_list, status, err = ysjdm(targetURL)
 	} else if strings.Contains(targetURL, "www.yinghuacd.com") {
 		href_text_list, status, err = yinghuacd(targetURL)
 	} else if strings.Contains(targetURL, "age") {
@@ -296,7 +294,7 @@ func acfunBangumi(targetURL string) ([][]string, string, error) {
 	return newVideoMsgList, status, nil
 }
 
-func ysjdm(targetURL string) ([][]string, string, error) {
+func age(targetURL string) ([][]string, string, error) {
 	var status string
 	var newVideoMsgList [][]string
 
@@ -311,7 +309,7 @@ func ysjdm(targetURL string) ([][]string, string, error) {
 			global.Log.Error(err.Error())
 		}
 
-		dom.Find(`ul[class="content_playlist clearfix"]`).Eq(0).Find(`li>a`).Each(
+		dom.Find(`ul[class="video_detail_episode"]`).Eq(0).Find(`li>a`).Each(
 			func(i int, node *goquery.Selection) {
 				url, _ := node.Attr("href")
 				title := node.Text()
@@ -321,10 +319,10 @@ func ysjdm(targetURL string) ([][]string, string, error) {
 			},
 		)
 
-		reg := regexp.MustCompile(`data_style">(.*?)</span>`)
+		reg := regexp.MustCompile(`播放状态：.*?class="detail_imform_value">(.*?)</span>`)
 		m := reg.FindStringSubmatch(html)
 		status = m[1]
-		if status == "已完结" {
+		if goutils.IsInCol(m, "完结") {
 			status = "已完结"
 		} else {
 			status = "连载中"
@@ -365,42 +363,6 @@ func yinghuacd(targetURL string) ([][]string, string, error) {
 		} else {
 			status = "连载中"
 			newVideoMsgList = goutils.SliceListReverse(newVideoMsgList)
-		}
-	}
-
-	return newVideoMsgList, status, nil
-}
-
-func age(targetURL string) ([][]string, string, error) {
-	var status string
-	var newVideoMsgList [][]string
-
-	resp, err := global.Client.R().Get(targetURL)
-	if err != nil {
-		global.Log.Error(err.Error())
-		return newVideoMsgList, "连载中", err
-	} else {
-		html := goutils.EncodeToUTF8(resp)
-		dom, err := goquery.NewDocumentFromReader(strings.NewReader(html))
-		if err != nil {
-			global.Log.Error(err.Error())
-		}
-
-		dom.Find(`ul[class="video_detail_episode"]`).Eq(0).Find(`a`).Each(func(i int, node *goquery.Selection) {
-			url, _ := node.Attr("href")
-			title := node.Text()
-			if !strings.Contains(strings.ToLower(title), "pv") && !strings.Contains(strings.ToLower(title), "无字") && !strings.Contains(strings.ToLower(title), "英字") && !strings.Contains(strings.ToLower(title), "生肉") {
-				newVideoMsgList = append(newVideoMsgList, []string{title, url})
-			}
-		})
-
-		reg := regexp.MustCompile(`detail_imform_value">(.*?)</span>`)
-		m := reg.FindStringSubmatch(html)
-		status = m[1]
-		if status == "完结" {
-			status = "已完结"
-		} else {
-			status = "连载中"
 		}
 	}
 
