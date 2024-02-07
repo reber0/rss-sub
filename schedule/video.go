@@ -2,7 +2,7 @@
  * @Author: reber
  * @Mail: reber0ask@qq.com
  * @Date: 2022-01-04 21:12:34
- * @LastEditTime: 2024-01-28 17:04:11
+ * @LastEditTime: 2024-02-07 17:15:11
  */
 package schedule
 
@@ -130,7 +130,7 @@ func getNewVideoMsg(targetURL string, videoURLSlice []string) ([][]string, strin
 			}
 
 			// 暂存新剧集
-			if !goutils.IsInCol(a_href, videoURLSlice) {
+			if !goutils.IsInCol(videoURLSlice, a_href) {
 				newVideoMsgList = append(newVideoMsgList, []string{a_text, a_href})
 			}
 		}
