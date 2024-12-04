@@ -1,0 +1,95 @@
+<!--
+ * @Author: reber
+ * @Mail: reber0ask@qq.com
+ * @Date: 2022-04-30 12:31:31
+ * @LastEditTime: 2023-04-21 14:37:10
+-->
+
+<title>简单用法 - 数据表格</title>
+
+<div class="layui-card layadmin-header">
+<div class="layui-breadcrumb" lay-filter="breadcrumb">
+    <a lay-href="">主页</a>
+    <a><cite>Article</cite></a>
+    <a><cite>添加 Site</cite></a>
+</div>
+</div>
+
+<style>
+.layui-textarea {
+    border: 1px solid #ccc;padding: 7px 7px;border-radius: 3px;
+    padding-left:5px;margin: 5px 30px 5px 20px;width: 250px;height:60px;
+}
+
+.layui-input {
+    border: 1px solid #ccc;padding: 7px 7px;border-radius: 3px;
+    padding-left:5px;margin: 5px 30px 5px 20px;width: 250px;
+}
+</style>
+
+
+<script id="blog_msg_table" type="text/html">
+    {{# layui.each(d.data, function(index, item){ }}
+        <b>{{ item.title }}</b><br>
+        <span style="color:blue">{{ item.url }}</span>
+        <hr class="layui-bg-gray">
+    {{# }); }}
+    {{# if(d.data.length === 0){ }}
+        <h2 style="color:#F00">未正则到数据!</h2>
+    {{# } }}
+</script>
+
+
+<div class="layui-fluid">
+    <div class="layui-row">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">添加 Blog</div>
+                <div class="layui-card-body">
+                    <div class="layui-row layui-col-space30">
+                        <div class="layui-col-md5">
+                            <form class="layui-form" lay-filter="blog-form">
+                                <div class="layui-form-item layui-row">
+                                    <label class="layui-form-label layui-col-md2">Title</label>
+                                    <div class="layui-input-inline layui-col-md10">
+                                        <input type="text" name="name" placeholder="Reber's Blog" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-form-item layui-row">
+                                    <label class="layui-form-label layui-col-md2">Link</label>
+                                    <div class="layui-input-inline layui-col-md10">
+                                        <input type="text" name="link" placeholder="http://wyb0.com/posts/" class="layui-input" lay-verify="required|url">
+                                    </div>
+                                </div>
+                                <div class="layui-form-item layui-form-text layui-row">
+                                    <label class="layui-form-label layui-col-md2">Regex</label>
+                                    <div class="layui-input-inline layui-col-md10">
+                                        <textarea name="regex" placeholder='<li>\s+<div.*?>\s+<a href="(.*?)">(.*?)</a>' class="layui-textarea" lay-verify="required"></textarea>
+                                    </div>
+                                </div>
+                                <div class="layui-form-item layui-row">
+                                    <label class="layui-form-label layui-col-md2"></label>
+                                    <div class="layui-input-inline layui-col-md10 layui-col-md-offset2">
+                                        <button type="reset" class="layui-btn layui-btn-primary layui-btn-sm">重置</button>
+                                        <button type="button" class="layui-btn layui-btn-sm" lay-submit lay-filter="rss-check">检测</button>
+                                        <button type="button" class="layui-btn layui-btn-sm" lay-submit lay-filter="rss-submit">提交</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="layui-col-md6">
+                            <div class="layui-row">
+                                <table id="blog-msg-view"></table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    layui.use('article/site/add', layui.factory('article/site/add'));
+</script>

@@ -1,0 +1,76 @@
+<!--
+ * @Author: reber
+ * @Mail: reber0ask@qq.com
+ * @Date: 2021-01-04 15:20:32
+ * @LastEditTime: 2023-04-21 14:36:20
+ -->
+
+<title>简单用法 - 数据表格</title>
+
+<div class="layui-card layadmin-header">
+  <div class="layui-breadcrumb" lay-filter="breadcrumb">
+    <a lay-href="">主页</a>
+    <a><cite>Article</cite></a>
+    <a><cite>管理 Article</cite></a>
+  </div>
+</div>
+
+<style>
+    .search-form .layui-form-item {margin-bottom: 5px;}
+    .search-form .layui-form-select input {width:90px}
+    .search-form input {width:150px}
+</style>
+
+<div class="layui-fluid">
+  <div class="layui-row layui-col-space15">
+    <div class="layui-col-md12">
+      <div class="layui-card">
+        <!-- <div class="layui-card-header">管理 Article</div> -->
+        <div class="layui-card-body">
+            <div class="layui-form search-form">
+                <div class="layui-form-item">
+                Name&nbsp;
+                <div class="layui-inline">
+                    <input class="layui-input" name="keyword" autocomplete="off" placeholder="根据 Name 搜索">
+                </div>
+                Title&nbsp;
+                <div class="layui-inline">
+                    <input class="layui-input" name="title" autocomplete="off" placeholder="根据 Title 搜索">
+                </div>
+                Status&nbsp;
+                <div class="layui-inline">
+                    <select name="status" lay-filter="status-select" lay-search>
+                        <option value=""></option>
+                        <option value="read">read</option>
+                        <option value="unread" selected>unread</option>
+                    </select>
+                </div>
+                <div class="layui-inline">
+                    <button class="layui-btn" lay-submit lay-filter="search-form">
+                        <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                    </button>
+                </div>
+                </div>
+            </div>
+            <table id="article-table" lay-filter="article-table"></table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="text/html" id="article-table-toolbar">
+    <div class="layui-btn-container">
+        <button class="layui-btn layui-btn-sm" lay-event="refresh">刷新</button>
+        <button class="layui-btn layui-btn-sm" lay-event="read-select">已读选中</button>
+    </div>
+</script>
+
+<script type="text/html" id="article-table-bar">
+    <button class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</button>
+    <button class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete">删除</button>
+</script>
+
+<script>
+    layui.use('article/data/list', layui.factory('article/data/list'));
+</script>

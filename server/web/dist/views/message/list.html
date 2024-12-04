@@ -1,0 +1,57 @@
+<!--
+ * @Author: reber
+ * @Mail: reber0ask@qq.com
+ * @Date: 2022-01-04 18:04:32
+ * @LastEditTime: 2022-05-07 11:30:43
+-->
+
+
+<title>消息中心</title>
+
+<div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a lay-href="">主页</a>
+        <a><cite>消息中心</cite></a>
+    </div>
+</div>
+
+<style>
+    .layui-tab-content {
+        padding:15px;
+    }
+</style>
+
+
+<div class="layui-fluid" id="LAY-message">
+    <div class="layui-card">
+        <!-- <div class="layui-tab layui-tab-card" lay-filter="massage-tab" lay-allowClose="true"> -->
+        <div class="layui-tab layui-tab-card" lay-filter="massage-tab">
+            <ul class="layui-tab-title">
+            </ul>
+            <div class="layui-tab-content">
+                <div class="layui-tab-item api-tab-item">
+                    <div class="LAY-message-btns" style="margin-bottom: 10px;">
+                        <button class="layui-btn layui-btn-primary layui-btn-sm" data-type="api" data-events="delete">删除选中</button>
+                        <button class="layui-btn layui-btn-primary layui-btn-sm" data-type="api" data-events="deleteAll">删除全部</button>
+                        <button class="layui-btn layui-btn-primary layui-btn-sm" data-type="api" data-events="read">已读选中</button>
+                        <button class="layui-btn layui-btn-primary layui-btn-sm" data-type="api" data-events="readAll">已读全部</button>
+                    </div>
+                    <table id="LAY-message-api" lay-filter="LAY-message-api"></table>
+                </div>
+                <div class="layui-tab-item user-tab-item">
+                    <div class="LAY-message-btns" style="margin-bottom: 10px;">
+                        <button class="layui-btn layui-btn-primary layui-btn-sm" data-type="user" data-events="delete">删除选中</button>
+                        <button class="layui-btn layui-btn-primary layui-btn-sm" data-type="user" data-events="deleteAll">删除全部</button>
+                        <button class="layui-btn layui-btn-primary layui-btn-sm" data-type="user" data-events="read">已读选中</button>
+                        <button class="layui-btn layui-btn-primary layui-btn-sm" data-type="user" data-events="readAll">已读全部</button>
+                    </div>
+                    <table id="LAY-message-user" lay-filter="LAY-message-user"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    layui.use('message/list', layui.factory('message/list'));
+</script>

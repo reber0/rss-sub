@@ -1,0 +1,125 @@
+<!--
+ * @Author: reber
+ * @Mail: reber0ask@qq.com
+ * @Date: 2020-02-08 16:28:54
+ * @LastEditTime: 2022-02-14 10:15:38
+ -->
+<title>网站设置</title>
+
+<div class="layui-card layadmin-header">
+  <div class="layui-breadcrumb" lay-filter="breadcrumb">
+    <a lay-href="">主页</a>
+    <a><cite>设置</cite></a>
+    <a><cite>网站设置</cite></a>
+  </div>
+</div>
+  
+<div class="layui-fluid">
+  <div class="layui-row layui-col-space15">
+    <div class="layui-col-md12">
+      <div class="layui-card">
+        <div class="layui-card-header">网站设置</div>
+        <div class="layui-card-body" pad15>
+          
+          <div class="layui-form" wid100 lay-filter="website-form">
+            <div class="layui-form-item">
+              <label class="layui-form-label">网站名称</label>
+              <div class="layui-input-block">
+                <input type="text" name="sitename" value="layuiAdmin" class="layui-input">
+              </div>
+            </div>
+            <div class="layui-form-item">
+              <label class="layui-form-label">网站域名</label>
+              <div class="layui-input-block">
+                <input type="text" name="domain" lay-verify="url" class="layui-input">
+              </div>
+            </div>
+            <div class="layui-form-item">
+              <label class="layui-form-label">最大文件上传</label>
+              <div class="layui-input-inline" style="width: 80px;">
+                <input type="text" name="upload_max_size" lay-verify="number" class="layui-input">
+              </div>
+              <div class="layui-input-inline layui-input-company">KB</div>
+              <div class="layui-form-mid layui-word-aux">提示：1 M = 1024 KB</div>
+            </div>
+            <div class="layui-form-item layui-form-text">
+              <label class="layui-form-label">首页标题</label>
+              <div class="layui-input-block">
+                <textarea name="title" class="layui-textarea"></textarea>
+              </div>
+            </div>
+            <div class="layui-form-item layui-form-text">
+              <label class="layui-form-label">META关键词</label>
+              <div class="layui-input-block">
+                <textarea name="keyword" class="layui-textarea" placeholder="多个关键词用英文状态 , 号分割"></textarea>
+              </div>
+            </div>
+            <div class="layui-form-item layui-form-text">
+              <label class="layui-form-label">META描述</label>
+              <div class="layui-input-block">
+                <textarea name="descript" class="layui-textarea"></textarea>
+              </div>
+            </div>
+            <div class="layui-form-item layui-form-text">
+              <label class="layui-form-label">版权信息</label>
+              <div class="layui-input-block">
+                <textarea name="copyright" class="layui-textarea"></textarea>
+              </div>
+            </div>
+            <div class="layui-form-item">
+              <div class="layui-input-block">
+                <button class="layui-btn" lay-submit lay-filter="set-website">确认保存</button>
+              </div>
+            </div>
+          </div>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+    layui.use(['admin', 'form'], function(){
+        var admin = layui.admin;
+        var form = layui.form;
+
+        admin.req({
+            url: '/api/set/system/website',
+            type: 'post',
+            dataType: "json", //期望后端返回json
+            contentType: "application/json", //发送的数据的类型
+            timeout: 20000,
+            success: function (result) {
+                if (result.code == 0){
+                    form.val("website-form", {
+                        "sitename": result.data.sitename,
+                        "domain": result.data.domain,
+                        "upload_max_size": result.data.upload_max_size,
+                        "title": result.data.title,
+                        "keyword": result.data.keyword,
+                        "descript": result.data.descript,
+                        "copyright": result.data.copyright,
+                    });
+                }
+            }
+        });
+
+        // event 为 submit、lay-filter 为 set-website 的按钮
+        form.on('submit(set-website)', function(data){
+            var formData = data.field;
+
+            admin.req({
+                url: '/api/set/system/website_update',
+                type: 'post',
+                dataType: "json", //期望后端返回json
+                contentType: "application/json", //发送的数据的类型
+                data: JSON.stringify(formData),
+                timeout: 20000,
+                success: function (result) {
+                    layer.msg(result.msg, {offset: '150px', icon: 1, time: 1000});
+                }
+            });
+        });
+    });
+</script>
