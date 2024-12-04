@@ -1,4 +1,4 @@
-module github.com/reber0/rss-sub
+module github.com/reber0/rss-sub/server
 
 go 1.23.2
 
